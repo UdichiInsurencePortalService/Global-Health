@@ -10,10 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "antd": "^5.24.4",
+=======
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+>>>>>>> 88a28cea9f995345566efc02557b5ff9f9e61fe9
     "bootstrap": "^5.3.3",
     "framer-motion": "^12.5.0",
     "react": "^19.0.0",

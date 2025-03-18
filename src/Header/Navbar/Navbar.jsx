@@ -37,6 +37,7 @@ const Header = () => {
               onMouseEnter={() => setShowProduct(true)}
               onMouseLeave={() => setShowProduct(false)}
             >
+<<<<<<< HEAD
               <div className="dropdown-menu show">
                 <NavDropdown.Item className="p-3" style={{ minWidth: "550px" }}>
                   <Row>
@@ -59,6 +60,42 @@ const Header = () => {
                   </Row>
                 </NavDropdown.Item>
               </div>
+=======
+              <NavDropdown.Item className="p-3" style={{ minWidth: "550px" }}>
+                <Row>
+                  {/* Individual Insurance */}
+                  <Col md={6} className="p-2">
+                    <Link
+                      to="/product"
+                      className="d-block mb-2 fw-bold text-dark text-decoration-none"
+                    >
+                      Individual Insurance
+                    </Link>
+                    <ul className="list-unstyled">
+                    <li className="mb-1"><Link to="/individual-plan-1" className="nav-item-hover">Car Insurance</Link></li>
+                      <li className="mb-1"><Link to="/individual-plan-1" className="nav-item-hover">Life Insurance</Link></li>
+                      <li className="mb-1"><Link to="/individual-plan-2" className="nav-item-hover">Health Insurance</Link></li>
+                      <li className="mb-1"><Link to="/individual-plan-3" className="nav-item-hover">Auto Insurance</Link></li>
+                      <li className="mb-1"><Link to="/individual-plan-4" className="nav-item-hover">Home Insurance</Link></li>
+                    </ul>
+                  </Col>
+
+                  {/* Business Insurance */}
+                  <Col md={6} className="p-2">
+                    <Link
+                      to="/product"
+                      className="d-block mb-2 fw-bold text-dark text-decoration-none"
+                    >
+                      Business Insurance
+                    </Link>
+                    <ul className="list-unstyled">
+                      <li className="mb-1"><Link to="/business-plan-1" className="nav-item-hover">Commercial Liability</Link></li>
+                      <li className="mb-1"><Link to="/business-plan-2" className="nav-item-hover">Property</Link></li>
+                    </ul>
+                  </Col>
+                </Row>
+              </NavDropdown.Item>
+>>>>>>> 88a28cea9f995345566efc02557b5ff9f9e61fe9
             </NavDropdown>
 
             {/* Policy Details Dropdown */}
