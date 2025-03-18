@@ -179,3 +179,19 @@
   transform: translateX(5px);
 }
 
+
+
+
+
+/* Remove default blue background on click */
+.nav-dropdown-hover .dropdown-item:active,
+.nav-dropdown-hover .dropdown-item:focus {
+  background-color: white !important;
+  color: black !important; /* Ensures text remains readable */
+  outline: none;
+}
+
+/* Optional: Add hover effect */
+.nav-dropdown-hover .dropdown-item:hover {
+  background-color: #f8f9fa !important; /* Light grey */
+}
