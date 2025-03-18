@@ -53,10 +53,11 @@ const Header = () => {
                       Individual Insurance
                     </Link>
                     <ul className="list-unstyled">
-                      <li className="mb-1"><Link to="/individual-plan-1" className="nav-item-hover">Life</Link></li>
-                      <li className="mb-1"><Link to="/individual-plan-2" className="nav-item-hover">Health</Link></li>
-                      <li className="mb-1"><Link to="/individual-plan-3" className="nav-item-hover">Auto</Link></li>
-                      <li className="mb-1"><Link to="/individual-plan-4" className="nav-item-hover">Home</Link></li>
+                    <li className="mb-1"><Link to="/individual-plan-1" className="nav-item-hover">Car Insurance</Link></li>
+                      <li className="mb-1"><Link to="/individual-plan-1" className="nav-item-hover">Life Insurance</Link></li>
+                      <li className="mb-1"><Link to="/individual-plan-2" className="nav-item-hover">Health Insurance</Link></li>
+                      <li className="mb-1"><Link to="/individual-plan-3" className="nav-item-hover">Auto Insurance</Link></li>
+                      <li className="mb-1"><Link to="/individual-plan-4" className="nav-item-hover">Home Insurance</Link></li>
                     </ul>
                   </Col>
 
