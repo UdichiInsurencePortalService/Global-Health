@@ -1,41 +1,52 @@
-import { useState } from "react";
-import { Navbar, Nav, Container, NavDropdown, Button, Row, Col } from "react-bootstrap";
+import { useState, useRef } from "react";
+import { Navbar, Nav, Container, NavDropdown, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
-import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-
-
+import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PlusOutlined } from "@ant-design/icons";
+import { Drawer, Form, Input, Row, Col } from "antd";
+import emailjs from "@emailjs/browser";
 import logo from "../../assets/logo-main-.png";
 
+const { Item } = Form;
+
 const Header = () => {
+  const formRef = useRef(null);
   const [expanded, setExpanded] = useState(false);
   const [showProduct, setShowProduct] = useState(false);
   const [showPolicy, setShowPolicy] = useState(false);
   const [showCustomer, setShowCustomer] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => setOpen(true);
+  const onClose = () => setOpen(false);
+
+  const sendEmail = (values) => {
+    emailjs
+      .send("service_la8diqr", "template_qhn3bt3", values, "_CVqq1nmrbE6BhO0x")
+      .then(
+        () => {
+          console.log("SUCCESS!");
+          onClose();
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+        }
+      );
+  };
 
   return (
     <Navbar expand="lg" bg="white" variant="light" className="shadow-sm py-3 sticky-top" expanded={expanded}>
       <Container>
         {/* Logo */}
-        <Navbar.Brand as={Link} to="/" className="fw-bold fs-3 text-decoration-none text-orange">
- 
-</Navbar.Brand>
-
-
         <Navbar.Brand as={Link} to="/" className="fw-bold fs-3 text-decoration-none text-orange d-flex align-items-center">
           <img
             className="img-fluid"
             src={logo}
             alt="logo"
-            style={{
-              height: "155px", // Matches Navbar height
-              objectFit: "contain",
-              background: "transparent",
-              position:'absolute'
-            }}
+            style={{ height: "155px", objectFit: "contain", background: "transparent", position: "absolute" }}
           />
         </Navbar.Brand>
 
@@ -58,10 +69,6 @@ const Header = () => {
               onMouseEnter={() => setShowProduct(true)}
               onMouseLeave={() => setShowProduct(false)}
             >
-              
-              <NavDropdown.Item className="p-3" style={{ minWidth: "550px" }}>
-               
-              </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/individual-plan-1">Life Insurance</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/individual-plan-2">Health Insurance</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/individual-plan-3">Auto Insurance</NavDropdown.Item>
@@ -89,45 +96,38 @@ const Header = () => {
 
             {/* Customer Support Dropdown */}
             <NavDropdown
-  className="navbar-design nav-dropdown-hover gmail"
-  title="Customer Support"
-  id="customer-dropdown"
-  show={showCustomer}
-  onMouseEnter={() => setShowCustomer(true)}
-  onMouseLeave={() => setShowCustomer(false)}
->
-    <NavDropdown.Item as={Link} to="/#">
-  <FontAwesomeIcon icon={faEnvelope} className="me-2" />
-  globalindia@gmail.com
-</NavDropdown.Item>
+              className="navbar-design nav-dropdown-hover"
+              title="Customer Support"
+              id="customer-dropdown"
+              show={showCustomer}
+              onMouseEnter={() => setShowCustomer(true)}
+              onMouseLeave={() => setShowCustomer(false)}
+            >
+              <NavDropdown.Item as={Link} to="#">
+                <FontAwesomeIcon icon={faEnvelope} className="me-2" />
+                globalhealth235@gmail.com
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="#">
+                <FontAwesomeIcon icon={faPhone} className="me-2" />
+                9205401500
+              </NavDropdown.Item>
 
-<NavDropdown.Item as={Link} to="#">
-  <FontAwesomeIcon icon={faPhone} className="me-2" />
-  9205401500
-</NavDropdown.Item>
+              {/* Buttons Section */}
+              <div className="d-flex flex-column gap-2 mt-2">
+                {/* WhatsApp Button */}
+                <Button
+                  style={{ fontSize: "12px" }}
+                  onClick={() => window.open("https://wa.me/9928151651?text=Hello%20Global%20India!", "_blank")}
+                >
+                  Contact via WhatsApp
+                </Button>
 
-{/* Buttons aligned using d-flex and justify-content-between */}
-<div className="d-flex justify-content-between mt-2">
-  {/* WhatsApp Button */}
-  <Button 
-    style={{ fontSize: '10px', display: 'flex', gap: '20px',target:'_blank' }} 
-    onClick={() => window.open('https://wa.me/9928151651?text=Hello%20Global%20India!', '_blank')}
-  >
-    Contact with WhatsApp
-  </Button>
-
-  {/* Contact Button */}
-  <Button 
-    style={{ fontSize: '10px', display: 'flex', gap: '20px' }}
-    onClick={() => alert('Contact button clicked!')}
-  >
-    Contact
-  </Button>
-</div>
-  </NavDropdown>
-
-
-
+                {/* Contact Button */}
+                <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
+                  Contact Us
+                </Button>
+              </div>
+            </NavDropdown>
           </Nav>
 
           {/* Log In Button */}
@@ -136,6 +136,51 @@ const Header = () => {
           </Button>
         </Navbar.Collapse>
       </Container>
+
+      {/* Drawer for Account Creation */}
+      <Drawer title="Create a New Account" width={720} onClose={onClose} open={open}>
+        <Form layout="vertical" ref={formRef} onFinish={sendEmail}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Item name="user_name" label="Name" rules={[{ required: true, message: "Please enter your name" }]}>
+                <Input placeholder="Enter your name" />
+              </Item>
+            </Col>
+            <Col span={12}>
+              <Item name="user_email" label="Email" rules={[{ required: true, message: "Please enter your email" }]}>
+                <Input type="email" placeholder="Enter your email" />
+              </Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Item name="user_number" label="Number" rules={[{ required: true, message: "Please enter your number" }]}>
+                <Input type="number" placeholder="Enter your number" />
+              </Item>
+            </Col>
+            <Col span={12}>
+              <Item name="user_address" label="Address" rules={[{ required: true, message: "Please enter your address" }]}>
+                <Input placeholder="Enter your address" />
+              </Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Item name="message" label="Description" rules={[{ required: true, message: "Please enter a description" }]}>
+                <Input.TextArea rows={4} placeholder="Enter your message" />
+              </Item>
+            </Col>
+          </Row>
+
+          {/* CANCEL & SUBMIT BUTTONS BELOW FORM */}
+          <div className="d-flex justify-content-end gap-2 mt-4">
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </div>
+        </Form>
+      </Drawer>
     </Navbar>
   );
 };
