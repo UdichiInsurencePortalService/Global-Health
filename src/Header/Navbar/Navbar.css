@@ -149,3 +149,23 @@
 }
 
 
+
+.nav-dropdown-hover .dropdown-item {
+  text-decoration: none !important;
+}
+
+@media (max-width: 992px) {
+  .dropdown-menu {
+    width: 100% !important; /* Full width on mobile */
+  }
+}
+
+/* Adjust navbar alignment */
+.navbar-design {
+  font-weight: 500;
+}
+
+/* Adjust dropdown hover effects */
+.nav-dropdown-hover .dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

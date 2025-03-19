@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 
+import logo from "../../assets/logo-main-.png";
 
 const Header = () => {
   const [expanded, setExpanded] = useState(false);
@@ -16,19 +17,27 @@ const Header = () => {
   const [showCustomer, setShowCustomer] = useState(false);
 
   return (
-    <Navbar expand="lg" bg="white" variant="light" className="shadow-sm py-3" expanded={expanded}>
+    <Navbar expand="lg" bg="white" variant="light" className="shadow-sm py-3 sticky-top" expanded={expanded}>
       <Container>
         {/* Logo */}
         <Navbar.Brand as={Link} to="/" className="fw-bold fs-3 text-decoration-none text-orange">
-  <img 
-    src="./src/assets/Home/logo2.png" 
-    className="img-fluid"
-    alt="Logo" 
-    style={{ height: '80px', width: '80px', objectFit: 'contain' }}
-  />
+ 
 </Navbar.Brand>
 
 
+        <Navbar.Brand as={Link} to="/" className="fw-bold fs-3 text-decoration-none text-orange d-flex align-items-center">
+          <img
+            className="img-fluid"
+            src={logo}
+            alt="logo"
+            style={{
+              height: "155px", // Matches Navbar height
+              objectFit: "contain",
+              background: "transparent",
+              position:'absolute'
+            }}
+          />
+        </Navbar.Brand>
 
         {/* Mobile Toggle Button */}
         <Navbar.Toggle aria-controls="navbar-nav" onClick={() => setExpanded(!expanded)} />
@@ -49,62 +58,14 @@ const Header = () => {
               onMouseEnter={() => setShowProduct(true)}
               onMouseLeave={() => setShowProduct(false)}
             >
-              <div className="dropdown-menu show">
-                <NavDropdown.Item className="p-3" style={{ minWidth: "550px" }}>
-                  <Row>
-                    <Col md={6} className="p-2">
-                      <Link to="/product" className="dropdown-heading">Individual Insurance</Link>
-                      <ul className="list-unstyled">
-                        <li><Link to="/individual-plan-1" className="nav-item-hover">Life</Link></li>
-                        <li><Link to="/individual-plan-2" className="nav-item-hover">Health</Link></li>
-                        <li><Link to="/individual-plan-3" className="nav-item-hover">Auto</Link></li>
-                        <li><Link to="/individual-plan-4" className="nav-item-hover">Home</Link></li>
-                      </ul>
-                    </Col>
-                    <Col md={6} className="p-2">
-                      <Link to="/product" className="dropdown-heading">Business Insurance</Link>
-                      <ul className="list-unstyled">
-                        <li><Link to="/business-plan-1" className="nav-item-hover">Commercial Liability</Link></li>
-                        <li><Link to="/business-plan-2" className="nav-item-hover">Property</Link></li>
-                      </ul>
-                    </Col>
-                  </Row>
-                </NavDropdown.Item>
-              </div>
+              
               <NavDropdown.Item className="p-3" style={{ minWidth: "550px" }}>
-                <Row>
-                  {/* Individual Insurance */}
-                  <Col md={6} className="p-2">
-                    <Link
-                      to="/product"
-                      className="d-block mb-2 fw-bold text-dark text-decoration-none"
-                    >
-                      Individual Insurance
-                    </Link>
-                    <ul className="list-unstyled">
-                    <li className="mb-1"><Link to="/individual-plan-1" className="nav-item-hover">Car Insurance</Link></li>
-                      <li className="mb-1"><Link to="/individual-plan-1" className="nav-item-hover">Life Insurance</Link></li>
-                      <li className="mb-1"><Link to="/individual-plan-2" className="nav-item-hover">Health Insurance</Link></li>
-                      <li className="mb-1"><Link to="/individual-plan-3" className="nav-item-hover">Auto Insurance</Link></li>
-                      <li className="mb-1"><Link to="/individual-plan-4" className="nav-item-hover">Home Insurance</Link></li>
-                    </ul>
-                  </Col>
-
-                  {/* Business Insurance */}
-                  <Col md={6} className="p-2">
-                    <Link
-                      to="/product"
-                      className="d-block mb-2 fw-bold text-dark text-decoration-none"
-                    >
-                      Business Insurance
-                    </Link>
-                    <ul className="list-unstyled">
-                      <li className="mb-1"><Link to="/business-plan-1" className="nav-item-hover">Commercial Liability</Link></li>
-                      <li className="mb-1"><Link to="/business-plan-2" className="nav-item-hover">Property</Link></li>
-                    </ul>
-                  </Col>
-                </Row>
+               
               </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/individual-plan-1">Life Insurance</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/individual-plan-2">Health Insurance</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/individual-plan-3">Auto Insurance</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/individual-plan-4">Home Insurance</NavDropdown.Item>
             </NavDropdown>
 
             {/* Policy Details Dropdown */}
@@ -170,7 +131,7 @@ const Header = () => {
           </Nav>
 
           {/* Log In Button */}
-          <Button as={Link} to="/login" className=" ms-lg-3 rounded-pill px-4 ">
+          <Button as={Link} to="/login" className="ms-lg-3 rounded-pill px-4">
             Log In
           </Button>
         </Navbar.Collapse>
