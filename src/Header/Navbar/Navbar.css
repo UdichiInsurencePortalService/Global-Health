@@ -35,14 +35,14 @@
 }
 
 /* Button Styling */
-.btn-primary {
+/* .btn-primary {
   background-color: #007bff;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
   font-weight: 600;
   border-radius: 50px;
-}
+} */
 
 .btn-primary:hover {
   background-color: #0056b3;
@@ -140,6 +140,14 @@
   visibility: visible;
   transform: translateY(0);
 }
+
+.gmail {
+  font-style: italic;
+  font-weight: 600;
+  color: black;
+
+}
+
 
 
 .nav-dropdown-hover .dropdown-item {
