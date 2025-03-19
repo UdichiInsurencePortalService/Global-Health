@@ -3,6 +3,11 @@ import { Navbar, Nav, Container, NavDropdown, Button, Row, Col } from "react-boo
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
+import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
+
 
 const Header = () => {
   const [expanded, setExpanded] = useState(false);
@@ -15,8 +20,15 @@ const Header = () => {
       <Container>
         {/* Logo */}
         <Navbar.Brand as={Link} to="/" className="fw-bold fs-3 text-decoration-none text-orange">
-          Demo Project
-        </Navbar.Brand>
+  <img 
+    src="./src/assets/Home/logo2.png" 
+    className="img-fluid"
+    alt="Logo" 
+    style={{ height: '80px', width: '80px', objectFit: 'contain' }}
+  />
+</Navbar.Brand>
+
+
 
         {/* Mobile Toggle Button */}
         <Navbar.Toggle aria-controls="navbar-nav" onClick={() => setExpanded(!expanded)} />
@@ -37,7 +49,6 @@ const Header = () => {
               onMouseEnter={() => setShowProduct(true)}
               onMouseLeave={() => setShowProduct(false)}
             >
-<<<<<<< HEAD
               <div className="dropdown-menu show">
                 <NavDropdown.Item className="p-3" style={{ minWidth: "550px" }}>
                   <Row>
@@ -60,7 +71,6 @@ const Header = () => {
                   </Row>
                 </NavDropdown.Item>
               </div>
-=======
               <NavDropdown.Item className="p-3" style={{ minWidth: "550px" }}>
                 <Row>
                   {/* Individual Insurance */}
@@ -95,7 +105,6 @@ const Header = () => {
                   </Col>
                 </Row>
               </NavDropdown.Item>
->>>>>>> 88a28cea9f995345566efc02557b5ff9f9e61fe9
             </NavDropdown>
 
             {/* Policy Details Dropdown */}
@@ -119,16 +128,45 @@ const Header = () => {
 
             {/* Customer Support Dropdown */}
             <NavDropdown
-              className="navbar-design nav-dropdown-hover"
-              title="Customer Support"
-              id="customer-dropdown"
-              show={showCustomer}
-              onMouseEnter={() => setShowCustomer(true)}
-              onMouseLeave={() => setShowCustomer(false)}
-            >
-              <NavDropdown.Item as={Link} to="/contact/email">Email</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/contact/phone">Phone</NavDropdown.Item>
-            </NavDropdown>
+  className="navbar-design nav-dropdown-hover gmail"
+  title="Customer Support"
+  id="customer-dropdown"
+  show={showCustomer}
+  onMouseEnter={() => setShowCustomer(true)}
+  onMouseLeave={() => setShowCustomer(false)}
+>
+    <NavDropdown.Item as={Link} to="/#">
+  <FontAwesomeIcon icon={faEnvelope} className="me-2" />
+  globalindia@gmail.com
+</NavDropdown.Item>
+
+<NavDropdown.Item as={Link} to="#">
+  <FontAwesomeIcon icon={faPhone} className="me-2" />
+  9205401500
+</NavDropdown.Item>
+
+{/* Buttons aligned using d-flex and justify-content-between */}
+<div className="d-flex justify-content-between mt-2">
+  {/* WhatsApp Button */}
+  <Button 
+    style={{ fontSize: '10px', display: 'flex', gap: '20px',target:'_blank' }} 
+    onClick={() => window.open('https://wa.me/9928151651?text=Hello%20Global%20India!', '_blank')}
+  >
+    Contact with WhatsApp
+  </Button>
+
+  {/* Contact Button */}
+  <Button 
+    style={{ fontSize: '10px', display: 'flex', gap: '20px' }}
+    onClick={() => alert('Contact button clicked!')}
+  >
+    Contact
+  </Button>
+</div>
+  </NavDropdown>
+
+
+
           </Nav>
 
           {/* Log In Button */}
