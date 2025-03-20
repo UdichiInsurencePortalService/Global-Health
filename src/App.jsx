@@ -7,14 +7,12 @@ import Product from "./Components/Pages/Product/Product.jsx";
 import Login from "./Components/Pages/Authentication/Login/Login.jsx"; // Fixed Import
 
 
-// Import FontAwesomeIcon Component
 
-// Import Specific Icons
 
 
 
 function App() {
-  return (
+  return (    
     <>
       <Navbar />
       <Routes>
