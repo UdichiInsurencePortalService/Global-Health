@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./Components/Pages/Home/Home.jsx";
 import Product from "./Components/Pages/Product/Product.jsx";
 import Login from "./Components/Pages/Authentication/Login/Login.jsx"; // Fixed Import
+import Footer from "./Header/Footer/Footer.jsx";
 
 
 // Import FontAwesomeIcon Component
@@ -22,6 +23,7 @@ function App() {
         <Route path="/product" element={<Product />} />
         <Route path="/login" element={<Login />} /> {/* Fixed */}
       </Routes>
+      <Footer/>
     </>
   );
 }

@@ -62,18 +62,33 @@ const Header = () => {
 
             {/* Product Dropdown */}
             <NavDropdown
-              className="navbar-design nav-dropdown-hover"
-              title="Product"
-              id="product-dropdown"
-              show={showProduct}
-              onMouseEnter={() => setShowProduct(true)}
-              onMouseLeave={() => setShowProduct(false)}
-            >
-              <NavDropdown.Item as={Link} to="/individual-plan-1">Life Insurance</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/individual-plan-2">Health Insurance</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/individual-plan-3">Auto Insurance</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/individual-plan-4">Home Insurance</NavDropdown.Item>
-            </NavDropdown>
+  className="navbar-design nav-dropdown-hover"
+  title="Product"
+  id="product-dropdown"
+  show={showProduct}
+  onMouseEnter={() => setShowProduct(true)}
+  onMouseLeave={() => setShowProduct(false)}
+>
+  <div className="dropdown-container">
+    <div className="dropdown-section">
+      <h6 className="dropdown-heading">Individual Insurance</h6>
+      <NavDropdown.Item as={Link} to="/individual-car">Car Insurance</NavDropdown.Item>
+      <NavDropdown.Item as={Link} to="/individual-life">Life Insurance</NavDropdown.Item>
+      <NavDropdown.Item as={Link} to="/individual-health">Health Insurance</NavDropdown.Item>
+      <NavDropdown.Item as={Link} to="/individual-auto">Auto Insurance</NavDropdown.Item>
+      <NavDropdown.Item as={Link} to="/individual-home">Home Insurance</NavDropdown.Item>
+    </div>
+    <div className="dropdown-section">
+      <h6 className="dropdown-heading">Business Insurance</h6>
+      <NavDropdown.Item as={Link} to="/business-commercial">Commercial Insurance</NavDropdown.Item>
+      <NavDropdown.Item as={Link} to="/business-liability">Liability Insurance</NavDropdown.Item>
+      <NavDropdown.Item as={Link} to="/business-property">Property Insurance</NavDropdown.Item>
+    </div>
+  </div>
+</NavDropdown>
+
+
+
 
             {/* Policy Details Dropdown */}
             <NavDropdown
