@@ -1,0 +1,43 @@
+.footer {
+    background: linear-gradient(135deg, #516984, #6e98c6);
+    margin-top: 0px;
+    /* background-color: burlywood;
+    color: black;
+*/
+} 
+.footer2 {
+    background-color: rgb(253, 250, 250);
+    color: rgb(2, 2, 2);
+    font-weight:900;
+}
+
+.copyright {
+    color: black;
+}
+
+
+.para p{
+    color: rgb(3, 3, 3);
+    font-weight: 800;
+    font-size: large;
+}
+
+.footer a {
+    text-decoration: none;
+    color: rgb(8, 8, 8);
+    transition: color 0.3s ease, transform 0.3s ease;
+    font-size: 17px;
+    font-weight: 530;
+    font-style: italic;
+  }
+  
+  .footer a:hover {
+    color: #1f0469; /* Teal color on hover */
+    transform: translateY(-3px); /* Smooth lift effect */
+  }
+  
+  .icone {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 15px;
+  }
