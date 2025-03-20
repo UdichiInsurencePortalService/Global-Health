@@ -8,14 +8,12 @@ import Login from "./Components/Pages/Authentication/Login/Login.jsx"; // Fixed 
 import Footer from "./Header/Footer/Footer.jsx";
 
 
-// Import FontAwesomeIcon Component
 
-// Import Specific Icons
 
 
 
 function App() {
-  return (
+  return (    
     <>
       <Navbar />
       <Routes>
