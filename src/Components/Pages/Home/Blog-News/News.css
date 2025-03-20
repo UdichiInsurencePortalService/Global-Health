@@ -1,0 +1,94 @@
+/* General Styles */
+.news-section{
+    padding: 40px 50px;
+}
+.news-section h2{
+ font-size: 34px;
+ font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+ font-weight: 550;
+}
+
+.dealer-section {
+    padding: 40px 0;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.dealer-heading {
+    font-size: 28px;
+    font-weight: 600;
+    color: #51575d;
+    margin-bottom: 30px;
+}
+
+.dealer-heading h2 {
+    text-transform: uppercase;
+    color: #333;
+}
+
+/* Tabs Navigation */
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    background: #fcfcfc;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.nav-tabs .nav-item {
+    margin: 0 5px;
+}
+
+.nav-tabs .nav-link {
+    font-size: 16px;
+    font-weight: 500;
+    color: #0157c0;
+    background: #f9f9f9;
+    border-radius: 4px;
+    padding: 10px 15px;
+    transition: all 0.3s;
+}
+
+.nav-tabs .nav-link.active, 
+.nav-tabs .nav-link:hover {
+    background-color: #0157c0;
+    color: white;
+}
+
+/* Tab Content */
+.tab-content {
+    margin-top: 20px;
+}
+
+/* Card Styles */
+.car-content {
+    display: block;
+    padding: 15px;
+    border-radius: 10px;
+    background: #fff;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.car-content:hover {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.car-content img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.car-content span {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    display: block;
+    margin-top: 10px;
+}
+
+.car-content:hover span {
+    color: #0157c0;
+}

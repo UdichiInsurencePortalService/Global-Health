@@ -1,0 +1,20 @@
+.choose-section{
+    padding: 40px 50px;
+}
+.choose-section h1{
+    font-size: 34px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: 550;
+    display: flex;
+    justify-content: center;
+}
+
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  

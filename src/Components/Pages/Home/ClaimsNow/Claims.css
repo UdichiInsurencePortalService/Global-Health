@@ -1,0 +1,104 @@
+.call-action {
+    background-image: url('../../../../assets/Home/b.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    background-repeat: no-repeat;
+    padding: 40px 50px;
+  }
+  
+  .call-action .content {
+    text-align: center;
+    /* padding: 100px 265px; */
+  }
+  
+  .call-action .content h2 {
+    color: #040404;
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 46px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  
+  .call-action .content p {
+    color: #0a0a0a;
+    margin: 30px 0px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  
+  .call-action .content .btn {
+    margin-right: 20px;
+    font-weight: 500;
+    border: 1px solid #fff;
+    color: #fbfbfc;
+  }
+  
+  .call-action .content .btn:before {
+    background: #1A76D1;
+  }
+  
+  .call-action .content .btn:hover {
+    background: #1A76D1;
+    color: #fff;
+  }
+  
+  .call-action .content .btn:last-child {
+    margin-right: 0px;
+  }
+  
+  .call-action .content .second {
+    border: 1px solid #fff;
+    color: #fff;
+    background: transparent;
+    color: #fff !important;
+  }
+  
+  .call-action .content .second:before {
+    background: #fff;
+  }
+  
+  .call-action .content .second:hover {
+    color: #1A76D1;
+    border-color: transparent;
+    background: #fff;
+  }
+  
+  .call-action .content .second i {
+    margin-left: 10px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .call-action .content {
+      padding: 80px 50px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .call-action .content {
+      padding: 60px 30px;
+    }
+  
+    .call-action .content h2 {
+      font-size: 28px;
+      line-height: 40px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .call-action .content {
+      padding: 40px 20px;
+    }
+  
+    .call-action .content h2 {
+      font-size: 24px;
+      line-height: 36px;
+    }
+  
+    .call-action .content .btn {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  

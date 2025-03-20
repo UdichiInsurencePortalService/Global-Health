@@ -72,7 +72,7 @@ const Header = () => {
   <div className="dropdown-container">
     <div className="dropdown-section">
       <h6 className="dropdown-heading">Individual Insurance</h6>
-      <NavDropdown.Item as={Link} to="/individual-car">Car Insurance</NavDropdown.Item>
+      <NavDropdown.Item as={Link} to="/product">Car Insurance</NavDropdown.Item>
       <NavDropdown.Item as={Link} to="/individual-life">Life Insurance</NavDropdown.Item>
       <NavDropdown.Item as={Link} to="/individual-health">Health Insurance</NavDropdown.Item>
       <NavDropdown.Item as={Link} to="/individual-auto">Auto Insurance</NavDropdown.Item>

@@ -9,6 +9,10 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import Seprate from './Seprate Insurance/Seprate';
+import Insurance from './Insurance/Insurance';
+import Choose from './ChooseUs/Choose';
+import Claim from './ClaimsNow/Claim';
+import News from './Blog-News/News';
 
 const { Meta } = Card;
 
@@ -75,9 +79,16 @@ const Home = () => {
     <Seprate/>
 
     {/*  */}
-  
+   <Insurance/>
 
     {/*  */}
+
+    <Choose/>
+
+    <Claim/>
+
+
+    <News/>
 
 
 
