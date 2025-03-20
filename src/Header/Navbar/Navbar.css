@@ -126,8 +126,12 @@
 .navbar-design {
   font-weight: 500;
   transition: all 0.3s ease-in-out;
+  font-size: 16px;
+  /* padding: 10px; */
 }
-
+.navbar-toggler {
+  border: none;
+} 
 .navbar-design:hover {
   color: #007bff !important;
   transform: scale(1.05);
@@ -166,6 +170,86 @@
 }
 
 /* Adjust dropdown hover effects */
+/* Dropdown container - Increased width */
+.dropdown-container {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  padding: 20px;
+  /* background: white; */
+  border-radius: 8px;
+  /* box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); */
+  min-width: 450px;
+}
+
+/* Individual sections */
+.dropdown-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+}
+
+/* Headings - Full width with a stronger presence */
+.dropdown-heading {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  width: 100%;
+  text-align: left;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+/* Dropdown links */
+.nav-dropdown-hover .dropdown-item {
+  font-size: 14px;
+  padding: 12px;
+  transition: background 0.3s ease;
+  border-radius: 5px;
+}
+
 .nav-dropdown-hover .dropdown-item:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 51, 102, 0.1);
+  color: #003366;
+  font-weight: bold;
+}
+@media (max-width: 992px) {
+  .dropdown-container {
+    flex-direction: column;
+    min-width: auto;
+  }
+  .dropdown-section {
+    min-width: 100%;
+  }
+}
+
+/* Contact Drawer Responsive */
+@media (max-width: 768px) {
+  .ant-drawer-content-wrapper {
+    width: 90% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
+
+  .dropdown-container {
+    padding: 15px;
+  }
+
+  .dropdown-heading {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .navbar-design {
+    font-size: 14px;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
 }
