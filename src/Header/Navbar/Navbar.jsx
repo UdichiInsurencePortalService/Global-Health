@@ -137,9 +137,17 @@ const Header = () => {
         </Navbar.Collapse>
       </Container>
 
-      {/* Drawer for Account Creation */}
-      <Drawer title="Create a New Account" width={720} onClose={onClose} open={open}>
-        <Form layout="vertical" ref={formRef} onFinish={sendEmail}>
+
+
+      <Drawer title="Create a New Account" width={600} onClose={onClose} open={open}>
+      <h1 style={{ color: '#007bff', fontSize: '2.5rem', fontFamily: 'Arial, sans-serif', textAlign: 'center', marginTop: '20px' }}>
+        We’re Here to Help! Let Us Know Your Query
+      </h1>
+      <p style={{ color: '#555', fontSize: '1.2rem', fontFamily: 'Segoe UI, sans-serif', textAlign: 'center', marginBottom: '40px' }}>
+        Fill out the form below, and our team will get back to you as soon as possible.
+      </p>
+
+        <Form layout="vertical" ref={formRef} onFinish={sendEmail} className="p-50">
           <Row gutter={16}>
             <Col span={12}>
               <Item name="user_name" label="Name" rules={[{ required: true, message: "Please enter your name" }]}>
