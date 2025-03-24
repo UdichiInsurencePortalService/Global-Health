@@ -62,30 +62,30 @@ const Header = () => {
 
             {/* Product Dropdown */}
             <NavDropdown
-  className="navbar-design nav-dropdown-hover"
-  title="Product"
-  id="product-dropdown"
-  show={showProduct}
-  onMouseEnter={() => setShowProduct(true)}
-  onMouseLeave={() => setShowProduct(false)}
->
-  <div className="dropdown-container">
-    <div className="dropdown-section">
-      <h6 className="dropdown-heading">Individual Insurance</h6>
-      <NavDropdown.Item as={Link} to="/product">Car Insurance</NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/individual-life">Life Insurance</NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/individual-health">Health Insurance</NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/individual-auto">Auto Insurance</NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/individual-home">Home Insurance</NavDropdown.Item>
-    </div>
-    <div className="dropdown-section">
-      <h6 className="dropdown-heading">Business Insurance</h6>
-      <NavDropdown.Item as={Link} to="/business-commercial">Commercial Insurance</NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/business-liability">Liability Insurance</NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/business-property">Property Insurance</NavDropdown.Item>
-    </div>
-  </div>
-</NavDropdown>
+              className="navbar-design nav-dropdown-hover"
+              title="Product"
+              id="product-dropdown"
+              show={showProduct}
+              onMouseEnter={() => setShowProduct(true)}
+              onMouseLeave={() => setShowProduct(false)}
+            >
+              <div className="dropdown-container">
+                <div className="dropdown-section">
+                  <h6 className="dropdown-heading">Individual Insurance</h6>
+                  <NavDropdown.Item as={Link} to="/product">Car Insurance</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/individual-life">Life Insurance</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/individual-health">Health Insurance</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/individual-auto">Auto Insurance</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/individual-home">Home Insurance</NavDropdown.Item>
+                </div>
+                <div className="dropdown-section">
+                  <h6 className="dropdown-heading">Business Insurance</h6>
+                  <NavDropdown.Item as={Link} to="/business-commercial">Commercial Insurance</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/business-liability">Liability Insurance</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/business-property">Property Insurance</NavDropdown.Item>
+                </div>
+              </div>
+            </NavDropdown>
 
 
 
@@ -155,12 +155,12 @@ const Header = () => {
 
 
       <Drawer title="Create a New Account" width={600} onClose={onClose} open={open}>
-      <h1 style={{ color: '#007bff', fontSize: '2.5rem', fontFamily: 'Arial, sans-serif', textAlign: 'center', marginTop: '20px' }}>
-        We’re Here to Help! Let Us Know Your Query
-      </h1>
-      <p style={{ color: '#555', fontSize: '1.2rem', fontFamily: 'Segoe UI, sans-serif', textAlign: 'center', marginBottom: '40px' }}>
-        Fill out the form below, and our team will get back to you as soon as possible.
-      </p>
+        <h1 style={{ color: '#007bff', fontSize: '2.5rem', fontFamily: 'Arial, sans-serif', textAlign: 'center', marginTop: '20px' }}>
+          We’re Here to Help! Let Us Know Your Query
+        </h1>
+        <p style={{ color: '#555', fontSize: '1.2rem', fontFamily: 'Segoe UI, sans-serif', textAlign: 'center', marginBottom: '40px' }}>
+          Fill out the form below, and our team will get back to you as soon as possible.
+        </p>
 
         <Form layout="vertical" ref={formRef} onFinish={sendEmail} className="p-50">
           <Row gutter={16}>
