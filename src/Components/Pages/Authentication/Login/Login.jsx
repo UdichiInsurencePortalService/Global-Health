@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { faFacebook, faTwitter, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import {
+  faFacebook,
+  faTwitter,
+  faGoogle,
+} from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ToastContainer } from "react-toastify";
 import { handleError, handleSuccess } from "../../../../errortoast";
@@ -11,12 +15,12 @@ const Login = () => {
   const [signup, setSignup] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const [login, setlogin] = useState({
     email: "",
-    password: ""
+    password: "",
   });
   const navigate = useNavigate();
   const handlelogInChange = (e) => {
@@ -24,12 +28,12 @@ const Login = () => {
     setlogin((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  // 
+  //
   const handlelogIn = async (e) => {
     e.preventDefault();
     const { email, password } = login;
 
-    if ( !email || !password) {
+    if (!email || !password) {
       return handleError(" email, and password are required.");
     }
     try {
@@ -42,24 +46,23 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
       const result = await response.json();
-      const { success, message,JWTToken,name, error } = result;
+      const { success, message, JWTToken, name, error } = result;
       if (success) {
         handleSuccess(message);
         localStorage.setItem("token", JWTToken);
         localStorage.setItem("loggedInUser", name);
         setTimeout(() => {
-          navigate('/');
+          navigate("/");
         }, 1000);
-      } else if(error){
+      } else if (error) {
         const detail = error?.details[0].message;
-        handleError(detail)
+        handleError(detail);
       }
       console.log(result);
     } catch (err) {
       handleError(err);
     }
   };
-
 
   // Sign Up Start here
 
@@ -90,9 +93,9 @@ const Login = () => {
         setTimeout(() => {
           // navigate('/');
         }, 1000);
-      } else if(error){
+      } else if (error) {
         const detail = error?.details[0].message;
-        handleError(detail)
+        handleError(detail);
       }
       console.log(result);
     } catch (err) {
@@ -101,8 +104,14 @@ const Login = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center pt-3" style={{ background: "#f4f4fa", minHeight: "100vh" }}>
-      <div className="card p-5 text-center shadow-lg" style={{ backgroundColor: "white", maxWidth: "400px", width: "100%" }}>
+    <div
+      className="d-flex justify-content-center align-items-center pt-3"
+      style={{ background: "#f4f4fa", minHeight: "100vh" }}
+    >
+      <div
+        className="card p-5 text-center shadow-lg"
+        style={{ backgroundColor: "white", maxWidth: "400px", width: "100%" }}
+      >
         {/* Tabs */}
         <ul className="nav nav-tabs justify-content-center mb-4">
           <li className="nav-item">
@@ -142,12 +151,32 @@ const Login = () => {
               <h2>LOGIN</h2>
               <p>Please enter your login details.</p>
               <form action="" onSubmit={handlelogIn}>
-              <input name="email" value={login.email} onChange={handlelogInChange} type="text" className="form-control my-2" placeholder="Email" />
-              <input name="password" value={login.password} onChange={handlelogInChange} type="password" className="form-control my-2" placeholder="Password" />
-              <a href="#" className="text-decoration-none" style={{ color: "#00BFFF" }}>
-                Forgot password?
-              </a>
-              <button className="btn btn-primary my-3 w-100 rounded-pill">Login</button>
+                <input
+                  name="email"
+                  value={login.email}
+                  onChange={handlelogInChange}
+                  type="text"
+                  className="form-control my-2"
+                  placeholder="Email"
+                />
+                <input
+                  name="password"
+                  value={login.password}
+                  onChange={handlelogInChange}
+                  type="password"
+                  className="form-control my-2"
+                  placeholder="Password"
+                />
+                <a
+                  href="#"
+                  className="text-decoration-none"
+                  style={{ color: "#00BFFF" }}
+                >
+                  Forgot password?
+                </a>
+                <button className="btn btn-primary my-3 w-100 rounded-pill">
+                  Login
+                </button>
               </form>
 
               <SocialButtons />
@@ -157,10 +186,36 @@ const Login = () => {
               <h2>SIGNUP</h2>
               <p>Create your account below.</p>
               <form onSubmit={handleSignup}>
-                <input name="name" value={signup.name} type="text" className="form-control my-2" placeholder="Username" onChange={handleChange} />
-                <input name="email" value={signup.email} type="email" className="form-control my-2" placeholder="Email" onChange={handleChange} />
-                <input name="password" value={signup.password} type="password" className="form-control my-2" placeholder="Password" onChange={handleChange} />
-                <button type="submit" className="btn btn-primary my-3 w-100 rounded-pill">Signup</button>
+                <input
+                  name="name"
+                  value={signup.name}
+                  type="text"
+                  className="form-control my-2"
+                  placeholder="Username"
+                  onChange={handleChange}
+                />
+                <input
+                  name="email"
+                  value={signup.email}
+                  type="email"
+                  className="form-control my-2"
+                  placeholder="Email"
+                  onChange={handleChange}
+                />
+                <input
+                  name="password"
+                  value={signup.password}
+                  type="password"
+                  className="form-control my-2"
+                  placeholder="Password"
+                  onChange={handleChange}
+                />
+                <button
+                  type="submit"
+                  className="btn btn-primary my-3 w-100 rounded-pill"
+                >
+                  Signup
+                </button>
               </form>
               <SocialButtons />
             </div>

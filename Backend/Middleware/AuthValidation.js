@@ -1,35 +1,33 @@
-const Jio = require('joi')
+const Joi = require('joi'); // Corrected the import
 
-const signupValidation = (req,res,next)=>{
-    const schema = Jio.object({
-        name: Jio.string().min(3).max(100).required(),
-        email: Jio.string().min(3).required(),
-        password: Jio.string().min(4).max(100).required()
-    })
-    const{error} = schema.validate(req.body);
-    if(error){
-        return res.status(400)
-        .json({message:"Bad request",error})
+const signupValidation = (req, res, next) => {
+    const schema = Joi.object({ // Changed "Jio" to "Joi"
+        name: Joi.string().min(3).max(100).required(),
+        email: Joi.string().email().required(), // Added email validation
+        password: Joi.string().min(4).max(100).required()
+    });
+
+    const { error } = schema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: "Bad request", error: error.details[0].message });
     }
     next();
+};
 
-}  
+const loginValidation = (req, res, next) => {
+    const schema = Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().min(4).max(100).required()
+    });
 
-const loginValidation = (req,res,next)=>{
-    const schema = Jio.object({
-        email: Jio.string().min(3).required(),
-        password: Jio.string().min(4).max(100).required()
-    })
-    const{error} = schema.validate(req.body);
-    if(error){
-        return res.status(400)
-        .json({message:"Bad request",error})
+    const { error } = schema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: "Bad request", error: error.details[0].message });
     }
     next();
-
-}  
+};
 
 module.exports = {
     signupValidation,
     loginValidation
-}
+};
