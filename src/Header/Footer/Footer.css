@@ -1,10 +1,9 @@
-.footer {
+/* .footer {
     background: linear-gradient(135deg, #516984, #6e98c6);
     margin-top: 0px;
-    /* background-color: burlywood;
-    color: black;
-*/
-} 
+}
+
+
 .footer2 {
     background-color: rgb(253, 250, 250);
     color: rgb(2, 2, 2);
@@ -32,12 +31,22 @@
   }
   
   .footer a:hover {
-    color: #1f0469; /* Teal color on hover */
-    transform: translateY(-3px); /* Smooth lift effect */
+    color: #1f0469; animation:;
+    transform: translateY(-3px); 
   }
   
   .icone {
     display: flex;
     justify-content: flex-end;
     padding-top: 15px;
+  } */
+
+
+  .footer-section{
+    background: linear-gradient(180deg, #140f2e 6.74%, #2a2063 55%, #5c36c4);
+
+  }
+  .copyright-section{
+    background: linear-gradient(180deg, #8b889b 6.74%, #9225b3 55%, #245acf);
+
   }

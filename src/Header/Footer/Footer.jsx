@@ -1,114 +1,83 @@
-import React from 'react';
-import "./Footer.css";
-import {
-  MDBFooter,
-  MDBContainer,
-  MDBIcon,
-  MDBInput,
-  MDBCol,
-  MDBRow,
-  MDBBtn
-} from 'mdb-react-ui-kit';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-
+import { FaFacebookSquare, FaInstagram, FaYoutube, FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
+import logo from '../../assets/logo.png'
+import { AiFillCaretRight } from "react-icons/ai";
+import './Footer.css'
 
 
 const Footer = () => {
   return (
-    <MDBFooter className='text-center footer'>
-      <MDBContainer className='p-4 '>
-        {/* <section className='mb-4'>
-          {['twitter', 'google', 'instagram', 'linkedin-in',].map((icon, index) => (
-            <MDBBtn outline color="light" floating className='m-1' href='javascript:void(0)' role='button' key={index}>
-              <MDBIcon fab icon={icon} />
-            </MDBBtn>
-          ))}
-        </section> */}
+    <div className="container-fluid p-0">
+      <footer className="text-white text-center text-lg-start p-4 footer-section">
+        <div className="container py-4">
+          <div className="row">
+            {/* Logo Section */}
+            <div className="col-lg-3 col-md-6 mb-4">
+              <div className="d-flex justify-content-center">
+                <div className="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-lg" style={{ width: "150px", height: "150px" }}>
+                  <img
+                    src={logo}
+                    height="120"
+                    alt="Global Health & Allied Insurances"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+              <p className="text-center mt-3">Protect What Matters Most</p>
+              <div className="d-flex justify-content-center gap-3 mt-3">
+                <a href="#!" className="text-white fs-4"><FaFacebookSquare /></a>
+                <a href="#!" className="text-white fs-4"><FaInstagram /></a>
+                <a href="#!" className="text-white fs-4"><FaYoutube /></a>
+              </div>
+            </div>
+            
+            {/* Animals Section */}
+            <div className="col-lg-3 col-md-6 mb-4">
+              <h5 className="text-uppercase mb-4">Products</h5>
+              <ul className="list-unstyled">
+                {["Car Insurance ", "Life Insurance ", "Health Insurance ", "Auto Insurance ", "Home Insurance ", "Commercial Insurance ", "Property Insurance"].map((item) => (
+                  <li key={item} className="mb-2">
+                    <a href="#!" className="text-white d-flex align-items-center">
+                      <AiFillCaretRight className="me-2" /> {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-        <section>
-          <form action=''>
-            <MDBRow className='d-flex justify-content-center'>
-              <MDBCol size="auto">
-                <p className='pt-2'><strong>Sign Up For Our Newsletter :</strong></p>
-              </MDBCol>
-              <MDBCol md='5' start>
-                <MDBInput contrast={true} type='email' className='mb-4' placeholder='Enter your Email' />
-              </MDBCol>
-              <MDBCol size="auto">
-                <MDBBtn outline color='light' type='submit' className='mb-4'>Subscribe</MDBBtn>
-              </MDBCol>
-            </MDBRow>
-          </form>
-        </section>
+            {/* Shelter Info Section */}
+            <div className="col-lg-3 col-md-6 mb-4">
+              <h5 className="text-uppercase mb-4">UseFull Links</h5>
+              <ul className="list-unstyled">
+                {["FAQ", "Company-Imformation", "Privacy-Policy", "Terms And  Condition", "Contact"].map((item) => (
+                  <li key={item} className="mb-2">
+                    <a href="#!" className="text-white d-flex align-items-center">
+                      <AiFillCaretRight className="me-2" /> {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-        <section className='mb-4 para'>
-          <p>
-          "Click the link below to explore more:"
-          </p>
-        </section>
+            {/* Contact Section */}
+            <div className="col-lg-3 col-md-6 mb-4">
+              <h5 className="text-uppercase mb-4">Contact</h5>
+              <ul className="list-unstyled">
+                <li><p className="d-flex align-items-center"><FaMapMarkerAlt className="me-2" /> Warsaw, 57 Street, Poland</p></li>
+                <li><p className="d-flex align-items-center"><FaPhone className="me-2" /> +01 234 567 89</p></li>
+                <li><p className="d-flex align-items-center"><FaEnvelope className="me-2" />globalheath235@gmail.com</p></li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-        <section>
-  <MDBRow className='copyright'>
-    {[
-      [
-        { name: 'Home', url: 'https://example.com' },
-        { name: 'About', url: 'https://about.com' },
-        { name: 'Claims', url: 'https://services.com' },
-        { name: 'Log In', url: 'https://services.com' },
-        { name: 'Contact', url: 'https://contact.com' },
-
-
-      ],
-      [
-        { name: 'Car insurance', url: 'https://google.com' },
-        { name: 'Life insurance', url: 'https://yahoo.com' },
-        { name: 'Health insurance', url: 'https://bing.com' },
-        { name: 'Auto Insurance', url: 'https://duckduckgo.com' }
-      ],
-      [
-        { name: 'Commercial Insurance', url: 'https://facebook.com' },
-        { name: 'Liability Insurance ', url: 'https://twitter.com' },
-        { name: 'Property Insurance ', url: 'https://instagram.com' },
-        { name: 'Policy Details', url: 'https://linkedin.com' }
-      ],
-      [
-        { name: 'FAQ', url: 'https://github.com' },
-        { name: 'Company Imformation', url: 'https://gitlab.com' },
-        { name: 'Terms & Conditin ', url: 'https://bitbucket.org' },
-        { name: 'Privacy Policy', url: 'https://codepen.io' }
-      ]
-    ].map((links, index) => (
-      <MDBCol lg='3' md='6' className='mb-4 mb-md-0' key={index}>
-        <h5 className='text-uppercase'></h5>
-        <ul className='list-unstyled mb-0'>
-          {links.map((link, num) => (
-            <li key={num}>
-              <a href={link.url}  target='_blank' rel='noopener noreferrer'>
-                {link.name}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </MDBCol>
-    ))}
-  </MDBRow>
-</section>
-<section className='icone'>
-          {['twitter', 'google', 'instagram', 'linkedin-in',].map((icon, index) => (
-            <MDBBtn outline color="light" floating className='m-1' href='javascript:void(0)' role='button' key={index}>
-              <MDBIcon fab icon={icon} />
-            </MDBBtn>
-          ))}
-        </section>
-
-      </MDBContainer>
-
-      <div className='text-center p-3 footer2'>
-        © 2025 Copyright: 
-        <a className='text-black' href='https://mdbootstrap.com/'> Global Health & Allied Insurance  </a>
-      </div>
-    </MDBFooter>
+        {/* Copyright */}
+        <div className="text-center p-3" copyright-section >
+          © 2025 Copyright:
+          <a className="text-white ms-1" href="#">Global Health& Allied Insurance.com</a>
+        </div>
+      </footer>
+    </div>
   );
-}
+};
 
 export default Footer;

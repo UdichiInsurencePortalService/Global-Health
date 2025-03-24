@@ -14,6 +14,7 @@ import Choose from './ChooseUs/Choose';
 import Claim from './ClaimsNow/Claim';
 import News from './Blog-News/News';
 
+
 const { Meta } = Card;
 
 const Home = () => {
