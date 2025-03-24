@@ -1,8 +1,10 @@
 {
-    "rewrites": [
+    "builds": [
       {
-        "source": "/(.*)",
-        "destination": "/index.html"
+        "src": "next.config.js",
+        "use": "@vercel/next"
       }
-    ]
+    ],
+    "routes": []
   }
+  
