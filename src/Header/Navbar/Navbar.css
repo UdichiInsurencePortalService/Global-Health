@@ -196,6 +196,7 @@
     padding: 8px 12px;
   }
 }  */
+<<<<<<< HEAD
 .user-menu {
 	position: relative;
 	display: inline-block;
@@ -241,6 +242,8 @@
 	background-color: darkred;
   }
 
+=======
+>>>>>>> 7ea579c52e0d99b3fc8e42aa54c2b08aa548d893
 
 
 html, body {

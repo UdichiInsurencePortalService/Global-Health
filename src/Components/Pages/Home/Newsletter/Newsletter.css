@@ -1,0 +1,28 @@
+.Newsletter-section {
+  background-image: url('../../../../assets/background-white-42166f822e.svg'); /* Replace with your image path */
+  background-position: 50% 0;
+  background-repeat: repeat-x;
+  background-color: #1197eb;
+  padding: 80px 0;
+}
+
+.Newsletter-section h1 {
+  font-weight: 600;
+  color: white;
+}
+
+.Newsletter-section h2 {
+  font-weight: 500;
+  color: white;
+}
+
+.Newsletter-section p {
+  font-weight: 600;
+  color: white;
+}
+
+/* Corrected row selector */
+.Newsletter-section .row {
+  row-gap: 20px;
+}
+
