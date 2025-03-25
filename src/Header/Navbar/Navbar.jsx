@@ -13,7 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const formRef = useRef(null);
-  const timeout = 2000; // Define timeout duration for logout
+  const timeout = 2000;
 
   const showDrawer = () => setOpen(true);
   const onClose = () => setOpen(false);
@@ -22,21 +22,19 @@ const Navbar = () => {
     emailjs
       .send("service_la8diqr", "template_qhn3bt3", values, "_CVqq1nmrbE6BhO0x")
       .then(() => {
-        console.log("SUCCESS!");
+        handleSuccess("Message sent successfully!");
         onClose();
       })
-      .catch((error) => {
-        console.log("FAILED...", error.text);
-      });
+      .catch((error) => console.error("Failed to send email:", error));
   };
 
   const handleLogout = () => {
     localStorage.removeItem("loggedInUser");
-    handleSuccess('user Logout')
     localStorage.removeItem("token");
-    setUsername("");
+    handleSuccess("User logged out");
+
     setTimeout(() => {
-      navigate('/login');
+      navigate("/login");
     }, timeout);
   };
 
@@ -50,68 +48,44 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="header">
-        <div className="topbar" style={{ backgroundColor: "rgb(172, 57, 19)", color: "white" }}>
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-6 col-md-5 col-12">
-                <ul className="top-link" style={{ display: "flex", gap: "15px", listStyle: "none", padding: 0, margin: 0 }}>
-                  <li><Link to="#" style={{ color: "white", textDecoration: "none" }}>About</Link></li>
-                  <li><Link to="/" style={{ color: "white", textDecoration: "none" }}>Blogs</Link></li>
-                  <li><Link to="#" style={{ color: "white", textDecoration: "none" }}>FAQ</Link></li>
-                </ul>
-              </div>
-              <div className="col-lg-6 col-md-7 col-12">
-                <ul className="top-contact" style={{ display: "flex", gap: "15px", listStyle: "none", padding: 0, margin: 0 }}>
-                  <li style={{ color: "white" }}>
-                    <i className="fa fa-phone" style={{ marginRight: "5px" }}></i> 9205401500
-                  </li>
-                  <li style={{ color: "white" }}>
-                    <i className="fa fa-envelope" style={{ marginRight: "5px", color: "white" }}></i>
-                    <Link to="mailto:globalhealth235@gmail.com" style={{ color: "white", textDecoration: "none" }}>
-                      globalhealth235@gmail.com
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+      <div className="topbar" style={{ backgroundColor: "rgb(172, 57, 19)", color: "white", padding: "10px" }}>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-6 col-md-5 col-12">
+              <ul className="top-link" style={{ display: "flex", gap: "15px", listStyle: "none", padding: 0, margin: 0 }}>
+                <li><Link to="#" style={{ color: "white", textDecoration: "none" }}>About</Link></li>
+                <li><Link to="/" style={{ color: "white", textDecoration: "none" }}>Blogs</Link></li>
+                <li><Link to="#" style={{ color: "white", textDecoration: "none" }}>FAQ</Link></li>
+              </ul>
+            </div>
+            <div className="col-lg-6 col-md-7 col-12">
+              <ul className="top-contact" style={{ display: "flex", gap: "15px", listStyle: "none", justifyContent: 'end', margin: 0, padding: 0 }}>
+                <li style={{ color: "white" }}><i className="fa fa-phone" style={{ marginRight: "5px" }}></i> 9205401500</li>
+                <li style={{ color: "white" }}>
+                  <i className="fa fa-envelope" style={{ marginRight: "5px" }}></i>
+                  <Link to="mailto:globalhealth235@gmail.com" style={{ color: "white", textDecoration: "none" }}>globalhealth235@gmail.com</Link>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="header-inner"
-          style={{
-            position: "sticky",
-            top: "0",
-            zIndex: 1000,
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            backdropFilter: "blur(10px)",
-            transition: "all 0.3s ease-in-out",
-            width: "100%",
-          }}
-        >
+      <header className="header">
+        <div className="header-inner">
           <div className="container">
             <div className="inner">
               <div className="row align-items-center">
                 <div className="col-lg-4 col-md-3 col-12">
-                  <div className="logo">
-                    <Link to="/" style={{ display: "flex", alignItems: "center" }}>
-                      <img
-                        src={logo}
-                        alt="Logo"
-                        className="img-fluid"
-                        style={{ maxHeight: "150px", width: "auto", objectFit: "contain", position: "absolute" }}
-                      />
-                    </Link>
-                  </div>
+                  <Link to="/" style={{ display: "flex", alignItems: "center", height: "100%" }}>
+                    <img src={logo} alt="Logo" className="img-fluid" style={{ maxWidth: "180px", height: "auto", objectFit: "contain", position: 'absolute' }} />
+                  </Link>
                 </div>
                 <div className="col-lg-6 col-md-9 col-12">
-                  <div className="main-menu">
-                    <nav className="navigation">
-                      <ul className="nav menu" style={{ display: "flex", gap: "20px", listStyle: "none", padding: 0, margin: 0 }}>
-                        <li className="active">
-                          <Link to="/" style={{ textDecoration: "none" }}>Home</Link>
-                        </li>
-                        <li className="nav-item dropdown">
+                  <nav className="navigation">
+                    <ul className="nav menu" style={{ display: "flex", gap: "20px", listStyle: "none", padding: 0, margin: 0 }}>
+                      <li><Link to="/">Home</Link></li>
+                      <li className="nav-item dropdown">
                           <Link to="#" className="nav-link">Product</Link>
                           <ul className="dropdown" style={{ display: "flex", minWidth: "400px", padding: "10px" }}>
                             <li style={{ flex: 1, listStyle: "none" }}>
@@ -134,32 +108,49 @@ const Navbar = () => {
                             </li>
                           </ul>
                         </li>
-                        <li><Link to="#" style={{ textDecoration: "none" }}>Policy</Link></li>
-                        <li><Link to="#" style={{ textDecoration: "none" }}>Claims</Link></li>
-                        <li><Link to="/" style={{ textDecoration: "none" }} onClick={showDrawer}>Contact Us</Link></li>
-                      </ul>
-                    </nav>
-                  </div>
+                      <li><Link to="#">Policy</Link></li>
+                      <li><Link to="#">Claims</Link></li>
+                      <li><Link to="/" onClick={showDrawer}>Contact Us</Link></li>
+                    </ul>
+                  </nav>
                 </div>
                 <div className="col-lg-2 col-12">
                   <div className="get-quote">
                     {username ? (
-                      <button onClick={handleLogout} className="logout-btn">
-                        Log Out
-                      </button>
+                      <span className="username-display">Hello, {username}</span>
+                    ) : null}
+                    {username ? (
+                      <button onClick={handleLogout} className="logout-btn">Log Out</button>
                     ) : (
-                      <Link to="/login" className="btn login-btn">
-                        Log In
-                      </Link>
+                      <Link to="/login" className="btn login-btn">Log In</Link>
                     )}
                   </div>
                 </div>
-                <ToastContainer/>
               </div>
             </div>
           </div>
         </div>
       </header>
+
+      <Drawer title="Contact Us" placement="right" onClose={onClose} open={open}>
+        <Form layout="vertical" ref={formRef} onFinish={sendEmail} initialValues={{ name: username }}>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item name="name" label="Name" rules={[{ required: true, message: "Please enter your name" }]}>
+                <Input placeholder="Enter your name" />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item name="email" label="Email" rules={[{ required: true, message: "Please enter your email" }]}>
+                <Input type="email" placeholder="Enter your email" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Button type="primary" htmlType="submit">Send Message</Button>
+        </Form>
+      </Drawer>
+
+      <ToastContainer />
     </>
   );
 };
