@@ -1,0 +1,122 @@
+/* Base Styles */
+.car-section {
+    padding: 60px 0;
+    background-color: #f9f9f9;
+    background-image: url('../../../assets//Home/carbackgraundimage.png');
+    width: 100%;
+    padding: 90px 80px;
+  }
+  
+  .car-heading h1, .car-heading span {
+    color: white;
+    font-weight: 900;
+    line-height: 3rem;
+    font-size: 100px;
+    padding-top: 25px;
+  }
+  
+  .car-heading span {
+    color: #008000;
+  }
+  
+  .car-form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  }
+  
+  .car-form label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .car-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .car-form h1 {
+    font-weight: 600;
+    font-size: 14px;
+    color: black;
+    padding-top: 7px;
+  }
+  
+  .mobile-input {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .mobile-input span {
+    background-color: #f0f0f0;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    background-color: #ffc107;
+    color: #333;
+    font-weight: bold;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .submit-btn:hover {
+    background-color: #ffa000;
+  }
+  
+  /* Responsive Design */
+  
+  /* For tablets and smaller laptops */
+  @media (max-width: 991px) {
+    .car-heading h1, .car-heading span {
+      font-size: 70px;
+      line-height: 2.5rem;
+    }
+  }
+  
+  /* For mobile phones */
+  @media (max-width: 767px) {
+    .car-section {
+      padding: 40px 20px;
+    }
+  
+    .car-heading h1, .car-heading span {
+      font-size: 50px;
+      line-height: 2rem;
+      padding-top: 10px;
+    }
+  
+    .car-form {
+      padding: 20px;
+    }
+  
+    .submit-btn {
+      padding: 12px;
+    }
+  }
+  
+  /* For very small screens */
+  @media (max-width: 480px) {
+    .car-heading h1, .car-heading span {
+      font-size: 40px;
+    }
+  
+    .car-form input {
+      padding: 10px;
+    }
+  
+    .submit-btn {
+      padding: 10px;
+    }
+  } 
+  
