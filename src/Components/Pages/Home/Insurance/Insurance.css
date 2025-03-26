@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 
->>>>>>> 7ea579c52e0d99b3fc8e42aa54c2b08aa548d893
 .insurance-section {
     display: flex;
     justify-content: center;
@@ -9,9 +6,7 @@
     padding: 40px 20px;
     background-color: rgb(244, 248, 250);
   }
-<<<<<<< HEAD
   
-=======
   /* .insurance-section {
     background-image: url("banner");
     background-size: cover;
@@ -23,7 +18,6 @@
     align-items: center;
   }
    */
->>>>>>> 7ea579c52e0d99b3fc8e42aa54c2b08aa548d893
   
   .insurance-header h1 {
     font-size: 34px;
@@ -39,19 +33,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-<<<<<<< HEAD
     gap: 10px;
   }
   
   .input-field {
     width: 70%;
-=======
     gap: 15px;
   }
 
   .input-field {
     width: 50%;
->>>>>>> 7ea579c52e0d99b3fc8e42aa54c2b08aa548d893
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -85,10 +76,7 @@
     .btn-view {
       width: 100%;
     }
-  }
-<<<<<<< HEAD
-=======
-  
+  }  
 
 
   .custom-link {
@@ -128,5 +116,4 @@
   .custom-link:hover::after {
     width: 100%;
   }
->>>>>>> 7ea579c52e0d99b3fc8e42aa54c2b08aa548d893
   
