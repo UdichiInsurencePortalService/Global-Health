@@ -10,26 +10,46 @@ const CarInsurance = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const trimmedRegNum = registrationNumber.trim().toUpperCase();
-    
     if (!trimmedRegNum) {
-      setError("Please enter a valid registration number.");
+      setError("Please enter a valid registation number.");
       setVehicleDetails(null);
       return;
     }
-
-    const vehicles = apis.vehicles; // Access the correct array
+    const vehicles = apis.vehicles;
     const vehicle = vehicles.find(
       (v) => v.vehicle_no.toUpperCase() === trimmedRegNum
     );
-    
     if (vehicle) {
       setVehicleDetails(vehicle);
       setError(null);
     } else {
-      setVehicleDetails(null);
-      setError("No vehicle found with this registration number.");
+      setError("No vehicle found this registration number.");
     }
   };
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const trimmedRegNum = registrationNumber.trim().toUpperCase();
+
+  //   if (!trimmedRegNum) {
+  //     setError("Please enter a valid registration number.");
+  //     setVehicleDetails(null);
+  //     return;
+  //   }
+
+  //   const vehicles = apis.vehicles; // Access the correct array
+  //   const vehicle = vehicles.find(
+  //     (v) => v.vehicle_no.toUpperCase() === trimmedRegNum
+  //   );
+
+  //   if (vehicle) {
+  //     setVehicleDetails(vehicle);
+  //     setError(null);
+  //   } else {
+  //     setVehicleDetails(null);
+  //     setError("No vehicle found with this registration number.");
+  //   }
+  // };
 
   return (
     <div className="car-section">
@@ -56,7 +76,7 @@ const CarInsurance = () => {
                 required
               />
               <button type="submit" className="submit-btn">
-                View Prices
+                View Details
               </button>
             </form>
           </div>
@@ -65,11 +85,22 @@ const CarInsurance = () => {
         {vehicleDetails && (
           <div className="vehicle-details">
             <h2>Vehicle Details</h2>
-            <p><strong>Model:</strong> {vehicleDetails.model}</p>
-            <p><strong>Brand:</strong> {vehicleDetails.company}</p>
-            <p><strong>Year:</strong> {new Date(vehicleDetails.date_of_buy).getFullYear()}</p>
-            <p><strong>Owner:</strong> {vehicleDetails.owner}</p>
-            <p><strong>Address:</strong> {vehicleDetails.address}</p>
+            <p>
+              <strong>Model:</strong> {vehicleDetails.model}
+            </p>
+            <p>
+              <strong>Brand:</strong> {vehicleDetails.company}
+            </p>
+            <p>
+              <strong>Year:</strong>{" "}
+              {new Date(vehicleDetails.date_of_buy).getFullYear()}
+            </p>
+            <p>
+              <strong>Owner:</strong> {vehicleDetails.owner}
+            </p>
+            <p>
+              <strong>Address:</strong> {vehicleDetails.address}
+            </p>
           </div>
         )}
 
