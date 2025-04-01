@@ -1,3 +1,6 @@
+
+
+
 /* Base Styles */
 .car-section {
     padding: 60px 0;
@@ -120,3 +123,54 @@
     }
   } 
   
+
+
+  .car-section-info {
+    display: block;
+    padding: 40px 0;
+    text-align: center;
+    background-color: #f9f9f9;
+    /* margin: 50px; */
+  }
+
+  .car-section-info h1{
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+
+  .car-section-info {
+    padding: 50 50;
+  }
+  
+  .car-section-info p{
+    text-align: start;
+    font-weight: 600;
+  }
+
+ .car-section-statics h2 , p{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+ }
+
+
+ .img-fluid {
+  position: static;
+  width: 150px;
+  margin: 0 auto;
+ }
+
+ .what-not-cover-section {
+  background-color: darkgray;
+ }
+
+ .what-not-cover-section img{
+  /* display: flex;
+  justify-content: flex-start;
+  align-items: center; */
+  margin-right: 235px;
+  
+  height: 70px;
+  width: 70px;
+ }

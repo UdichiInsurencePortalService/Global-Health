@@ -7,7 +7,7 @@ import Login from "./Components/Pages/Authentication/Login/Login.jsx"; // Fixed 
 import Footer from "./Header/Footer/Footer.jsx";
 import './App.css'
 import CarInsurance from "./Features/product/CarInsurance/CarInsurance.jsx";
-
+import About from "./Aboutus/About.jsx";
 
 
 
@@ -16,9 +16,15 @@ import CarInsurance from "./Features/product/CarInsurance/CarInsurance.jsx";
 function App() {
   return (    
     <>
+
       <Navbar />
       <Routes>
+
         <Route path="/" element={<Home />} />
+        <Route path="/aboutus" element={<About />} />
+
+
+
         {/* <Route path="/product" element={<Product />} /> */}
         <Route path="/carinsurance" element={<CarInsurance />} />
         <Route path="/login" element={<Login />} /> {/* Fixed */}

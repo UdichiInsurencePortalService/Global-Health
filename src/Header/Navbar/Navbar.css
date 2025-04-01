@@ -297,7 +297,7 @@ html, body {
 /* Right Bar */
 .header.style2 .main-menu{
 	display:inline-block;
-	float:left;
+	float: left;
 }
 .header .right-bar {
 	float: right;
@@ -392,3 +392,38 @@ html, body {
 	box-shadow:0px 0px 13px #00000054;
 }
 
+
+.contact-description {
+	font-size: 14px;
+	color: #555;
+	margin-bottom: 20px;
+  }
+  
+  .contact-input {
+	border-radius: 8px;
+  }
+  
+  .contact-buttons {
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+  }
+  
+  .cancel-btn {
+	background-color: #ff4d4f;
+	color: white;
+  }
+  
+  .submit-btn {
+	background-color: #1890ff;
+	color: white;
+  }
+  
+  .contact-title {
+	margin-top: 30px;
+	font-size: 18px;
+  }
+  
+  .contact-list li {
+	margin-bottom: 10px;
+  }
