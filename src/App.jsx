@@ -7,10 +7,6 @@ import Login from "./Components/Pages/Authentication/Login/Login.jsx";
 import Footer from "./Header/Footer/Footer.jsx";
 import "./App.css";
 import CarInsurance from "./Features/product/CarInsurance/CarInsurance.jsx";
-
-
-
-
 import Abouts from "./Abouts/Abouts.jsx"; // Make sure this path is correct
 
 function App() {

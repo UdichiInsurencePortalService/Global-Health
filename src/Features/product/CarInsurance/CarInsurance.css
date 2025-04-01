@@ -143,8 +143,10 @@
   }
   
   .car-section-info p{
-    text-align: start;
     font-weight: 600;
+    font-size: 17px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-style: italic;
   }
 
  .car-section-statics h2 , p{

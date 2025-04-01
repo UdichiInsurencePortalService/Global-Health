@@ -9,7 +9,7 @@ const Top = () => {
           <div className="col-lg-6 col-md-5 col-12">
             <ul className="top-link" style={{ display: "flex", gap: "15px", listStyle: "none", padding: 0, margin: 0 }}>
               <li>
-                <Link to="/Abouts" style={{ color: "white", textDecoration: "none" }}>About Us</Link>
+                <Link to="/aboutus" style={{ color: "white", textDecoration: "none" }}>About Us</Link>
               </li>
               <li>
                 <Link to="/" style={{ color: "white", textDecoration: "none" }}>Blogs</Link>

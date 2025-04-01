@@ -214,7 +214,7 @@ const CarInsurance = () => {
               <h1>What is Car Insurance?</h1>
             </div>
           </div>
-          <div className="row">
+          <div className="row justify-content-center">
             <div className="col-lg-8">
               <p>Car Insurance, also known as auto or motor insurance, is a type of vehicle insurance policy that protects you and your car from any risks and damages caused by accidents, thefts, or natural disasters.</p>
               <p>In addition to that, it protects you from third-party liabilities, ensuring financial security in case of any unforeseen circumstances.</p>

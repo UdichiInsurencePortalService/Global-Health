@@ -17,9 +17,9 @@ const Newsletter = () => {
         </div>
 
         {/* Input with Icon and Button Section */}
-        <div className="row mt-4" style={{ gap: 20 }}>
+        <div className="row justify-content-center">
           {/* Email Input with Icon Inside */}
-          <div className="col-lg-8 col-md-6 col-sm-12">
+          <div className="col-lg-8 col-md-6 col-sm-12" style={{width:'24%'}}>
             <div className="input-group">
               <span className="input-group-text">
                 <FaEnvelope />
