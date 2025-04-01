@@ -1,11 +1,11 @@
 const express = require("express");
 const { signupValidation, loginValidation } = require("../Middleware/AuthValidation");
-const {signup,login} = require("../Controlers/AuthController")
-const router = express.Router(); // Correct initialization of Router
+const { signup, login, exportUsers } = require("../Controlers/AuthController"); // Combined imports
 
-// Example authentication route
+const router = express.Router();
 
-router.post('/signup',signupValidation,signup );
-router.post('/login',loginValidation, login );
+router.post('/signup', signupValidation, signup);
+router.post('/login', loginValidation, login);
+router.get('/export-users', exportUsers); // Route for exporting users
 
-module.exports = router; // Ensure the router is exported
+module.exports = router; // ✅ FIXED: Removed space in "module. Exports"

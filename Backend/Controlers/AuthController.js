@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../Models/user");
+const exportUsersToExcel = require("../Utils/excelExport");
 
 const signup = async (req, res) => {
     try {
@@ -73,7 +74,25 @@ const login = async (req, res) => {
     }
 };
 
+// Export users to Excel file
+const exportUsers = async (req, res) => {
+    try {
+        await exportUsersToExcel();
+        res.status(200).json({
+            message: "User data exported successfully",
+            success: true
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            success: false,
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     signup,
-    login
+    login,
+    exportUsers
 };
