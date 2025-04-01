@@ -15,8 +15,8 @@ const Footer = () => {
               <div className="d-flex justify-content-center">
                 <div className="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-lg" style={{ width: "150px", height: "150px" }}>
                   <img
+                  width={134}
                     src={logo}
-                    height="120"
                     alt="Global Health & Allied Insurances"
                     loading="lazy"
                   />

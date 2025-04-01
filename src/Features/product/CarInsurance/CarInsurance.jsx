@@ -4,6 +4,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import apis from "../../../Data/Vechicle.json";
 import { handleError } from "../../../errortoast";
 import "./CarInsurance.css";
+import IDV from "../../../IDV/IDV.jsx";
 
 const CarInsurance = () => {
   const [registrationNumber, setRegistrationNumber] = useState(
@@ -140,6 +141,7 @@ const CarInsurance = () => {
         </div>
       </div>
     </div>
+    <IDV/>
 
     </>
 

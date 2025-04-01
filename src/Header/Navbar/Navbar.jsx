@@ -7,6 +7,7 @@ import logo from "../../assets/logo.png";
 import { Drawer, Form, Input, Row, Col, Button } from "antd";
 import { ToastContainer } from "react-toastify";
 import { handleSuccess } from "../../errortoast";
+import Top from "./TopBar/Top";
 
 const Navbar = () => {
   const [username, setUsername] = useState(localStorage.getItem("loggedInUser") || "");
@@ -45,29 +46,9 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="topbar" style={{ backgroundColor: "rgb(172, 57, 19)", color: "white", padding: "10px" }}>
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-6 col-md-5 col-12">
-              <ul className="top-link" style={{ display: "flex", gap: "15px", listStyle: "none", padding: 0, margin: 0 }}>
-                <li><Link to="#" style={{ color: "white", textDecoration: "none" }}>About</Link></li>
-                <li><Link to="/" style={{ color: "white", textDecoration: "none" }}>Blogs</Link></li>
-                <li><Link to="#" style={{ color: "white", textDecoration: "none" }}>FAQ</Link></li>
-              </ul>
-            </div>
-            <div className="col-lg-6 col-md-7 col-12">
-              <ul className="top-contact" style={{ display: "flex", gap: "15px", listStyle: "none", justifyContent: 'end', margin: 0, padding: 0 }}>
-                <li style={{ color: "white" }}><i className="fa fa-phone" style={{ marginRight: "5px" }}></i> 9205401500</li>
-                <li style={{ color: "white" }}>
-                  <i className="fa fa-envelope" style={{ marginRight: "5px" }}></i>
-                  <Link to="mailto:globalhealth235@gmail.com" style={{ color: "white", textDecoration: "none" }}>globalhealth235@gmail.com</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
+         <div className="topbar" style={{ backgroundColor: "rgb(172, 57, 19)", color: "white", padding: "10px" }}>
+<Top/>
+</div>
       <header className="header">
         <div className="container">
           <div className="row align-items-center">
@@ -78,7 +59,7 @@ const Navbar = () => {
                         src={logo}
                         alt="Logo"
                         className="img-fluid"
-                        style={{ maxHeight: "150px", width: "auto", objectFit: "contain", position: "absolute" }}
+                        style={{ maxWidth: "190px", width: "auto", objectFit: "contain", position: "absolute" }}
                       />
                     </Link>
                   </div>
@@ -113,7 +94,8 @@ const Navbar = () => {
                         </li>
                   
                   <li><Link to="#">Policy</Link></li>
-                  <li><Link to="#">Claims</Link></li>
+                  <li><Link to="/">Claims</Link></li>
+
                   <li><Link to="#" onClick={showDrawer}>Contact Us</Link></li>
                 </ul>
               </nav>
