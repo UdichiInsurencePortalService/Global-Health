@@ -297,7 +297,7 @@ html, body {
 /* Right Bar */
 .header.style2 .main-menu{
 	display:inline-block;
-	float: left;
+	/* float: left; */
 }
 .header .right-bar {
 	float: right;
@@ -407,6 +407,9 @@ html, body {
 	margin-top: 20px;
 	display: flex;
 	justify-content: space-between;
+	width: 40%;
+	margin-right: 30px;
+	gap: 20px;
   }
   
   .cancel-btn {
@@ -427,3 +430,4 @@ html, body {
   .contact-list li {
 	margin-bottom: 10px;
   }
+  

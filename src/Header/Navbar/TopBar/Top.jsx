@@ -12,7 +12,7 @@ const Top = () => {
                 <Link to="/aboutus" style={{ color: "white", textDecoration: "none" }}>About Us</Link>
               </li>
               <li>
-                <Link to="/" style={{ color: "white", textDecoration: "none" }}>Blogs</Link>
+                <Link to="/Blog" style={{ color: "white", textDecoration: "none" }}>Blogs</Link>
               </li>
               <li>
                 <Link to="/" style={{ color: "white", textDecoration: "none" }}>FAQ</Link>

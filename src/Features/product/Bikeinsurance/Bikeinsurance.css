@@ -1,0 +1,302 @@
+.Bike-section {
+    padding: 60px 0;
+    background-color: #f9f9f9;
+    background-image: url('../../../assets//Home/carbackgraundimage.png');
+    width: 100%;
+    padding: 90px 80px;
+  }
+  .Bike-info {
+    background-color: white;
+  }
+
+  
+  .Bike-heading h1, .Bike-heading span {
+    color: white;
+    font-weight: 900;
+    line-height: 5rem;
+    font-size: 100px;
+    padding-top: 25px;
+  }
+
+  .Bike-heading h1 {
+    color: #008000;
+  }
+  .Bike-heading h2 {
+    color: #008000;
+    font-weight: 900;
+    line-height: 3rem;
+    font-size: 100px;
+    padding-top: 30px;
+  }
+
+  .Bike-form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  }
+  
+  .Bike-form label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .Bike-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .Bike-form h1 {
+    font-weight: 600;
+    font-size: 14px;
+    color: black;
+    padding-top: 7px;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    background-color: #ffc107;
+    color: #333;
+    font-weight: bold;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .submit-btn:hover {
+    background-color: #ffa000;
+  }
+  
+
+    /* Responsive Design */
+  
+  /* For tablets and smaller laptops */
+  @media (max-width: 991px) {
+    .car-heading h1, .car-heading span {
+      font-size: 70px;
+      line-height: 2.5rem;
+    }
+  }
+  
+  /* For mobile phones */
+  @media (max-width: 767px) {
+    .Bike-section {
+      padding: 40px 20px;
+    }
+  
+    .Bike-heading h1, .Bike-heading span {
+      font-size: 50px;
+      line-height: 2rem;
+      padding-top: 10px;
+    }
+  
+    .Bike-form {
+      padding: 20px;
+    }
+  
+    .submit-btn {
+      padding: 12px;
+    }
+  }
+  
+  /* For very small screens */
+  @media (max-width: 480px) {
+    .Bike-heading h1, .Bike-heading span {
+      font-size: 40px;
+    }
+  
+    .Bike-form input {
+      padding: 10px;
+    }
+  
+    .submit-btn {
+      padding: 10px;
+    }
+  } 
+/*   
+
+  .Bike-info {
+    padding: 20px 20px;
+  }
+
+  .Bike-info h1 {
+    text-align: center;
+    padding: 30px;
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .Bike-info .content-info-list p {
+    margin: 10 0 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: start;
+  }
+
+
+  .Bike-info .content-info-list h3 {
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+.Bike-info .content-info-list {
+    margin-top: 30px;
+}
+
+.Bike-info .content-info-list p {
+    font-size: 1rem;
+    line-height: 2.4;
+}
+ */
+
+
+ .Bike-info {
+  background-color: #ffffff;
+  padding: 60px 20px;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.Bike-info h1 {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #007b5e;
+}
+
+.content-info-list {
+  margin-bottom: 40px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 25px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.content-info-list:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  background-color: #f1f1f1;
+}
+
+.content-info-list h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #008000;
+  margin-bottom: 10px;
+}
+
+.content-info-list p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #444;
+}
+
+@media (max-width: 767px) {
+  .Bike-info h1 {
+    font-size: 28px;
+  }
+
+  .content-info-list h3 {
+    font-size: 20px;
+  }
+
+  .content-info-list p {
+    font-size: 15px;
+  }
+
+  .content-info-list {
+    padding: 20px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/* WHAT COVER IN INSURANCE SECTION DESIGN */
+
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+
+what-cover-section, img {
+  border-radius: 20%;
+}
+
+
+
+
+/* WHATS NOT COVER SECTION DESIGN SECTION DESIGN */
+
+
+.bike-not-cover-section {
+  background-color: #f9f9f9;
+  padding: 60px 0;
+}
+
+.bike-not-cover-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+.card-not-covered {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 30px 20px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 100%;
+}
+
+.card-not-covered:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+}
+
+.card-not-covered img {
+  max-width: 60px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.card-not-covered:hover img {
+  transform: scale(1.1);
+}
+
+.card-not-covered h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card-not-covered p {
+  font-size: 0.95rem;
+  color: #555;
+  flex-grow: 1;
+}
