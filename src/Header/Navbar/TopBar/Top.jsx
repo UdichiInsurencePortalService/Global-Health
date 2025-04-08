@@ -1,38 +1,41 @@
-import React from 'react';
-import '../../Navbar/Navbar.css';
-import { Link } from 'react-router-dom';
+import React from "react";
+import "../../Navbar/Navbar.css";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 const Top = () => {
   return (
+    <div className="topbar-wrapper">
       <div className="container">
-        <div className="row">
-          <div className="col-lg-6 col-md-5 col-12">
-            <ul className="top-link" style={{ display: "flex", gap: "15px", listStyle: "none", padding: 0, margin: 0 }}>
-              <li>
-                <Link to="/aboutus" style={{ color: "white", textDecoration: "none" }}>About Us</Link>
-              </li>
-              <li>
-                <Link to="/" style={{ color: "white", textDecoration: "none" }}>Blogs</Link>
-              </li>
-              <li>
-                <Link to="/" style={{ color: "white", textDecoration: "none" }}>FAQ</Link>
-              </li>
+        <div className="row align-items-center">
+          {/* Left Links */}
+          <div className="col-md-6 col-12 mb-2 mb-md-0">
+            <ul className="top-links">
+              <li><Link to="/aboutus">About Us</Link></li>
+              <li><Link to="/">Blogs</Link></li>
+              <li><Link to="/">FAQ</Link></li>
             </ul>
           </div>
-          <div className="col-lg-6 col-md-7 col-12">
-            <ul className="top-contact" style={{ display: "flex", gap: "15px", listStyle: "none", justifyContent: 'end', margin: 0, padding: 0 }}>
-              <li style={{ color: "white" }}>
-                <i className="fa fa-phone" style={{ marginRight: "5px" }}></i> 9205401500
+
+          {/* Right Contact */}
+          <div className="col-md-6 col-12 text-md-end" style={{display:'flex',justifyContent:'end',alignItems:"center"}}>
+            <ul className="top-contact">
+              <li>
+                <FontAwesomeIcon icon={faPhone} /> 9205401500
               </li>
-              <li style={{ color: "white" }}>
-                <i className="fa fa-envelope" style={{ marginRight: "5px" }}></i>
-                <Link to="mailto:globalhealth235@gmail.com" style={{ color: "white", textDecoration: "none" }}>globalhealth235@gmail.com</Link>
+              <li>
+                <FontAwesomeIcon icon={faEnvelope} />
+                <Link to="mailto:globalhealth235@gmail.com">
+                  globalhealth235@gmail.com
+                </Link>
               </li>
             </ul>
           </div>
         </div>
       </div>
+    </div>
   );
-}
+};
 
 export default Top;

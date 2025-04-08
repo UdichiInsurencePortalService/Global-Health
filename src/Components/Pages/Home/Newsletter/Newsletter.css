@@ -1,28 +1,149 @@
-.Newsletter-section {
-  background-image: url('../../../../assets/background-white-42166f822e.svg'); /* Replace with your image path */
-  background-position: 50% 0;
-  background-repeat: repeat-x;
-  background-color: #1197eb;
-  padding: 80px 0;
+/* Newsletter Section with Animated Gradient and Texture */
+.newsletter-section {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  width: 100%;
+  background-color: rgb(245, 250, 255);
 }
 
-.Newsletter-section h1 {
-  font-weight: 600;
-  color: white;
+
+
+/* Newsletter Card with Swing Animation */
+.newsletter-card {
+  width: 90%;
+  max-width: 800px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 15px;
+  background: white;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+  animation: swing 3s ease-in-out infinite alternate;
+  text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
-.Newsletter-section h2 {
+/* Rope Effect */
+.newsletter-card::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 4px;
+  height: 30px;
+  background: #555;
+  border-radius: 2px;
+  transform: translateX(-50%);
+}
+
+/* Swing Animation */
+/* @keyframes swing {
+  0% { transform: rotate(-3deg); }
+  100% { transform: rotate(3deg); }
+} */
+
+/* Headings & Paragraph */
+.newsletter-card h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.newsletter-card h2 {
+  font-size: 1.5rem;
   font-weight: 500;
+  color: #555;
+}
+
+.newsletter-card p {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Input Group Styling */
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.input-group-text {
+  padding: 10px;
+}
+
+/* Input Field */
+.form-control {
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+/* Newsletter Button - Unified Styling */
+.newsletter-btn {
+  font-size: 1rem;
+  background-color: #0d6efd;
   color: white;
+  padding: 10px 15px;
+  border: 1px solid #0d6efd;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
-.Newsletter-section p {
-  font-weight: 600;
-  color: white;
+.newsletter-btn:hover {
+  background-color: #0b5ed7;
+  transform: scale(1.05);
 }
 
-/* Corrected row selector */
-.Newsletter-section .row {
-  row-gap: 20px;
+.newsletter-btn:active {
+  transform: scale(0.9);
+  transition: transform 0.1s ease-in-out;
 }
 
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .newsletter-card {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .newsletter-card h1 {
+    font-size: 1.8rem;
+  }
+
+  .newsletter-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .newsletter-card p {
+    font-size: 0.95rem;
+  }
+
+  .input-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-control,
+  .newsletter-btn {
+    width: 100%;
+  }
+  .input-group-text{
+    display: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .newsletter-btn {
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  .input-group-text,
+  .form-control {
+    border-radius: 0.25rem !important;
+  }
+}

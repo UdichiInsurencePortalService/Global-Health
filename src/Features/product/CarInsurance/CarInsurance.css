@@ -3,7 +3,6 @@
 
 /* Base Styles */
 .car-section {
-    padding: 60px 0;
     background-color: #f9f9f9;
     background-image: url('../../../assets//Home/carbackgraundimage.png');
     width: 100%;
@@ -63,7 +62,6 @@
   }
   
   .submit-btn {
-    width: 100%;
     background-color: #ffc107;
     color: #333;
     font-weight: bold;
@@ -71,6 +69,7 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    
   }
   
   .submit-btn:hover {

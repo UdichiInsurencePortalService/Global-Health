@@ -1,94 +1,319 @@
-/* General Styles */
-.news-section{
-    padding: 40px 50px;
-}
-.news-section h2{
- font-size: 34px;
- font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
- font-weight: 550;
-}
-
-.dealer-section {
-    padding: 40px 0;
-    background-color: #f9f9f9;
-    text-align: center;
+/* Base styles */
+.faq-container {
+  max-width: 1180px;
+  margin: 10px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  padding: 0;
 }
 
-.dealer-heading {
-    font-size: 28px;
-    font-weight: 600;
-    color: #51575d;
-    margin-bottom: 30px;
+.faq-title {
+  font-size: 2rem;
+  text-align: center;
+  margin: 20px 0;
+  color: #333;
+  padding: 0 15px;
 }
 
-.dealer-heading h2 {
-    text-transform: uppercase;
-    color: #333;
+/* Tab Navigation */
+.faq-tabs {
+  display: flex;
+  background: linear-gradient(135deg, #3498db, #1a5276);
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
 }
 
-/* Tabs Navigation */
-.nav-tabs {
-    display: flex;
-    justify-content: center;
-    background: #fcfcfc;
-    border-radius: 5px;
-    padding: 5px;
+.faq-tabs::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
 }
 
-.nav-tabs .nav-item {
-    margin: 0 5px;
+.tab-button {
+  flex: 1;
+  padding: 18px 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-.nav-tabs .nav-link {
-    font-size: 16px;
-    font-weight: 500;
-    color: #0157c0;
-    background: #f9f9f9;
-    border-radius: 4px;
-    padding: 10px 15px;
-    transition: all 0.3s;
+.tab-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
 }
 
-.nav-tabs .nav-link.active, 
-.nav-tabs .nav-link:hover {
-    background-color: #0157c0;
-    color: white;
+.tab-button:hover {
+  color: #fff;
+}
+
+.tab-button.active {
+  color: #fff;
+}
+
+.tab-button.active::after {
+  width: 80%;
+}
+
+/* Mobile swipe instructions */
+.mobile-instructions {
+  display: none;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 0.85rem;
+  color: #777;
+  background-color: rgba(52, 152, 219, 0.1);
 }
 
 /* Tab Content */
 .tab-content {
-    margin-top: 20px;
+  position: relative;
 }
 
-/* Card Styles */
-.car-content {
-    display: block;
-    padding: 15px;
+.accordion-container {
+  display: none;
+  padding: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.accordion-container.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accordion Items */
+.accordion-item {
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-header {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.accordion-item.expanded .accordion-header {
+  background-color: #e9f5fe;
+}
+
+.accordion-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  transition: all 0.3s ease;
+}
+
+.accordion-item.expanded .accordion-header h3 {
+  color: #2980b9;
+}
+
+.accordion-icon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.accordion-icon::before,
+.accordion-icon::after {
+  content: '';
+  position: absolute;
+  background-color: #95a5a6;
+  transition: all 0.3s ease;
+}
+
+.accordion-icon::before {
+  top: 9px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+.accordion-icon::after {
+  top: 0;
+  left: 9px;
+  width: 2px;
+  height: 100%;
+  transform: scaleY(1);
+}
+
+.accordion-item.expanded .accordion-icon::before,
+.accordion-item.expanded .accordion-icon::after {
+  background-color: #3498db;
+}
+
+.accordion-item.expanded .accordion-icon::after {
+  transform: scaleY(0);
+}
+
+.accordion-content {
+  max-height: 0;
+  padding: 0 20px;
+  overflow: hidden;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.accordion-item.expanded .accordion-content {
+  max-height: 300px;
+  padding: 10px 20px 20px;
+}
+
+.accordion-content p {
+  margin: 0;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .faq-title {
+    font-size: 1.8rem;
+  }
+  
+  .accordion-header h3 {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .faq-container {
+    margin: 20px auto;
     border-radius: 10px;
-    background: #fff;
-    transition: 0.3s;
-    text-decoration: none;
-}
-
-.car-content:hover {
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.car-content img {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 5px;
-}
-
-.car-content span {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
+  }
+  
+  .faq-title {
+    font-size: 1.4rem;
+    margin: 15px 0;
+  }
+  
+  .faq-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 0;
+  }
+  
+  .mobile-instructions {
     display: block;
-    margin-top: 10px;
+  }
+  
+  .tab-button {
+    flex: 0 0 auto;
+    min-width: 120px;
+    padding: 14px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .tab-button.active::after {
+    width: 60%;
+  }
+  
+  .accordion-container {
+    padding: 15px;
+  }
+  
+  .accordion-header {
+    padding: 14px 16px;
+  }
+  
+  .accordion-header h3 {
+    font-size: 14px;
+  }
+  
+  .accordion-item.expanded .accordion-content {
+    padding: 10px 16px 16px;
+  }
 }
 
-.car-content:hover span {
-    color: #0157c0;
+@media (max-width: 480px) {
+  .faq-container {
+    margin: 10px auto;
+    border-radius: 8px;
+  }
+  
+  .faq-title {
+    font-size: 1.2rem;
+    margin: 12px 0;
+  }
+  
+  .tab-button {
+    min-width: 110px;
+    padding: 12px 8px;
+    font-size: 0.8rem;
+  }
+  
+  .accordion-container {
+    padding: 10px;
+  }
+  
+  .accordion-header {
+    padding: 12px;
+  }
+  
+  .accordion-header h3 {
+    font-size: 13px;
+  }
+  
+  .accordion-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .accordion-icon::before {
+    top: 7px;
+  }
+  
+  .accordion-icon::after {
+    left: 7px;
+  }
+  
+  .accordion-content p {
+    font-size: 0.85rem;
+  }
 }
