@@ -10,8 +10,105 @@ import {
 import { CarOutlined, PhoneOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./CarInsurance.css";
+import own1 from '../../../assets/own1.png'
+import drunk2 from '../../../assets/drunk2.png'
+import driving3 from '../../../assets/driving3.png'
+import consequential4 from '../../../assets/consequential4.png'
+import contributory5 from '../../../assets/contributory5.png'
+import car from '../../../assets/car.png'
+import theft from '../../../assets/theft.png'
+import fire from '../../../assets/fire.png'
+import dia from '../../../assets/dia.png'
+import acci from '../../../assets/acci.png'
+import third from '../../../assets/third.png'
+import add6 from '../../../assets/add6.png'
+
+
+
+
+
 
 const CarInsurance = () => {
+  const features2 = [
+    {
+      id: 1,
+      title: "Own Damages for Third-Party Policy Holder",
+      img: own1,
+      text: "In the case of a Third-Party or Liability Only Car Policy, damages to own vehicle won’t be covered.",
+    },
+    {
+      id: 2,
+      title: "Drunk Driving or without a Licence",
+      img: drunk2,
+      text: "You were driving drunk or without a valid driving licence.",
+    },
+    {
+      id: 3,
+      title: "Driving without a Valid Driving Licence Holder",
+      img: driving3,
+      text: "You hold a learner’s licence and were driving without a valid driving licence-holder in the front passenger seat.",
+    },
+    {
+      id: 4,
+      title: "Consequential Damages",
+      img: consequential4,
+      text: "Any damage which is not a direct result of the accident (e.g. after an accident, if the damaged car is driven incorrectly and the engine gets damaged, it will not be covered)",
+    },
+    {
+      id: 5,
+      title: "Contributory Negligence",
+      img: contributory5,
+      text: "Any contributory negligence (e.g., damage due to driving a car in a flood, which is not recommended as per the manufacturer’s driving manual, will not be covered)",
+    },
+    {
+      id: 6,
+      title: "Add-Ons Not Bought",
+      img: add6,
+      text: "Some situations are covered in add-ons. If you haven’t bought those add-ons, the corresponding situations will not be covered.",
+    },
+  ];
+
+  const features = [
+    {
+      id: 1,
+      title: "Accidents",
+      img: car,
+      text: "Damages and losses that may arise out of accidents and collisions",
+    },
+    {
+      id: 2,
+      title: "Theft",
+      img: theft,
+      text: "Covers for the losses incurred when your car is unfortunately stolen",
+    },
+    {
+      id: 3,
+      title: "Fire",
+      img: fire,
+      text: "Damages and losses caused to your car due to an accidental fire",
+    },
+    {
+      id: 4,
+      title: "Natural Disasters",
+      img: dia,
+      text: "Damages and losses to your car in case of natural calamities such as floods, cyclones, etc.",
+    },
+    {
+      id: 5,
+      title: "Personal Accident",
+      img: acci,
+      text: "If there is a car accident and unfortunately, it leads to death or disability of the owner",
+    },
+    {
+      id: 6,
+      title: "Third-Party Losses",
+      img: third,
+      text: "In cases where your car causes damages and losses to someone else, their car or property.",
+    },
+  ];     
+
+
+
   const navigate = useNavigate();
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
@@ -139,6 +236,70 @@ const CarInsurance = () => {
               </Card>
             </Col>
           </Row>
+        </div>
+      </div>
+
+{/*  */}
+
+
+<div className="car-section-info">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <h1>What is Car Insurance?</h1>
+            </div>
+          </div>
+          <div className="row justify-content-center">
+            <div className="col-lg-8">
+              <p>Car Insurance, also known as auto or motor insurance, is a type of vehicle insurance policy that protects you and your car from any risks and damages caused by accidents, thefts, or natural disasters.</p>
+              <p>In addition to that, it protects you from third-party liabilities, ensuring financial security in case of any unforeseen circumstances.</p>
+              <p>Whether you want to legally comply with the law with basic third-party insurance or opt for comprehensive protection, you can customize your IDV and add-ons to suit your needs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="what-cover-section py-5">
+        <div className="container">
+          <div className="row justify-content-center text-center mb-4">
+            <div className="col-md-8">
+              <h1 className="fw-bold">What’s Covered in Car Insurance?</h1>
+            </div>
+          </div>
+          <div className="row">
+            {features.map((feature) => (
+              <div key={feature.id} className="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex align-items-stretch">
+                <div className="card shadow-lg p-4 text-center card-hover d-flex flex-column">
+                  <img src={feature.img} alt={feature.title} className="img-fluid mb-3" />
+                  <h4 className="fw-bold">{feature.title}</h4>
+                  <p className="flex-grow-1">{feature.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+
+      <div className="what-not-cover-section py-5">
+        <div className="container">
+          <div className="row justify-content-center text-center mb-4">
+            <div className="col-md-8">
+              <h1 className="fw-bold">What’s Not Covered?</h1>
+              <p>It is equally important to know what’s not covered in your car insurance policy to avoid surprises when you make a claim.</p>
+            </div>
+          </div>
+          <div className="row">
+            {features2.map((feature) => (
+              <div key={feature.id} className="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex align-items-stretch">
+                <div className="card shadow-lg p-4 text-center card-hover d-flex flex-column">
+                  <img src={feature.img} alt={feature.title} className="img-fluid mb-3" />
+                  <h4 className="fw-bold">{feature.title}</h4>
+                  <p className="flex-grow-1">{feature.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
