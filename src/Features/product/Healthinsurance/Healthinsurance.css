@@ -1,0 +1,157 @@
+/* Base Section */
+.Health-section {
+  background-color: #f9f9f9;
+  background-image: url('../../../assets/Home/carbackgraundimage.png');
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  padding: 90px 80px;
+}
+
+/* Heading */
+.Health-heading h1,
+.Health-heading span {
+  font-weight: 900;
+  line-height: 5rem;
+  font-size: 100px;
+  padding-top: 25px;
+  color: #008000;
+}
+
+.Health-heading h1 {
+  line-height: 6rem;
+  color: white;
+}
+
+/* Form */
+.Health-form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.Health-form label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.Health-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.Health-form h1 {
+  font-weight: 600;
+  font-size: 14px;
+  color: black;
+  padding-top: 7px;
+}
+
+/* Button */
+.submit-btn {
+    width: 30%;
+    background-color: #ffc107 !important;
+    color: #333;
+    font-weight: bold;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .submit-btn:hover {
+    background-color: #ffa000 !important;
+  }
+/* Responsive Design */
+
+/* Tablets and smaller laptops */
+@media (max-width: 991px) {
+  .Health-heading h1,
+  .Health-heading span {
+    font-size: 70px;
+    line-height: 4rem;
+  }
+
+  .Health-section {
+    padding: 60px 40px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 767px) {
+  .Health-heading {
+    text-align: center;
+  }
+
+  .Health-heading h1,
+  .Health-heading span {
+    font-size: 50px;
+    line-height: 3rem;
+    padding-top: 10px;
+  }
+
+  .Health-form {
+    padding: 20px;
+  }
+
+  .Health-section {
+    padding: 40px 20px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .Health-heading h1,
+  .Health-heading span {
+    font-size: 40px;
+    line-height: 2.5rem;
+  }
+
+  .Health-form input {
+    padding: 10px;
+  }
+
+  .btn-success {
+    padding: 12px;
+  }
+}
+
+
+.health-info {
+    background-color: #fefefe;
+}
+
+ .health-info .head1 {
+    color: black;
+    font-style: italic;
+    font-weight:600;
+    padding: 20px;
+ }
+ .health-info .head4{
+    color: black;
+    font-weight: 600;
+    font-style: italic;
+    /* padding-top: 5px; */
+    padding-bottom: 10px;
+ }
+
+ .health-info .para1{
+    display: flex;
+    align-items: center;
+    text-align: start;
+    font-style: italic;
+    font-weight: 500;
+    color: black;
+ }
+
+
+ .what-cover-section img {
+    height: 110px;
+    width: 110px;
+ }

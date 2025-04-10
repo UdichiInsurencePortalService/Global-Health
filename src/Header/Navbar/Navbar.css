@@ -266,9 +266,7 @@ html, body {
 /* Dropdown Menu */
 .header .nav li .dropdown {
 	background: #fff;
-	width: 220px;
 	position: absolute;
-	left:-20px;
 	top: 100%;
 	z-index: 999;
 	-webkit-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
@@ -281,7 +279,6 @@ html, body {
 	transition: all 0.3s ease 0s;
 	opacity: 0;
 	visibility: hidden;
-	top: 74px;
 	border-left:3px solid #2889e4;
 }
 .header .nav li:hover .dropdown{
@@ -323,7 +320,7 @@ html, body {
 /* Right Bar */
 .header.style2 .main-menu{
 	display:inline-block;
-	float: left;
+	/* float: left; */
 }
 .header .right-bar {
 	float: right;
@@ -433,6 +430,9 @@ html, body {
 	margin-top: 20px;
 	display: flex;
 	justify-content: space-between;
+	width: 40%;
+	margin-right: 30px;
+	gap: 20px;
   }
   
   .cancel-btn {
@@ -454,10 +454,7 @@ html, body {
 	margin-bottom: 10px;
   }
 
-
   /*  */
-
-
 
   .navigation .nav.menu li a {
 	text-decoration: none;

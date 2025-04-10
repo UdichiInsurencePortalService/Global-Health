@@ -1,0 +1,253 @@
+
+.car-dealership-site  {
+  /* background-color: violet; */
+  /* background: linear-gradient(to bottom, #4b0082, #8a2be2); */
+  background-color: #F8F9FA;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.custom-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1); /* Normal state */
+}
+
+.custom-hover:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+}
+
+/* .car-dealership-site title {
+  display: flex;
+  text-align: center;
+  color: yellow;
+} */
+
+* Card Image Styling */
+.card-img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  /* width: 100%; */
+}
+
+.heading {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: italic;
+}
+
+/* .card-img imge-fluid{
+  width: 100%;
+} */
+
+/* .img-fluid {
+  position: static;
+  width: 150px;
+  margin: 0 auto; */
+
+
+/* Card Title */
+.card-title{
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: black;
+  font-weight: 700;
+}
+
+
+/* Card Text */
+.card-text {
+  font-size: 1rem;
+  color: black;
+  font-weight: 300;
+  font-style: italic;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.card-text:hover{
+  color: blue;
+  font-weight: 400;
+  transition: 0s;
+}
+
+.sticky-sidebar {
+  position: sticky;
+  top: 80px; /* Navbar height adjust karna ho toh yeh change kar sakte ho */
+  height: 100vh;
+  overflow-y: auto; /* Agar sidebar ke andar scroll chahiye toh enable kar sakte ho */
+}
+
+
+.custom-hover {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.custom-hover:hover {
+  transform: translatey(+5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
+
+
+
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.travel-destinations-container {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(2vh, 1.5rem);
+}
+
+.destination-grid {
+  display: grid;
+  grid-template-columns: 25% 30% 15% 25%;
+  grid-template-rows: 50% 50%;
+  gap: 15px;
+  height: 80vh;
+  min-height: 460px;
+  width: 100%;
+}
+
+.destination-card {
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.tall-card {
+  grid-column: 2/3;
+  grid-row: span 2;
+}
+
+.wide-card {
+  grid-column: span 2;
+}
+
+.destination-card-inner {
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: -2px 4px 15px rgba(0, 0, 0, 0.26);
+  height: 100%;
+  border: none;
+}
+
+.card-img-wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.card-img-wrapper img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 25px;
+}
+
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  padding: clamp(0.938rem, 5vw, 1.563rem);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.57) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 25px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
+.card-overlay h2 {
+  font-size: clamp(1rem, 0.875rem + 0.625vw, 1.5rem);
+  line-height: 1.3;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.card-overlay p {
+  font-size: clamp(0.9rem, 0.875rem + 0.125vw, 1rem);
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
+.rating-badge {
+  position: absolute;
+  top: 25px;
+  left: min(2vmax, 1.563rem);
+  color: #ff7b29;
+  background: #fff;
+  border-radius: 50px;
+  padding: 2px 8px 2px 6px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 1px 20px rgba(0, 0, 0, 0.17);
+  font-size: 0.9rem;
+}
+
+.star-icon {
+  fill: #ff7b29;
+  width: 16px;
+  height: 16px;
+  margin-right: 2px;
+}
+
+@media screen and (max-width: 690px) {
+  .destination-grid {
+    height: 65vh;
+  }
+  
+  .tall-card {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+  
+  .wide-card {
+    grid-column: 2/4;
+    grid-row: 1/2;
+  }
+  
+  .wide-card-mobile {
+    grid-column: 2/4;
+    grid-row: 2/3;
+  }
+  
+  .rating-badge {
+    top: 20px;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .destination-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 35%);
+  }
+  
+  .destination-card {
+    grid-column: span 1;
+  }
+  
+  .full-width-small {
+    grid-column: span 2;
+  }
+  
+  .rating-badge {
+    top: 15px;
+  }
+} */

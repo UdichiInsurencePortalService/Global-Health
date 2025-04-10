@@ -1,0 +1,173 @@
+/* Base Section */
+.Auto-section {
+    background-color: #f9f9f9;
+    background-image: url('../../../assets/Home/carbackgraundimage.png');
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    padding: 90px 80px;
+  }
+  
+  /* Heading */
+  .Auto-heading h1,
+  .Auto-heading span {
+    font-weight: 900;
+    line-height: 5rem;
+    font-size: 100px;
+    padding-top: 25px;
+    color: #008000;
+  }
+  
+  .Auto-heading h1 {
+    line-height: 6rem;
+    color: white;
+  }
+  
+  /* Form */
+  .Auto-form {
+    /* background: #fff; */
+    background: #BFBFBF;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+  
+  .Auto-form label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .Auto-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .Auto-form h1 {
+    font-weight: 600;
+    font-size: 14px;
+    color: black;
+    padding-top: 7px;
+  }
+  
+/* Button */
+.submit-btn {
+    width: 30%;
+    background-color: #ffc107 !important;
+    color: #333;
+    font-weight: bold;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .submit-btn:hover {
+    background-color: #ffa000 !important;
+  }
+  
+  /* Responsive Design */
+  
+  /* Tablets and smaller laptops */
+  @media (max-width: 991px) {
+    .Auto-heading h1,
+    .Auto-heading span {
+      font-size: 70px;
+      line-height: 4rem;
+    }
+  
+    .Auto-section {
+      padding: 60px 40px;
+    }
+  }
+  
+  /* Mobile phones */
+  @media (max-width: 767px) {
+    .Auto-heading {
+      text-align: center;
+    }
+  
+    .Auto-heading h1,
+    .Auto-heading span {
+      font-size: 50px;
+      line-height: 3rem;
+      padding-top: 10px;
+    }
+  
+    .Auto-form {
+      padding: 20px;
+    }
+  
+    .Auto-section {
+      padding: 40px 20px;
+    }
+  }
+  
+  /* Very small screens */
+  @media (max-width: 480px) {
+    .Auto-heading h1,
+    .Auto-heading span {
+      font-size: 40px;
+      line-height: 2.5rem;
+    }
+  
+    .Auto-form input {
+      padding: 10px;
+    }
+  
+    .btn-success {
+      padding: 12px;
+    }
+  }
+  
+
+  .auto-info{
+    background-color: white;
+    padding: 30px;
+  }
+
+  .auto-info .head1 {
+    color: black;
+    font-style: italic;
+    font-weight:600;
+    padding: 20px;
+ }
+
+
+ .auto-info .para1{
+    display: flex;
+    /* align-items: center; */
+    text-align: flex-start;
+    align-content: start;
+    font-style: italic;
+    font-weight: 500;
+    color: black;
+ }
+
+
+  .info-section {
+    background-color: white;
+    padding: 30px;
+  }
+  
+  .info-section h2 {
+    color: black;
+    font-style: italic;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .info-section p {
+    margin-bottom: 12px;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  

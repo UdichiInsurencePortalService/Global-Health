@@ -1,6 +1,4 @@
 
-
-
 /* Base Styles */
 .car-section {
     background-color: #f9f9f9;
@@ -22,7 +20,8 @@
   }
   
   .car-form {
-    background: #fff;
+    /* background: #fff; */
+    background: #BFBFBF;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.05);
@@ -60,8 +59,10 @@
     padding: 12px;
     border-radius: 8px;
   }
-  
+ 
   .submit-btn {
+    width: 30% !important;
+    /* height: 150px; */
     background-color: #ffc107;
     color: #333;
     font-weight: bold;
@@ -70,6 +71,8 @@
     border-radius: 8px;
     cursor: pointer;
     
+    /* height: auto; */
+    /* width: 150px; */
   }
   
   .submit-btn:hover {
@@ -164,7 +167,7 @@
 
  .what-not-cover-section {
   background-color: darkgray;
- }
+ }  
 
  .what-not-cover-section img{
   /* display: flex;
@@ -175,3 +178,32 @@
   height: 70px;
   width: 70px;
  }
+
+
+
+
+
+
+
+
+ /* CARD HOVER EFFECT */
+
+ .choose-section{
+  padding: 40px 50px;
+}
+.choose-section h1{
+  font-size: 34px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: 550;
+  display: flex;
+  justify-content: center;
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-10px);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}

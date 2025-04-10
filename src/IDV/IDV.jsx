@@ -56,7 +56,7 @@ const calculateIDV = (vehiclePrice, purchaseDate) => {
 
 const IDVCalculator = () => {
     const [purchaseDate, setPurchaseDate] = useState('');
-    const [vehiclePrice, setVehiclePrice] = useState( 1205429 ); // Default price
+    const [vehiclePrice, setVehiclePrice] = useState( 1040000 ); // Default price
     const [idvDetails, setIdvDetails] = useState(null);
 
     const handleCalculate = () => {
