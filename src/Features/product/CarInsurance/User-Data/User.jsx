@@ -1,5 +1,3 @@
-// ye page vo vala hai jha pr user ka data hai sirf 
-
 import React, { useEffect, useState } from "react";
 import { Card, Row, Col, Descriptions, Button, message, Spin } from "antd";
 import { CarOutlined, ArrowLeftOutlined, DollarOutlined } from "@ant-design/icons";
@@ -13,25 +11,34 @@ const User = () => {
   const [msgApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
+    // Log when component mounts
+    console.log("User component mounted");
+    
     // Retrieve vehicle details from localStorage
     try {
       const storedDetails = localStorage.getItem("vehicleDetails");
+      console.log("Retrieved from localStorage:", storedDetails);
+      
       if (storedDetails) {
-        setVehicleDetails(JSON.parse(storedDetails));
+        const parsedDetails = JSON.parse(storedDetails);
+        console.log("Parsed vehicle details:", parsedDetails);
+        setVehicleDetails(parsedDetails);
       } else {
+        console.log("No vehicle details found in localStorage");
         msgApi.error("No vehicle details found. Please register a vehicle first.");
-        setTimeout(() => navigate("carinsurance"), 2000);
+        setTimeout(() => navigate("/carinsurance"), 2000);
       }
     } catch (error) {
       console.error("Error retrieving vehicle details:", error);
       msgApi.error("Error loading vehicle details.");
+      setTimeout(() => navigate("/carinsurance"), 2000);
     } finally {
       setLoading(false);
     }
   }, [navigate, msgApi]);
 
   const handleBack = () => {
-    navigate("carinsurance");
+    navigate("/carinsurance");  // Corrected path to /carinsurance
   };
 
   const handleViewPrice = () => {
@@ -39,13 +46,19 @@ const User = () => {
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    });
+    if (!dateString || dateString === "N/A") return "N/A";
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString; // Return original if invalid date
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return dateString;
+    }
   };
 
   return (
@@ -54,7 +67,7 @@ const User = () => {
       <div className="user-details-page">
         <div className="container">
           <Row gutter={[24, 24]} justify="center">
-            <Col xs={29} md={29} lg={38}>
+            <Col xs={24} md={24} lg={24}>
               <div className="navigation-section">
                 <Button 
                   icon={<ArrowLeftOutlined />} 
@@ -107,7 +120,7 @@ const User = () => {
                         {vehicleDetails.color || "N/A"}
                       </Descriptions.Item>
                       <Descriptions.Item label="Insurance Company" span={1}>
-                        {vehicleDetails.insurance_company}
+                        {vehicleDetails.insurance_company || "N/A"}
                       </Descriptions.Item>
                       <Descriptions.Item label="Address" span={2}>
                         {vehicleDetails.address || "N/A"}
@@ -115,9 +128,16 @@ const User = () => {
                       <Descriptions.Item label="Purchase Date" span={1}>
                         {formatDate(vehicleDetails.date_of_buy)}
                       </Descriptions.Item>
-                      <Descriptions.Item label="Ex-Showroom Price" span={1}>
-                        ₹{vehicleDetails.ex_showroom_price?.toLocaleString() || "N/A"}
+                      <Descriptions.Item label="Maker/Model" span={1}>
+                        {vehicleDetails.maker_model || "N/A"}
                       </Descriptions.Item>
+                      <Descriptions.Item label="Ex-Showroom Price" span={1}>
+                        {vehicleDetails.ex_showroom_price || "14000"}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Engine Capacity" span={1}>
+                        {vehicleDetails.cubic_capacity || "N/A"}
+                      </Descriptions.Item>
+                    
                     </Descriptions>
                     
                     <div className="view-price-button-container">

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
-import logo from "../../assets/brand.png";
+import logo from "../../assets/Home/global-logo.png";
 import { Drawer, Form, Input, Row, Col, Button } from "antd";
 import { ToastContainer } from "react-toastify";
 import { handleSuccess } from "../../errortoast";
@@ -102,6 +102,8 @@ const Navbar = () => {
       backgroundColor: isScrolled ? "rgb(29, 26, 26)" : "rgba(255, 255, 255, 0.7)",
       backdropFilter: "blur(10px)",
       boxShadow: isScrolled ? "0 2px 10px rgba(0, 0, 0, 0.1)" : "none",
+      padding:10,
+      
     },
   };
 
@@ -122,7 +124,7 @@ const Navbar = () => {
                     alt="Logo"
                     className="img-fluid"
                     style={{
-                      maxWidth: "190px",
+                      maxWidth: "89px",
                       width: "auto",
                       objectFit: "contain",
                     }}
@@ -146,6 +148,7 @@ const Navbar = () => {
                           <li><Link to="/Healthinsurance">Health Insurance</Link></li>
                           <li><Link to="/Autoinsurance">Auto Insurance</Link></li>
                           <li><Link to="/Homeinsurance">Home Insurance</Link></li>
+                          <li><Link to="/product/home-insurance">Home Insurance</Link></li>
                         </ul>
                       </li>
                       <li style={{margin:'20px'}}>
@@ -209,7 +212,6 @@ const Navbar = () => {
               <div className="mobile-dropdown-header">Individual Insurance</div>
               <ul>
                 <li><Link to="/carinsurance" onClick={toggleMobileMenu}>Car Insurance</Link></li>
-                <li><Link to="/product/life-insurance" onClick={toggleMobileMenu}>Life Insurance</Link></li>
                 <li><Link to="/product/health-insurance" onClick={toggleMobileMenu}>Health Insurance</Link></li>
                 <li><Link to="/product/auto-insurance" onClick={toggleMobileMenu}>Auto Insurance</Link></li>
                 <li><Link to="/product/home-insurance" onClick={toggleMobileMenu}>Home Insurance</Link></li>

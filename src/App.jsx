@@ -17,6 +17,7 @@ import Homeinsurance from "./Features/product/Homeinsurance/Homeinsurance.jsx";
 
 
 import { Autoinsurance } from "./Features/product/Autoinsurance/Autoinsurance.jsx";
+import  Autoinsurance  from "./Features/product/Autoinsurance/Autoinsurance.jsx";
 import User from "./Features/product/CarInsurance/User-Data/User.jsx";
 
 function App() {

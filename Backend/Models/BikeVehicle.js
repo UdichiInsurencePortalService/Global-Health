@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const UserVehicleSchema = new mongoose.Schema({
+const BikeVehicleSchema = new mongoose.Schema({
   registrationNumber: {
     type: String,
     required: true
@@ -13,14 +13,10 @@ const UserVehicleSchema = new mongoose.Schema({
     type: Object,
     required: true
   },
-  exShowroomPrice: {
-    type: Object // assuming it's a number
-  },
-
   createdAt: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model("UserVehicle", UserVehicleSchema);
+module.exports = mongoose.model("BikeVehicle", BikeVehicleSchema);

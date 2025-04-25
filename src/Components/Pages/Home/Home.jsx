@@ -32,9 +32,7 @@ const Home = () => {
     { name: "Car", icon: caricon },
     { name: "Bike", icon: bikeicon },
     { name: "Health", icon: healthicon },
-    { name: "Life", icon: lifeicon },
     { name: "Home", icon: homeicon },
-    { name: "Travel", icon: travelicon }
   ];
 
   const renderFormFields = () => {
@@ -138,39 +136,7 @@ const Home = () => {
             </Col>
           </>
         );
-      case "Life":
-        return (
-          <>
-            <Col lg={5} md={5} sm={12} className="mb-3 mb-md-0">
-              <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaUser className="me-2" /> Your Age
-                </Form.Label>
-                <Form.Control 
-                  type="number" 
-                  placeholder="Enter Your Age" 
-                  className="py-2 rounded-lg text-center"
-                  onFocus={() => setFocusField("lifeAge")}
-                  onBlur={() => setFocusField(null)}
-                />
-              </Form.Group>
-            </Col>
-            <Col lg={5} md={5} sm={12}>
-              <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaIdCard className="me-2" /> Coverage Amount
-                </Form.Label>
-                <Form.Control 
-                  type="text" 
-                  placeholder="Desired Coverage (₹)" 
-                  className="py-2 rounded-lg text-center"
-                  onFocus={() => setFocusField("lifeCoverage")}
-                  onBlur={() => setFocusField(null)}
-                />
-              </Form.Group>
-            </Col>
-          </>
-        );
+
       case "Home":
         return (
           <>
@@ -207,43 +173,7 @@ const Home = () => {
             </Col>
           </>
         );
-      case "Travel":
-        return (
-          <>
-            <Col lg={5} md={5} sm={12} className="mb-3 mb-md-0">
-              <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaMapMarkerAlt className="me-2" /> Destination
-                </Form.Label>
-                <Form.Select 
-                  className="py-2 rounded-lg text-center"
-                  onFocus={() => setFocusField("travelDestination")}
-                  onBlur={() => setFocusField(null)}
-                >
-                  <option value="">Select Destination</option>
-                  <option value="usa">USA & Canada</option>
-                  <option value="europe">Europe</option>
-                  <option value="asia">Asia</option>
-                  <option value="other">Other Countries</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col lg={5} md={5} sm={12}>
-              <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaCalendarAlt className="me-2" /> Trip Duration
-                </Form.Label>
-                <Form.Control 
-                  type="text" 
-                  placeholder="Number of Days" 
-                  className="py-2 rounded-lg text-center"
-                  onFocus={() => setFocusField("travelDuration")}
-                  onBlur={() => setFocusField(null)}
-                />
-              </Form.Group>
-            </Col>
-          </>
-        );
+   
       default:
         return <></>;
     }
