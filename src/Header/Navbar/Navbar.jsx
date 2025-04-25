@@ -145,9 +145,7 @@ const Navbar = () => {
                           <li><Link to="/Bikeinsurance">Bike Insurance</Link></li>
                           <li><Link to="/Healthinsurance">Health Insurance</Link></li>
                           <li><Link to="/Autoinsurance">Auto Insurance</Link></li>
-                          <li><Link to="/productinsurance">Travel Insurance</Link></li>
-                          <li><Link to="/productinsurance">Life Insurance</Link></li>
-                          <li><Link to="/product/home-insurance">Home Insurance</Link></li>
+                          <li><Link to="/Homeinsurance">Home Insurance</Link></li>
                         </ul>
                       </li>
                       <li style={{margin:'20px'}}>

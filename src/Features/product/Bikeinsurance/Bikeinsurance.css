@@ -165,26 +165,25 @@
 
 .Bike-info h1 {
   text-align: center;
-  font-size: 36px;
-  font-weight: 700;
+  /* font-size: 36px; */
+  font-weight: 600;
   margin-bottom: 40px;
-  color: #007b5e;
+  font-style: italic;
+  color: black;
 }
 
 .content-info-list {
-  margin-bottom: 40px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  padding: 25px;
+  /* margin-bottom: 40px; */
+  padding: 10px;
   border-radius: 12px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  /* background-color: #f9f9f9; */
 }
 
-.content-info-list:hover {
+/* .content-info-list:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   background-color: #f1f1f1;
-}
+} */
 
 .content-info-list h3 {
   font-size: 24px;

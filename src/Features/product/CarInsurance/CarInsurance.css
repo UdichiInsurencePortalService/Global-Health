@@ -136,8 +136,9 @@
   }
 
   .car-section-info h1{
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 30px;
+    font-style: italic;
   }
 
   .car-section-info {
@@ -169,6 +170,11 @@
   background-color: darkgray;
  }  
 
+ .what-cover-section  h1{
+  font-weight: 600;
+  font-style: italic;
+ }  
+
  .what-not-cover-section img{
   /* display: flex;
   justify-content: flex-start;
@@ -179,7 +185,10 @@
   width: 70px;
  }
 
-
+ .what-not-cover-section h1 {
+  font-weight: 600;
+  font-style: italic;
+ }  
 
 
 

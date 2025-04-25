@@ -122,36 +122,153 @@
   }
 }
 
-
-.health-info {
-    background-color: #fefefe;
+/* Tablet */
+@media (max-width: 991px) {
+  .submit-btn {
+    width: 50%;
+    
+  }
 }
 
- .health-info .head1 {
-    color: black;
-    font-style: italic;
-    font-weight:600;
-    padding: 20px;
- }
- .health-info .head4{
-    color: black;
-    font-weight: 600;
-    font-style: italic;
-    /* padding-top: 5px; */
-    padding-bottom: 10px;
- }
+/* Mobile phones */
+@media (max-width: 767px) {
+  .submit-btn {
+    width: 100%;
+    margin: 0 auto;
+    padding: 14px;
+    font-size: 14px;
+  }
+}
 
- .health-info .para1{
-    display: flex;
-    align-items: center;
-    text-align: start;
-    font-style: italic;
-    font-weight: 500;
-    color: black;
- }
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .submit-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+
+/* responsiv */.health-info .head1 {
+  color: black;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.health-info {
+  background-color: #fefefe;
+  padding: 40px 20px;
+}
+
+/* Heading 1 */
+.health-info .head1 {
+  color: black;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+  padding-bottom: 40px;
+  padding-top: 20px;
+}
+
+/* Heading 4 */
+.health-info .head4 {
+  color: black;
+  font-weight: 700;
+  font-style: italic;
+  padding-bottom: 10px;
+  align-items: center;
+  text-align: center;
+  flex-direction: column-reverse;
+}
+
+/* Paragraph */
+.health-info .para1 {
+  font-style: italic;
+  font-weight: 500;
+  color: black;
+  text-align: justify;
+  line-height: 1.6;
+  /* padding-bottom: 20px; */
+}
+
+/* Image Styling */
+.what-cover-section img {
+  height: 110px;
+  width: 110px;
+  object-fit: cover;
+}
+
+/* Text-start utility fix */
+.text-start {
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Tablet - max width 768px */
+@media (max-width: 768px) {
+  .health-info .head1 {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+
+  .health-info .head4 {
+    font-size: 1.25rem;
+    padding: 5px 0;
+  }
+
+  .health-info .para1 {
+    font-size: 1rem;
+    text-align: left;
+  }
+}
+
+/* Mobile - max width 480px */
+@media (max-width: 480px) {
+  .health-info .head1 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .health-info .head4 {
+    font-size: 1rem;
+  }
+
+  .health-info .para1 {
+    font-size: 0.95rem;
+  }
+
+  .what-cover-section img {
+    height: 80px;
+    width: 80px;
+  }
+}
+
+
 
 
  .what-cover-section img {
     height: 110px;
     width: 110px;
+ }
+
+ .text-start{
+  display: "flex";
+  padding: 10px;
+  justify-content:'center';
+  align-items: "center";
  }
