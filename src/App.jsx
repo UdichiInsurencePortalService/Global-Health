@@ -13,6 +13,10 @@ import Intimate from "./Claims/IntimateClaims/Intimate.jsx";
 import Blog from "./Blog/Blog.jsx";
 import Bikeinsurance from "./Features/product/Bikeinsurance/Bikeinsurance.jsx";
 import Healthinsurance from "./Features/product/Healthinsurance/Healthinsurance.jsx";
+import Homeinsurance from "./Features/product/Homeinsurance/Homeinsurance.jsx";
+
+
+import { Autoinsurance } from "./Features/product/Autoinsurance/Autoinsurance.jsx";
 import  Autoinsurance  from "./Features/product/Autoinsurance/Autoinsurance.jsx";
 import User from "./Features/product/CarInsurance/User-Data/User.jsx";
 
@@ -36,6 +40,8 @@ function App() {
         <Route path="Bikeinsurance" element={<Bikeinsurance />} />
         <Route path="/Healthinsurance" element={<Healthinsurance />} />
         <Route path="/Autoinsurance" element={<Autoinsurance />} />
+        <Route path="/Homeinsurance" element={<Homeinsurance />} />
+
 
         <Route path="/login" element={<Login />} />
         <Route path="/intimateclaims" element={<Intimate />} />

@@ -1,0 +1,12 @@
+.need-section {
+    background-color: #f7f9fc;
+  }
+  
+  .card {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
