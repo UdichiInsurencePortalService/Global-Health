@@ -1,181 +1,230 @@
-// ye page vo vala hai jha pr user IDV and premuim calaulate ho rha hai
-
-
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Table, Button, Divider, Tag, Tooltip } from 'antd';
+import { Card, Row, Col, Table, Button, Divider, Tag, Tooltip, Slider } from 'antd';
 import { InfoCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+
 import { Link } from 'react-router-dom';
 import './User.css';
 
 const UserData = () => {
   const [vehicle, setVehicle] = useState(null);
   const [idv, setIdv] = useState(0);
+  const [baseIdv, setBaseIdv] = useState(0);
+  const [idvAdjustment, setIdvAdjustment] = useState(0);
   const [premium, setPremium] = useState(0);
+  const [ncbDiscount, setNcbDiscount] = useState(0);
+  const [ncbPercentage, setNcbPercentage] = useState(0);
   const [addOns, setAddOns] = useState([
     { id: 1, name: 'Zero Depreciation', selected: false, price: 1500 },
     { id: 2, name: 'Engine Protection', selected: false, price: 800 },
     { id: 3, name: 'Roadside Assistance', selected: false, price: 500 },
     { id: 4, name: 'Return to Invoice', selected: false, price: 1200 },
-    { id: 5, name: 'NCB Protection', selected: false, price: 700 },
+    // Removed NCB Protection as requested
   ]);
 
   useEffect(() => {
-    // Get vehicle details from localStorage
     const storedVehicleDetails = localStorage.getItem('vehicleDetails');
-    
     if (storedVehicleDetails) {
       const vehicleDetails = JSON.parse(storedVehicleDetails);
       setVehicle(vehicleDetails);
-      
-      // Calculate IDV based on vehicle details
       calculateIDV(vehicleDetails);
+      
+      // Set NCB based on vehicle age - just for demo, in real app this would come from user input
+      const currentYear = new Date().getFullYear();
+      const purchaseYear = new Date(vehicleDetails.date_of_buy).getFullYear();
+      const ageInYears = currentYear - purchaseYear;
+      
+      // Apply NCB based on age (simplified logic for demo)
+      if (ageInYears >= 5) {
+        setNcbPercentage(50);
+      } else if (ageInYears === 4) {
+        setNcbPercentage(45);
+      } else if (ageInYears === 3) {
+        setNcbPercentage(35);
+      } else if (ageInYears === 2) {
+        setNcbPercentage(25);
+      } else if (ageInYears === 1) {
+        setNcbPercentage(20);
+      } else {
+        setNcbPercentage(0); // For 0 claim-free years
+      }
     }
   }, []);
 
   useEffect(() => {
-    // Calculate premium whenever IDV changes
-    if (idv > 0) {
+    if (baseIdv > 0 && vehicle) {
+      // Apply IDV adjustment
+      const adjustedIdv = baseIdv * (1 + idvAdjustment / 100);
+      setIdv(Math.round(adjustedIdv));
+    }
+  }, [baseIdv, idvAdjustment]);
+
+  useEffect(() => {
+    if (idv > 0 && vehicle) {
       calculatePremium();
     }
-  }, [idv, addOns]);
+  }, [idv, addOns, ncbPercentage]);
 
   const calculateIDV = (vehicleDetails) => {
-    if (!vehicleDetails) return;
-    
-    // Get current year and purchase year
     const currentYear = new Date().getFullYear();
     const purchaseYear = new Date(vehicleDetails.date_of_buy).getFullYear();
     const ageInYears = currentYear - purchaseYear;
-    
-    // Base value from vehicle details
-    let baseValue = vehicleDetails.ex_showroom_price || 1000000; // Default if not available
-    
-    // Apply depreciation based on vehicle age (extended up to 15 years)
+    const baseValue = vehicleDetails.ex_showroom_price || 0;
+
     let depreciationRate;
-   
     if (ageInYears <= 0.5) {
-        depreciationRate = 0.05; // 5% for vehicles up to 6 months old
+      depreciationRate = 0.05;
     } else if (ageInYears <= 1) {
-        depreciationRate = 0.15; // 15% for vehicles between 6 months and 1 year
+      depreciationRate = 0.15;
     } else if (ageInYears <= 2) {
-        depreciationRate = 0.20; // 20% for vehicles between 1 and 2 years
+      depreciationRate = 0.20;
     } else if (ageInYears <= 3) {
-        depreciationRate = 0.30; // 30% for vehicles between 2 and 3 years
+      depreciationRate = 0.30;
     } else if (ageInYears <= 4) {
-        depreciationRate = 0.40; // 40% for vehicles between 3 and 4 years
+      depreciationRate = 0.40;
     } else if (ageInYears <= 5) {
-        depreciationRate = 0.50; // 50% for vehicles between 4 and 5 years
+      depreciationRate = 0.50;
     } else if (ageInYears <= 7) {
-        depreciationRate = 0.60; // 60% for vehicles between 5 and 7 years
+      depreciationRate = 0.60;
     } else if (ageInYears <= 10) {
-        depreciationRate = 0.70; // 70% for vehicles between 7 and 10 years
+      depreciationRate = 0.70;
     } else if (ageInYears <= 15) {
-        depreciationRate = 0.80; // 80% for vehicles between 10 and 15 years
+      depreciationRate = 0.80;
     } else {
-        depreciationRate = 0.90; // 90% for vehicles older than 15 years
+      depreciationRate = 0.90;
     }
-    
-    // Calculate IDV after depreciation
+
     const calculatedIDV = baseValue * (1 - depreciationRate);
+    setBaseIdv(Math.round(calculatedIDV));
     setIdv(Math.round(calculatedIDV));
   };
 
   const calculatePremium = () => {
-    if (idv <= 0) return;
-    
-    // Basic premium calculation - varies based on vehicle age
     const currentYear = new Date().getFullYear();
-    const purchaseYear = vehicle ? new Date(vehicle.date_of_buy).getFullYear() : currentYear;
+    const purchaseYear = new Date(vehicle.date_of_buy).getFullYear();
+    console.log(purchaseYear)
     const ageInYears = currentYear - purchaseYear;
-    
-    // Adjust premium rate based on vehicle age
+    console.log(ageInYears)
+
+    // Further reduced base premium rates (lower than before)
     let basePremiumRate;
     if (ageInYears <= 3) {
-      basePremiumRate = 0.020; // 2.0% for newer vehicles
+      basePremiumRate = 0.008; // Reduced from 0.010 to 0.8% of IDV
     } else if (ageInYears <= 7) {
-      basePremiumRate = 0.025; // 2.5% for middle-aged vehicles
+      basePremiumRate = 0.009; // Reduced from 0.012 to 0.9% of IDV
     } else if (ageInYears <= 10) {
-      basePremiumRate = 0.030; // 3.0% for older vehicles
+      basePremiumRate = 0.011; // Reduced from 0.015 to 1.1% of IDV
     } else {
-      basePremiumRate = 0.035; // 3.5% for very old vehicles
+      basePremiumRate = 0.013; // Reduced from 0.018 to 1.3% of IDV
     }
+
+    // Calculate own damage premium before NCB
+    const ownDamagePremium = idv * basePremiumRate;
+    console.log(ownDamagePremium,'own damage premiun')
     
-    let basePremium = idv * basePremiumRate;
+    // Apply NCB discount to own damage premium
+    const ncbDiscount = ownDamagePremium * (ncbPercentage / 100);
+    console.log(ncbDiscount,'ncb discount')
+    setNcbDiscount(Math.round(ncbDiscount));
     
-    // Add third-party premium (fixed amount based on vehicle CC)
-    const thirdPartyPremium = 2000; // Example fixed amount
+    // Calculate final own damage premium after NCB
+    const finalOwnDamagePremium = ownDamagePremium - ncbDiscount;
+    console.log(finalOwnDamagePremium,'final own damage premiun')
     
-    // Calculate additional premium for add-ons
+    // Get third-party premium
+    const thirdPartyPremium = getThirdPartyPremium(vehicle);
+    
+    // Calculate add-ons premium
     const addOnsPremium = addOns
-      .filter(addon => addon.selected)
+      .filter((addon) => addon.selected)
       .reduce((total, addon) => total + addon.price, 0);
+
+    // Calculate subtotal (before GST)
+    const subtotal = finalOwnDamagePremium + thirdPartyPremium + addOnsPremium;
     
-    // Calculate total premium
-    const totalPremium = basePremium + thirdPartyPremium + addOnsPremium;
+    // Calculate GST (18% of subtotal)
+    const gst = subtotal * 0.18;
     
-    // Apply GST (18%)
-    const premiumWithGST = totalPremium * 1.18;
-    
-    setPremium(Math.round(premiumWithGST));
+    // Calculate total premium (subtotal + GST)
+    const totalPremium = subtotal + gst;
+
+    setPremium(Math.round(totalPremium));
+  };
+
+  // Updated to use exact IRDAI third-party premium rates as per latest schedule
+  const getThirdPartyPremium = (vehicleDetails) => {
+    const engineCC = vehicleDetails?.cubic_capacity || 0;
+    const isVehicleType = vehicleDetails.vehicle_type?.toLowerCase() || '';
+    const isBike = isVehicleType === 'bike' || engineCC <= 350;
+
+    // Latest IRDAI rates for third-party premiums
+    if (isBike) {
+      // Two-wheelers
+      if (engineCC <= 75) return 538;
+      if (engineCC <= 150) return 714;
+      if (engineCC <= 350) return 1366;
+      return 2804;
+    } else {
+      // Private cars
+      if (engineCC <= 1000) return 2094;
+      if (engineCC <= 1500) return 3416;
+      return 7897;
+    }
   };
 
   const toggleAddOn = (id) => {
-    setAddOns(prevAddOns => 
-      prevAddOns.map(addon => 
+    setAddOns((prevAddOns) =>
+      prevAddOns.map((addon) =>
         addon.id === id ? { ...addon, selected: !addon.selected } : addon
       )
     );
   };
 
+  const handleIdvAdjustment = (value) => {
+    setIdvAdjustment(value);
+  };
+
   const getPremiumBreakdown = () => {
-    if (!vehicle) return [];
-    
     const currentYear = new Date().getFullYear();
     const purchaseYear = new Date(vehicle.date_of_buy).getFullYear();
     const ageInYears = currentYear - purchaseYear;
-    
-    // Adjust premium rate based on vehicle age
+
+    // Use the same rates as in calculatePremium
     let basePremiumRate;
     if (ageInYears <= 3) {
-      basePremiumRate = 0.020; // 2.0% for newer vehicles
+      basePremiumRate = 0.008;
     } else if (ageInYears <= 7) {
-      basePremiumRate = 0.025; // 2.5% for middle-aged vehicles
+      basePremiumRate = 0.009;
     } else if (ageInYears <= 10) {
-      basePremiumRate = 0.030; // 3.0% for older vehicles
+      basePremiumRate = 0.011;
     } else {
-      basePremiumRate = 0.035; // 3.5% for very old vehicles
+      basePremiumRate = 0.013;
     }
+
+    // Calculate own damage premium before NCB
+    const ownDamagePremium = Math.round(idv * basePremiumRate);
     
-    const basePremium = Math.round(idv * basePremiumRate);
-    const thirdPartyPremium = 2000;
+    // Get third-party premium
+    const thirdPartyPremium = getThirdPartyPremium(vehicle);
+    
+    // Calculate add-ons premium
     const addOnsPremium = addOns
-      .filter(addon => addon.selected)
+      .filter((addon) => addon.selected)
       .reduce((total, addon) => total + addon.price, 0);
     
-    const subtotal = basePremium + thirdPartyPremium + addOnsPremium;
-    const gst = Math.round(subtotal * 0.18);
+    // Calculate subtotal (before GST)
+    const subtotal = ownDamagePremium - ncbDiscount + thirdPartyPremium + addOnsPremium;
     
+    // Calculate GST (18% of subtotal)
+    const gst = Math.round(subtotal * 0.18);
+
+    // Create breakdown array
     return [
-      {
-        key: '1',
-        component: 'Basic Own Damage',
-        amount: basePremium,
-      },
-      {
-        key: '2',
-        component: 'Third Party Premium',
-        amount: thirdPartyPremium,
-      },
-      {
-        key: '3',
-        component: 'Add-ons',
-        amount: addOnsPremium,
-      },
-      {
-        key: '4',
-        component: 'GST (18%)',
-        amount: gst,
-      },
+      { key: '1', component: 'Own Damage Premium', amount: ownDamagePremium },
+      // { key: '2', component: 'NCB Proptection', amount: ncbDiscount },
+
+      { key: '3', component: 'Third-Party Premium', amount: thirdPartyPremium },
+      { key: '4', component: 'Add-Ons', amount: addOnsPremium },
+      { key: '5', component: 'GST (18%)', amount: gst },
     ];
   };
 
@@ -214,157 +263,184 @@ const UserData = () => {
 
   return (
     <>
-    <Link to="/carinsurance">
-    <Button type="primary">Back to Vehicle Entry</Button>
-  </Link>
-    <div className="user-data-container py-5">
-      <div className="container">
-        <h1 className="text-center mb-4">Your Insurance Premium Details</h1>
-        
-        <Row gutter={[24, 24]}>
-          <Col xs={24} lg={8}>
-            <Card 
-              title="Vehicle Details" 
-              className="vehicle-card"
-              bordered={false}
-              hoverable
-              extra={<Tag color="blue">Verified</Tag>}
-            >
-              <p><strong>Registration:</strong> {vehicle.vehicle_no}</p>
-              <p><strong>Make:</strong> {vehicle.company}</p>
-              <p><strong>Model:</strong> {vehicle.model}</p>
-              <p><strong>Year:</strong> {purchaseYear} ({vehicleAge} years old)</p>
-              <p><strong>Owner:</strong> {vehicle.owner}</p>
-              <p><strong>Ex-Showroom Price:</strong> ₹ {vehicle.ex_showroom_price.toLocaleString()}</p>
-            </Card>
-          </Col>
+      <Link to="/carinsurance">
+        <Button type="primary">Back to Vehicle Entry</Button>
+      </Link>
+      <div className="user-data-container py-5">
+        <div className="container">
+          <h1 className="text-center mb-4">Your Insurance Premium Details</h1>
           
-          <Col xs={24} lg={8}>
-            <Card 
-              title={<div>Insured Declared Value (IDV) <Tooltip title="IDV is the maximum amount that you can claim in case of total loss or theft of your vehicle"><InfoCircleOutlined /></Tooltip></div>}
-              className="idv-card"
-              bordered={false}
-              hoverable
-            >
-              <h2 className="idv-value">₹ {idv.toLocaleString()}</h2>
-              <p className="text-muted">This value is calculated based on the vehicle's age of {vehicleAge} years, market value, and applicable depreciation.</p>
-              <p className="text-muted small">For vehicles up to 15 years old, depreciation ranges from 5% to 80%.</p>
-            </Card>
-          </Col>
+          <Row gutter={[24, 24]}>
+            <Col xs={24} lg={8}>
+              <Card 
+                title="Vehicle Details" 
+                className="vehicle-card"
+                bordered={false}
+                hoverable
+                extra={<Tag color="blue">Verified</Tag>}
+              >
+                <p><strong>Registration:</strong> {vehicle.vehicle_no}</p>
+                <p><strong>Model:</strong> {vehicle?.maker_model}</p>
+                <p><strong>Year:</strong> {purchaseYear} ({vehicleAge} years old)</p>
+                <p><strong>Owner:</strong> {vehicle.owner}</p>
+                <p><strong>Engine Capacity:</strong> {vehicle.cubic_capacity} cc</p>
+                <p><strong>Ex-Showroom Price:</strong> ₹ {vehicle.ex_showroom_price.toLocaleString()}</p>
+              </Card>
+            </Col>
+            
+            <Col xs={24} lg={8}>
+              <Card 
+                title={<div>Insured Declared Value (IDV) <Tooltip title="IDV is the maximum amount that you can claim in case of total loss or theft of your vehicle"><InfoCircleOutlined /></Tooltip></div>}
+                className="idv-card"
+                bordered={false}
+                hoverable
+              >
+                <h2 className="idv-value">₹ {idv.toLocaleString()}</h2>
+                <p className="text-muted">This value is calculated based on the vehicle's age of {vehicleAge} years, market value, and applicable depreciation.</p>
+                
+                <div className="mt-4">
+                  <p className="mb-1"><strong>Adjust IDV:</strong> ({idvAdjustment}%)</p>
+                  <Slider 
+                    min={-10} 
+                    max={10} 
+                    defaultValue={0}
+                    marks={{
+                      '-10': '-10%',
+                      '0': '0%',
+                      '10': '+10%'
+                    }}
+                    onChange={handleIdvAdjustment}
+                    value={idvAdjustment}
+                  />
+                  <p className="text-muted small mt-2">You can adjust the IDV within ±10% of the calculated value.</p>
+                </div>
+              </Card>
+            </Col>
+            
+            <Col xs={24} lg={8}>
+              <Card 
+                title="Total Premium" 
+                className="premium-card"
+                bordered={false}
+                hoverable
+              >
+                <h2 className="premium-value">₹ {premium.toLocaleString()}</h2>
+                <p className="text-muted">Annual premium including GST</p>
+                <div className="ncb-info mt-2 mb-3">
+                  <Tag color="green">NCB: {ncbPercentage}%</Tag>
+                  <span className="ms-2 text-muted">Savings: ₹ {ncbDiscount.toLocaleString()}</span>
+                </div>
+                <Button type="primary" size="large" block>
+                  Proceed to Payment
+                </Button>
+              </Card>
+            </Col>
+          </Row>
           
-          <Col xs={24} lg={8}>
-            <Card 
-              title="Total Premium" 
-              className="premium-card"
-              bordered={false}
-              hoverable
-            >
-              <h2 className="premium-value">₹ {premium.toLocaleString()}</h2>
-              <p className="text-muted">Annual premium including GST</p>
-              <Button type="primary" size="large" block>
-                Proceed to Payment
-              </Button>
-            </Card>
-          </Col>
-        </Row>
-        
-        <Row gutter={[24, 24]} className="mt-4">
-          <Col xs={24} lg={12}>
-            <Card title="Premium Breakdown" bordered={false}>
-              <Table 
-                dataSource={premiumBreakdown} 
-                columns={columns} 
-                pagination={false}
-                summary={pageData => {
-                  let total = 0;
-                  pageData.forEach(({ amount }) => {
-                    total += amount;
-                  });
-                  
-                  return (
-                    <>
-                      <Table.Summary.Row>
-                        <Table.Summary.Cell><strong>Total Premium</strong></Table.Summary.Cell>
-                        <Table.Summary.Cell><strong>₹ {total.toLocaleString()}</strong></Table.Summary.Cell>
-                      </Table.Summary.Row>
-                    </>
-                  );
-                }}
-              />
-            </Card>
-          </Col>
-          
-          <Col xs={24} lg={12}>
-            <Card title="Add-on Covers" bordered={false}>
-              <p>Enhance your coverage with these add-ons</p>
-              <div className="add-ons-container">
-                {addOns.map(addon => (
-                  <div key={addon.id} className={`add-on-item ${addon.selected ? 'selected' : ''}`} onClick={() => toggleAddOn(addon.id)}>
-                    <div className="add-on-info">
-                      <div className="add-on-name">{addon.name}</div>
-                      <div className="add-on-price">₹ {addon.price}</div>
+          <Row gutter={[24, 24]} className="mt-4">
+            <Col xs={24} lg={12}>
+              <Card title="Premium Breakdown" bordered={false}>
+                <Table 
+                  dataSource={premiumBreakdown} 
+                  columns={columns} 
+                  pagination={false}
+                  summary={pageData => {
+                    let total = 0;
+                    pageData.forEach(({ amount }) => {
+                      total += amount;
+                    });
+                    
+                    return (
+                      <>
+                        <Table.Summary.Row>
+                          <Table.Summary.Cell><strong>Total Premium</strong></Table.Summary.Cell>
+                          <Table.Summary.Cell><strong>₹ {total.toLocaleString()}</strong></Table.Summary.Cell>
+                        </Table.Summary.Row>
+                      </>
+                    );
+                  }}
+                />
+                <div className="premium-info mt-3">
+                  <p><small><strong>Note:</strong> Third-party premium is as per latest IRDAI tariff rates.</small></p>
+                </div>
+              </Card>
+            </Col>
+            
+            <Col xs={24} lg={12}>
+              <Card title="Add-on Covers" bordered={false}>
+                <p>Enhance your coverage with these add-ons:</p>
+                <div className="add-ons-container">
+                  {addOns.map(addon => (
+                    <div key={addon.id} className={`add-on-item ${addon.selected ? 'selected' : ''}`} onClick={() => toggleAddOn(addon.id)}>
+                      <div className="add-on-info">
+                        <div className="add-on-name">{addon.name}</div>
+                        <div className="add-on-price">₹ {addon.price}</div>
+                      </div>
+                      <div className="add-on-checkbox">
+                        {addon.selected && <CheckCircleOutlined />}
+                      </div>
                     </div>
-                    <div className="add-on-checkbox">
-                      {addon.selected && <CheckCircleOutlined />}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </Col>
-        </Row>
-        
-        <Row className="mt-4">
-          <Col xs={24}>
-            <Card title="Coverage Details" bordered={false}>
-              <Row gutter={[16, 16]}>
-                <Col xs={24} md={8}>
-                  <h4>What's Covered</h4>
-                  <ul className="coverage-list">
-                    <li>Accidental damage to your vehicle</li>
-                    <li>Theft of your vehicle</li>
-                    <li>Third-party liability</li>
-                    <li>Natural disasters (flood, earthquake, etc.)</li>
-                    <li>Fire damage</li>
-                    <li>Personal accident cover for owner-driver</li>
-                  </ul>
-                </Col>
-                <Col xs={24} md={8}>
-                  <h4>What's Not Covered</h4>
-                  <ul className="coverage-list not-covered">
-                    <li>Normal wear and tear</li>
-                    <li>Mechanical/electrical breakdown</li>
-                    <li>Damage due to driving under influence</li>
-                    <li>Damage when driving without valid license</li>
-                    <li>Consequential damages</li>
-                    <li>Contractual liability</li>
-                  </ul>
-                </Col>
-                <Col xs={24} md={8}>
-                  <h4>Additional Benefits</h4>
-                  <ul className="coverage-list benefits">
-                    <li>24/7 claim assistance</li>
-                    <li>Cashless repairs at network garages</li>
-                    <li>Quick claim settlement</li>
-                    <li>No Claim Bonus on renewal</li>
-                    <li>Digital policy documents</li>
-                  </ul>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-        </Row>
-        
-        <div className="text-center mt-4">
-          <Link to="/car-insurance">
-            <Button>Back</Button>
-          </Link>
-          <Button type="primary" className="ms-3">
-            Proceed to Payment
-          </Button>
+                  ))}
+                </div>
+              </Card>
+            </Col>
+          </Row>
+          
+          <Row className="mt-4">
+            <Col xs={24}>
+              <Card title="Coverage Details" bordered={false}>
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} md={8}>
+                    <h4>What's Covered</h4>
+                    <ul className="coverage-list">
+                      <li>Accidental damage to your vehicle</li>
+                      <li>Theft of your vehicle</li>
+                      <li>Third-party liability</li>
+                      <li>Natural disasters (flood, earthquake, etc.)</li>
+                      <li>Fire damage</li>
+                      <li>Personal accident cover for owner-driver</li>
+                    </ul>
+                  </Col>
+                  <Col xs={24} md={8}>
+                    <h4>What's Not Covered</h4>
+                    <ul className="coverage-list not-covered">
+                      <li>Normal wear and tear</li>
+                      <li>Mechanical/electrical breakdown</li>
+                      <li>Damage due to driving under influence</li>
+                      <li>Damage when driving without valid license</li>
+                      <li>Consequential damages</li>
+                      <li>Contractual liability</li>
+                    </ul>
+                  </Col>
+                  <Col xs={24} md={8}>
+                    <h4>Additional Benefits</h4>
+                    <ul className="coverage-list benefits">
+                      <li>24/7 claim assistance</li>
+                      <li>Cashless repairs at network garages</li>
+                      <li>Quick claim settlement</li>
+                      <li>No Claim Bonus on renewal</li>
+                      <li>Digital policy documents</li>
+                    </ul>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+          </Row>
+          
+          <div className="text-center mt-4">
+            <Link to="/car-insurance">
+              <Button>Back</Button>
+            </Link>
+            <Button type="primary" className="ms-3">
+              Proceed to Payment
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+
+  );
+
+
     </>
   );
 };

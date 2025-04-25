@@ -7,28 +7,43 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const jwt = require("jsonwebtoken");
 const extendedAuthRoutes = require("./Routes/authRouter"); // ✅ match filename
+const UserVehicle = require("./Routes/vehicleRoutes")
 require("./Models/db"); // ✅ MongoDB connection handled here
+require('./Models/postgressdb') // postgres connection here
+const vehiclePostgresRoutes = require('./Routes/vehiclePostgresRoutes');
+const BikePostgressRoutes = require('./Routes/BikePostgressRouter')
+const AutoPostgressRoutes = require('./Routes/AutoPostgresRouter')
 
 const app = express();
+app.use(express.json()); // ✅ This must come BEFORE route handlers
+
+
 const authRoutes = require("./Routes/authRouter"); // Google OAuth routes
 
 const PORT = process.env.PORT || 8080;
+app.use(express.json()); // ✅ This must come BEFORE route handlers
 
 // Middleware
 app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+app.use('/api', vehiclePostgresRoutes); //
+app.use('/api', BikePostgressRoutes); //
+app.use('/api',AutoPostgressRoutes);
+
+
+
 
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret",
     resave: false,
     saveUninitialized: true,
-  })
+  })  
 );
 
 app.use(passport.initialize());
@@ -56,6 +71,8 @@ passport.deserializeUser((user, done) => done(null, user));
 // Routes
 app.use("/auth", authRoutes); // 🔹 Google OAuth routes
 app.use("/api/auth", extendedAuthRoutes); // 🔹 Signup/Login/Vehicle Register routes
+app.use("/api/auth",UserVehicle ); // 🔹 Signup/Login/Vehicle Register routes
+
 
 // 🔹 Google Auth endpoints
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile"] }));

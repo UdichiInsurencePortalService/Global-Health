@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../Models/user");
-const exportUsersToExcel = require("../Utils/excelExport");
 
 const signup = async (req, res) => {
     try {
