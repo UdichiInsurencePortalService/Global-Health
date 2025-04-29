@@ -31,18 +31,77 @@ import RequiredDocuments from "../../../Reuse/RequireDocuments/RequireDocument";
 import NeedHelp from "../../../Reuse/NeedHelp/NeedHelp";
 
 
+const features = [
+  {
+    id: 1,
+    image: first, // ✅ Replace with your actual image URL
+    title: "Set Your Own Vehicle IDV",
+    description:
+      "We let you define your vehicle’s IDV based on your preference and need!",
+  },
+  {
+    id: 2,
+    image: second, // ✅ Replace with your actual image URL
+    title: "Round-the-Clock Customer Support",
+    description:
+      "Available 24/7, even on public holidays – we’re always here to help you out.",
+  },
+  {
+    id: 3,
+    image: third, // ✅ Replace with your actual image URL
+    title: "Quick & Easy Claim Process",
+    description:
+      "Use your smartphone to complete self-inspection in just a few minutes!",
+  },
+];
+
+const autoCard = [
+  {
+    id: 1,
+    image: data1,
+    title: "Accidents",
+    description: "Damages caused to your auto rickshaw in case of an accident.",
+  },
+  {
+    id: 2,
+    image: data2,
+    title: "Theft",
+    description: "Loss or damage of your auto rickshaw due to theft.",
+  },
+  {
+    id: 3,
+    image: data3,
+    title: "Fire",
+    description: "Damages caused to your auto rickshaw due to a fire.",
+  },
+  {
+    id: 4,
+    image: data4,
+    title: "Natural Disasters",
+    description: "Damages caused to your auto rickshaw due to any natural calamity.",
+  },
+  {
+    id: 5,
+    image: data5,
+    title: "Personal Accident",
+    description: "If your auto rickshaw meets with an accident, leading to an injury or death of you or the driver using it.",
+  },
+  {
+    id: 6,
+    image: data6,
+    title: "Third Party Losses",
+    description: "Any damages caused by your auto rickshaw to a third party or its passengers.",
+  },
+  {
+    id: 7,
+    image: data7,
+    title: "Towing Disabled Vehicles",
+    description: "Any damages caused to your auto rickshaw in cases where it's being towed.",
+},
+];
 
 
-/**
- * CarInsurance Component
- * 
- * This component handles vehicle registration lookup with a simplified approach:
- * 1. First checks PostgreSQL database using the registration number
- * 2. Falls back to Surepass API if data is not found in database
- * 3. Fetches ex-showroom price separately if needed
- * 4. Stores all data to PostgreSQL for future lookups
- * 5. Includes mobile number in the database save
- */
+
 const Autoinsurance = () => {
   const navigate = useNavigate();
   const [registrationNumber, setRegistrationNumber] = useState("");
@@ -168,77 +227,9 @@ const Autoinsurance = () => {
         date_of_buy: vehicleData?.purchase_date || vehicleData?.registration_date || "Not Available",
         maker_model: vehicleData?.maker_model || "Not Available",
          cubic_capacity: parseFloat(vehicleData?.engine_capacity || vehicleData?.cubic_capacity) || "Not Available",
-ex_showroom_price: parseInt(vehicleData?.exshowroom || exShowroomPrice),
+          ex_showroom_price: parseInt(vehicleData?.exshowroom || exShowroomPrice),
 
-  const features = [
-        {
-          id: 1,
-          image: first, // ✅ Replace with your actual image URL
-          title: "Set Your Own Vehicle IDV",
-          description:
-            "We let you define your vehicle’s IDV based on your preference and need!",
-        },
-        {
-          id: 2,
-          image: second, // ✅ Replace with your actual image URL
-          title: "Round-the-Clock Customer Support",
-          description:
-            "Available 24/7, even on public holidays – we’re always here to help you out.",
-        },
-        {
-          id: 3,
-          image: third, // ✅ Replace with your actual image URL
-          title: "Quick & Easy Claim Process",
-          description:
-            "Use your smartphone to complete self-inspection in just a few minutes!",
-        },
-      ];
-
-    const autoCard = [
-        {
-          id: 1,
-          image: data1,
-          title: "Accidents",
-          description: "Damages caused to your auto rickshaw in case of an accident.",
-        },
-        {
-          id: 2,
-          image: data2,
-          title: "Theft",
-          description: "Loss or damage of your auto rickshaw due to theft.",
-        },
-        {
-          id: 3,
-          image: data3,
-          title: "Fire",
-          description: "Damages caused to your auto rickshaw due to a fire.",
-        },
-        {
-          id: 4,
-          image: data4,
-          title: "Natural Disasters",
-          description: "Damages caused to your auto rickshaw due to any natural calamity.",
-        },
-        {
-          id: 5,
-          image: data5,
-          title: "Personal Accident",
-          description: "If your auto rickshaw meets with an accident, leading to an injury or death of you or the driver using it.",
-        },
-        {
-          id: 6,
-          image: data6,
-          title: "Third Party Losses",
-          description: "Any damages caused by your auto rickshaw to a third party or its passengers.",
-        },
-        {
-          id: 7,
-          image: data7,
-          title: "Towing Disabled Vehicles",
-          description: "Any damages caused to your auto rickshaw in cases where it's being towed.",
-         mobile_number: mobile // Add mobile number to summary
-      };
-  
+      }
       console.log("✨ Vehicle summary ready:", summary);
       
       // Clear any existing data before setting new data
@@ -429,7 +420,7 @@ ex_showroom_price: parseInt(vehicleData?.exshowroom || exShowroomPrice),
                     onChange={(e) => setRegistrationNumber(e.target.value.toUpperCase())}
                     className="mb-3"
                   />
-                </div>
+              
                 <div className="mb-3">
                   <label htmlFor="mobileNumber" className="form-label">
                     Enter Mobile Number
@@ -446,10 +437,11 @@ ex_showroom_price: parseInt(vehicleData?.exshowroom || exShowroomPrice),
                   View Plans
                 </button>
               </form>
-            </div>
-          </div>
-        </div>
+            </Card>
+          </Col>
+        </Row>
       </div>
+
       <div className="auto-info py-5">
         <div className="container">
           <div className="row align-item-center">
@@ -540,10 +532,7 @@ ex_showroom_price: parseInt(vehicleData?.exshowroom || exShowroomPrice),
                   >
                     {loading ? "Fetching Vehicle Data..." : "Get Vehicle Details"}
                   </Button>
-                </form>
-              </Card>
-            </Col>
-          </Row>
+             
         </div>
       </div>
     </div>

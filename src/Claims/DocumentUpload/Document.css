@@ -1,0 +1,18 @@
+.document-heading h1 {
+    font-size: 42px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 500;
+    position: relative; /* Needed to position the underline */
+    display: inline-block; /* Make sure h1 behaves like a box for ::after */
+  }
+  
+  .document-heading h1::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* Space between text and underline */
+    width: 100%; /* Match the width of text */
+    height: 3px; /* Thickness of underline */
+    background-color: blue; /* Underline color */
+  }
+  

@@ -3,7 +3,6 @@ import logo from '../../assets/logo.png'
 import { AiFillCaretRight } from "react-icons/ai";
 import './Footer.css'
 
-
 const Footer = () => {
   return (
     <div className="container-fluid p-0">
@@ -13,9 +12,12 @@ const Footer = () => {
             {/* Logo Section */}
             <div className="col-lg-3 col-md-6 mb-4">
               <div className="d-flex justify-content-center">
-                <div className="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-lg" style={{ width: "150px", height: "150px" }}>
+                <div
+                  className="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-lg"
+                  style={{ width: "150px", height: "150px" }}
+                >
                   <img
-                  width={134}
+                    width={134}
                     src={logo}
                     alt="Global Health & Allied Insurances"
                     loading="lazy"
@@ -29,12 +31,20 @@ const Footer = () => {
                 <a href="#!" className="text-white fs-4"><FaYoutube /></a>
               </div>
             </div>
-            
-            {/* Animals Section */}
+
+            {/* Products Section */}
             <div className="col-lg-3 col-md-6 mb-4">
               <h5 className="text-uppercase mb-4">Products</h5>
               <ul className="list-unstyled">
-                {["Car Insurance ", "Life Insurance ", "Health Insurance ", "Auto Insurance ", "Home Insurance ", "Commercial Insurance ", "Property Insurance"].map((item) => (
+                {[
+                  "Car Insurance",
+                  "Life Insurance",
+                  "Health Insurance",
+                  "Auto Insurance",
+                  "Home Insurance",
+                  "Commercial Insurance",
+                  "Property Insurance",
+                ].map((item) => (
                   <li key={item} className="mb-2">
                     <a href="#!" className="text-white d-flex align-items-center">
                       <AiFillCaretRight className="me-2" /> {item}
@@ -44,11 +54,17 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Shelter Info Section */}
+            {/* Useful Links Section */}
             <div className="col-lg-3 col-md-6 mb-4">
-              <h5 className="text-uppercase mb-4">UseFull Links</h5>
+              <h5 className="text-uppercase mb-4">Useful Links</h5>
               <ul className="list-unstyled">
-                {["FAQ", "Company-Imformation", "Privacy-Policy", "Terms And  Condition", "Contact"].map((item) => (
+                {[
+                  "FAQ",
+                  "Company Information",
+                  "Privacy Policy",
+                  "Terms and Conditions",
+                  "Contact",
+                ].map((item) => (
                   <li key={item} className="mb-2">
                     <a href="#!" className="text-white d-flex align-items-center">
                       <AiFillCaretRight className="me-2" /> {item}
@@ -64,16 +80,16 @@ const Footer = () => {
               <ul className="list-unstyled">
                 <li><p className="d-flex align-items-center"><FaMapMarkerAlt className="me-2" /> Warsaw, 57 Street, Poland</p></li>
                 <li><p className="d-flex align-items-center"><FaPhone className="me-2" /> +01 234 567 89</p></li>
-                <li><p className="d-flex align-items-center"><FaEnvelope className="me-2" />globalheath235@gmail.com</p></li>
+                <li><p className="d-flex align-items-center"><FaEnvelope className="me-2" /> globalhealth235@gmail.com</p></li>
               </ul>
             </div>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="text-center p-3" copyright-section >
+        <div className="text-center p-3">
           © 2025 Copyright:
-          <a className="text-white ms-1" href="#">Global Health& Allied Insurance.com</a>
+          <a className="text-white ms-1" href="#"> Global Health & Allied Insurance.com</a>
         </div>
       </footer>
     </div>

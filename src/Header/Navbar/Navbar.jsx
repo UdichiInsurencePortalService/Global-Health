@@ -148,7 +148,6 @@ const Navbar = () => {
                           <li><Link to="/Healthinsurance">Health Insurance</Link></li>
                           <li><Link to="/Autoinsurance">Auto Insurance</Link></li>
                           <li><Link to="/Homeinsurance">Home Insurance</Link></li>
-                          <li><Link to="/product/home-insurance">Home Insurance</Link></li>
                         </ul>
                       </li>
                       <li style={{margin:'20px'}}>
@@ -161,14 +160,14 @@ const Navbar = () => {
                       </li>
                     </ul>
                   </li>
-                  <li><Link to="#">Policy</Link></li>
+                  <li><Link to="/policy">Policy</Link></li>
                   <li>
                     <Link to="#">Claims</Link>
-                    <ul className="dropdown">
+                    <ul className="dropdown" style={{width:'300px'}}>
                       <li><Link to="/intimateclaims">Intimate Claims</Link></li>
-                      <li><Link to="/product/health-insurance">Document Upload</Link></li>
-                      <li><Link to="/product/auto-insurance">Auto Insurance</Link></li>
-                      <li><Link to="/product/home-insurance">Home Insurance</Link></li>
+                      <li><Link to="/documentupload">Document Upload</Link></li>
+                      {/* <li><Link to="/product/auto-insurance">Auto Insurance</Link></li>
+                      <li><Link to="/product/home-insurance">Home Insurance</Link></li> */}
                     </ul>
                   </li>
                   <li><Link to="#" onClick={showDrawer}>Contact Us</Link></li>

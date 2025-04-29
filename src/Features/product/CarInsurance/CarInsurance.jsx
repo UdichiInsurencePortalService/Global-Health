@@ -28,29 +28,32 @@ import document from "../../../assets/carimages/document.png";
 import second from "../../../assets/reuseimage/gear.png";
 import support from "../../../assets/reuseimage/24-hours-support.png";
 import customization from "../../../assets/carimages/customization.png";
-import { Paragraph } from "react-bootstrap-icons";
 import CarPremiumRate from "../../../Reuse/CarPremiumRate/CarPremiumRate";
 import ElectricCarRate from "../../../Reuse/ElecrtricCarRate/ElecrtricCarRate";
 import DepreciationCalculated from "../../../Reuse/DepreciationCalculated/DepreciationCalculated";
 import NeedHelp from "../../../Reuse/NeedHelp/NeedHelp";
 
-// import { steps } from "framer-motion";
+const Carinsurance = () => {
+  const navigate = useNavigate();
+  const [registrationNumber, setRegistrationNumber] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [msgApi, contextHolder] = message.useMessage();
 
-const CarInsurance = () => {
+  // Static data for UI components
   const downloadpolicydata = {
     heading: "How to Download Your Car Insurance Policy on Global Health App?",
     description:
       "To download your renewed or already active car insurance policy with Global Health, follow the given steps:",
     list: [
-      "on the Global Health app, go to the ‘My Policies’ tab at the bottom of the screen. You will see all your policies currently active with Global Health.",
-      "Now select the car insurance policy for which you want to download the document. Verify all the details and click on ‘Download Policy’. Your car insurance policy document will be downloaded.",
+      "on the Global Health app, go to the 'My Policies' tab at the bottom of the screen. You will see all your policies currently active with Global Health.",
+      "Now select the car insurance policy for which you want to download the document. Verify all the details and click on 'Download Policy'. Your car insurance policy document will be downloaded.",
     ],
   };
 
   const claimStepsData = {
     heading: "How to File a Car Insurance Claim?",
-    Paragraph:
-      "After you buy or renew our car insurance plan, you live tension free as we have a 3-step, completely digital claims process!",
+    Paragraph: "After you buy or renew our car insurance plan, you live tension free as we have a 3-step, completely digital claims process!",
     steps: [
       {
         id: 1,
@@ -61,7 +64,7 @@ const CarInsurance = () => {
         id: 2,
         title: "Step 2",
         description:
-          "Get a link for Self-Inspection on your registered mobile number. Shoot your vehicle’s damages from your smartphone through a guided step-by-step process.",
+          "Get a link for Self-Inspection on your registered mobile number. Shoot your vehicle's damages from your smartphone through a guided step-by-step process.",
       },
       {
         id: 3,
@@ -75,7 +78,7 @@ const CarInsurance = () => {
   const documentdata = {
     heading: "Documents Required to Buy Car Insurance Online",
     description:
-      "While buying a new car insurance policy online from Global Health, you don’t need a load of documents or paperwork. By having the following documents handy, you can easily buy a new car insurance policy within minutes:",
+      "While buying a new car insurance policy online from Global Health, you don't need a load of documents or paperwork. By having the following documents handy, you can easily buy a new car insurance policy within minutes:",
     list: [
       "Car Registration Certificate",
       "Previous year car insurance policy, if applicable",
@@ -122,38 +125,38 @@ const CarInsurance = () => {
   const carFeatures = [
     {
       id: 1,
-      image: repair, // Replace with actual image
+      image: repair,
       title: "Cashless Repairs",
       description:
         "Access 9000+ cashless garages across India for a smooth, worry-free repair experience.",
     },
     {
       id: 2,
-      image: document, // Replace with actual image
+      image: document,
       title: "DIY Claim Inspection",
       description:
         "Use your smartphone to capture the damage – no lengthy surveys or inspections required.",
     },
     {
       id: 3,
-      image: second, // Replace with actual image
+      image: second,
       title: "Lightning-Fast Claims",
       description:
-        "We’ve settled 96% of car insurance claims – experience a process that’s quick and hassle-free.",
+        "We've settled 96% of car insurance claims – experience a process that's quick and hassle-free.",
     },
     {
       id: 4,
-      image: support, // Add appropriate image
+      image: support,
       title: "24x7 Customer Care",
       description:
         "Have a query or need help? Our team is available around the clock, even on national holidays.",
     },
     {
       id: 5,
-      image: customization, // Add appropriate image
+      image: customization,
       title: "Set Your Own Vehicle IDV",
       description:
-        "With Digit, you have the freedom to decide your car’s IDV based on your needs.",
+        "With Digit, you have the freedom to decide your car's IDV based on your needs.",
     },
   ];
 
@@ -162,7 +165,7 @@ const CarInsurance = () => {
       id: 1,
       title: "Own Damages for Third-Party Policy Holder",
       img: own1,
-      text: "In the case of a Third-Party or Liability Only Car Policy, damages to own vehicle won’t be covered.",
+      text: "In the case of a Third-Party or Liability Only Car Policy, damages to own vehicle won't be covered.",
     },
     {
       id: 2,
@@ -174,7 +177,7 @@ const CarInsurance = () => {
       id: 3,
       title: "Driving without a Valid Driving Licence Holder",
       img: driving3,
-      text: "You hold a learner’s licence and were driving without a valid driving licence-holder in the front passenger seat.",
+      text: "You hold a learner's licence and were driving without a valid driving licence-holder in the front passenger seat.",
     },
     {
       id: 4,
@@ -186,13 +189,13 @@ const CarInsurance = () => {
       id: 5,
       title: "Contributory Negligence",
       img: contributory5,
-      text: "Any contributory negligence (e.g., damage due to driving a car in a flood, which is not recommended as per the manufacturer’s driving manual, will not be covered)",
+      text: "Any contributory negligence (e.g., damage due to driving a car in a flood, which is not recommended as per the manufacturer's driving manual, will not be covered)",
     },
     {
       id: 6,
       title: "Add-Ons Not Bought",
       img: add6,
-      text: "Some situations are covered in add-ons. If you haven’t bought those add-ons, the corresponding situations will not be covered.",
+      text: "Some situations are covered in add-ons. If you haven't bought those add-ons, the corresponding situations will not be covered.",
     },
   ];
 
@@ -235,23 +238,132 @@ const CarInsurance = () => {
     },
   ];
 
+  /**
+   * Fetch vehicle data from Surepass API
+   * @param {string} regNum - Vehicle registration number
+   * @returns {Object|null} - Vehicle data or null if not found
+   */
+  const fetchVehicleFromSurepass = async (regNum) => {
+    try {
+      console.log("📞 Calling Surepass API for vehicle data");
+      const surepassRes = await fetch(import.meta.env.VITE_SUREPASS_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: import.meta.env.VITE_SUREPASS_TOKEN,
+        },
+        body: JSON.stringify({ id_number: regNum }),
+      });
+    
+      const surepassData = await surepassRes.json();
+      
+      if (!surepassData.success) {
+        console.error("❌ Surepass API returned error:", surepassData);
+        return null;
+      }
+      
+      console.log("✅ Successfully got vehicle data from Surepass");
+      return surepassData.data;
+    } catch (error) {
+      console.error("❌ Error calling Surepass API:", error);
+      return null;
+    }
+  };
 
-/**
- * CarInsurance Component
- * 
- * This component handles vehicle registration lookup with a simplified approach:
- * 1. First checks PostgreSQL database using the registration number
- * 2. Falls back to Surepass API if data is not found in database
- * 3. Fetches ex-showroom price separately if needed
- * 4. Stores all data to PostgreSQL for future lookups
- * 5. Includes mobile number in the database save
- */
-const CarInsurance = () => {
-  const navigate = useNavigate();
-  const [registrationNumber, setRegistrationNumber] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [msgApi, contextHolder] = message.useMessage();
+  /**
+   * Fetch ex-showroom price from Surepass API
+   * @param {string} regNum - Vehicle registration number
+   * @returns {string|null} - Price as string or null if not found
+   */
+  const fetchExShowroomPrice = async (regNum) => {
+    try {
+      console.log("📞 Calling Surepass API for ex-showroom price");
+      const showroomRes = await fetch(import.meta.env.VITE_SUREPASS_EX_SHOWROOM_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: import.meta.env.VITE_SUREPASS_EX_SHOWROOM_TOKEN,
+        },
+        body: JSON.stringify({ id_number: regNum }),
+      });
+    
+      const showroomData = await showroomRes.json();
+      
+      if (!showroomData.success || !showroomData?.data?.sale_amount) {
+        console.log("⚠️ No ex-showroom price found in Surepass");
+        return null;
+      }
+      
+      console.log("✅ Successfully got ex-showroom price from Surepass");
+      return showroomData.data.sale_amount;
+    } catch (error) {
+      console.error("❌ Error fetching ex-showroom price:", error);
+      return null;
+    }
+  };
+
+  /**
+   * Save vehicle data to PostgreSQL database
+   * @param {string} regNum - Vehicle registration number
+   * @param {string} mobile - User's mobile number
+   * @param {Object} vehicleData - Complete vehicle data to save
+   * @returns {Promise<boolean>} - Success status
+   */
+  const saveVehicleToDatabase = async (regNum, mobile, vehicleData) => {
+    try {
+      console.log("💾 Saving vehicle data to database");
+      
+      // Extract and map the fields needed for the backend API
+      const payload = {
+        // Map fields from vehicleData to match database column names
+        owner_name: vehicleData?.owner_name || null,
+        address: vehicleData?.permanent_address || vehicleData?.present_address || null,
+        registration_number: regNum,
+        color: vehicleData?.color || null,
+        insurance_company: vehicleData?.insurance_company || null,
+        // Use registration_date as fallback for purchase_date if it doesn't exist
+        purchase_date: vehicleData?.purchase_date || null,
+        maker_model: vehicleData?.maker_model || null,
+        // Convert exshowroom to a number if it's a string
+        exshowroom: vehicleData?.exshowroom || vehicleData?.sale_amount || 1000000,
+        engine_capacity: vehicleData?.cubic_capacity || null,
+        registration_date: vehicleData?.registration_date || null,
+        // If client_id starts with "rc_" or is non-numeric, use null instead
+        id: vehicleData?.client_id && !isNaN(parseInt(vehicleData?.client_id)) 
+            ? parseInt(vehicleData?.client_id) 
+            : null,
+        fuel_type: vehicleData?.fuel_type || null,
+        mobile_number: mobile // Use the input mobile number directly
+      };
+      
+      console.log("Payload being sent to database:", payload);
+    
+      const saveRes = await fetch(import.meta.env.VITE_LOCALHOST_CAR_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      
+      // Check if response indicates success
+      if (!saveRes.ok) {
+        // Handle error response
+        try {
+          const errorData = await saveRes.json();
+          console.error("Database save error:", errorData);
+          return false;
+        } catch (e) {
+          console.error("Error parsing database response:", e);
+          return false;
+        }
+      }
+      
+      console.log("✅ Successfully saved vehicle data to database");
+      return true;
+    } catch (error) {
+      console.error("❌ Error saving vehicle data to database:", error);
+      return false;
+    }
+  };
 
   /**
    * Handles form submission and implements the data fetching logic
@@ -264,11 +376,6 @@ const CarInsurance = () => {
     const regNum = registrationNumber.trim().toUpperCase();
     const mobile = mobileNumber.trim();
 
-    if (!regNum) return msgApi.error("Please enter a registration number.");
-    if (!mobile || !/^\d{10}$/.test(mobile))
-      return msgApi.error("Enter a valid 10-digit mobile number.");
-
-  
     // Form validation
     if (!regNum) {
       msgApi.error("Please enter a registration number.");
@@ -394,7 +501,7 @@ const CarInsurance = () => {
       // Navigate to user page after a short delay
       setTimeout(() => {
         navigate("/user");
-      });
+      }, 1000);
     } catch (error) {
       // Handle any errors that occurred during the process
       console.error("❌ Error fetching vehicle data:", error);
@@ -404,201 +511,7 @@ const CarInsurance = () => {
       setLoading(false);
     }
   };
-
-  /**
-   * Fetch vehicle data from Surepass API
-   * @param {string} regNum - Vehicle registration number
-   * @returns {Object|null} - Vehicle data or null if not found
-   */
-  const fetchVehicleFromSurepass = async (regNum) => {
-    try {
-      console.log("📞 Calling Surepass API for vehicle data");
-      const surepassRes = await fetch(import.meta.env.VITE_SUREPASS_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: import.meta.env.VITE_SUREPASS_TOKEN,
-        },
-        body: JSON.stringify({ id_number: regNum }),
-      });
-    
-      const surepassData = await surepassRes.json();
-      
-      if (!surepassData.success) {
-        console.error("❌ Surepass API returned error:", surepassData);
-        return null;
-      }
-      
-      console.log("✅ Successfully got vehicle data from Surepass");
-      return surepassData.data;
-    } catch (error) {
-      console.error("❌ Error calling Surepass API:", error);
-      return null;
-    }
-  };
-
-      const data = await response.json();
-
-      if (data.success) {
-        const vehicleData = data.data;
-
-        // ✅ Step 2: Save full payload to backend
-        const payload = {
-          registrationNumber: regNum,
-          mobileNumber: mobile,
-          vehicleData,
-        };
-
-  /**
-   * Fetch ex-showroom price from Surepass API
-   * @param {string} regNum - Vehicle registration number
-   * @returns {string|null} - Price as string or null if not found
-   */
-  const fetchExShowroomPrice = async (regNum) => {
-    try {
-      console.log("📞 Calling Surepass API for ex-showroom price");
-      const showroomRes = await fetch(import.meta.env.VITE_SUREPASS_EX_SHOWROOM_API, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: import.meta.env.VITE_SUREPASS_EX_SHOWROOM_TOKEN,
-        },
-        body: JSON.stringify({ id_number: regNum }),
-      });
-    
-      const showroomData = await showroomRes.json();
-      
-      if (!showroomData.success || !showroomData?.data?.sale_amount) {
-        console.log("⚠️ No ex-showroom price found in Surepass");
-        return null;
-      }
-      
-      console.log("✅ Successfully got ex-showroom price from Surepass");
-      return showroomData.data.sale_amount;
-    } catch (error) {
-      console.error("❌ Error fetching ex-showroom price:", error);
-      return null;
-    }
-  };
-
-  /**
-   * Save vehicle data to PostgreSQL database
-   * @param {string} regNum - Vehicle registration number
-   * @param {string} mobile - User's mobile number
-   * @param {Object} vehicleData - Complete vehicle data to save
-   * @returns {Promise<boolean>} - Success status
-   */
-  const saveVehicleToDatabase = async (regNum, mobile, vehicleData) => {
-    try {
-      console.log("💾 Saving vehicle data to database");
-      
-      // Extract and map the fields needed for the backend API
-      const payload = {
-        // Map fields from vehicleData to match database column names
-        owner_name: vehicleData?.owner_name || null,
-        address: vehicleData?.permanent_address || vehicleData?.present_address || null,
-        registration_number: regNum,
-        color: vehicleData?.color || null,
-        insurance_company: vehicleData?.insurance_company || null,
-        // Use registration_date as fallback for purchase_date if it doesn't exist
-        purchase_date: vehicleData?.purchase_date || null,
-        maker_model: vehicleData?.maker_model || null,
-        // Convert exshowroom to a number if it's a string
-        exshowroom: vehicleData?.exshowroom || vehicleData?.sale_amount || 1000000,
-        engine_capacity: vehicleData?.cubic_capacity || null,
-        registration_date: vehicleData?.registration_date || null,
-        // If client_id starts with "rc_" or is non-numeric, use null instead
-        id: vehicleData?.client_id && !isNaN(parseInt(vehicleData?.client_id)) 
-            ? parseInt(vehicleData?.client_id) 
-            : null,
-        fuel_type: vehicleData?.fuel_type || null,
-        mobile_number: mobile // Use the input mobile number directly
-      };
-      
-      console.log("Payload being sent to database:", payload);
-      
-      const saveRes = await fetch(import.meta.env.VITE_LOCALHOST_CAR_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      
-      // Check if response indicates success
-      if (!saveRes.ok) {
-        // Handle error response
-        let errorMessage;
-        try {
-          const backendRes = await fetch(
-            import.meta.env.VITE_LOCALHOST_CAR_API,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(payload),
-            }
-          );
-
-          if (!backendRes.ok) {
-            console.warn("Warning: Backend save failed");
-            msgApi.warning("Vehicle details retrieved but saving failed.");
-          }
-        } catch (backendErr) {
-          console.error("Backend error:", backendErr);
-          msgApi.warning("Vehicle retrieved but backend error occurred.");
-        }
-
-        // ✅ Step 3: Save trimmed summary for next page
-        const summary = {
-          vehicle_no: regNum,
-          registration_date: vehicleData.registration_date,
-          owner: vehicleData.owner_name,
-          fuel_type: vehicleData.fuel_type,
-          color: vehicleData.color,
-          insurance_company: vehicleData.insurance_company || "N/A",
-          address: vehicleData.permanent_address,
-          date_of_buy: vehicleData.registration_date,
-          ex_showroom_price: 1000000, // Placeholder
-        };
-
-        localStorage.setItem("vehicleDetails", JSON.stringify(summary));
-        setTimeout(() => navigate("/user"), 1000);
-      } else {
-        msgApi.error("Invalid registration number or no data found.");
-          // Try to parse error as JSON first
-          const errorData = await saveRes.json();
-          errorMessage = errorData.error || "Failed to save vehicle data";
-        } catch (jsonError) {
-          // If not JSON, get as text
-          errorMessage = await saveRes.text();
-        }
-        
-        console.error("⚠️ Failed to save to database:", saveRes.status, errorMessage);
-        msgApi.warning("Vehicle data retrieved but failed to save to database.");
-        return false;
-      }
-      
-      // Try to parse the successful response
-      try {
-        const saveResult = await saveRes.json();
-        console.log("✅ Database save response:", saveResult);
-        msgApi.success("Vehicle data successfully saved to database");
-        return true;
-      } catch (parseError) {
-        // Handle case where response isn't JSON
-        const textResponse = await saveRes.text();
-        console.log("✅ Database save response (text):", textResponse);
-        msgApi.success("Vehicle data saved to database");
-        return true;
-      }
-    } catch (saveError) {
-      // Handle general errors in the save process
-      console.error("❌ Error saving to database:", saveError);
-      msgApi.warning("Vehicle data retrieved but could not be saved to database.");
-      return false;
-    }
-  };
-
+  
   return (
     <>
       {contextHolder}
@@ -649,8 +562,6 @@ const CarInsurance = () => {
         </div>
       </div>
 
-      {/*  */}
-
       <div className="car-section-info">
         <div className="container">
           <div className="row">
@@ -685,7 +596,7 @@ const CarInsurance = () => {
         <div className="container">
           <div className="row justify-content-center text-center mb-4">
             <div className="col-md-8">
-              <h1 className="fw-bold">What’s Covered in Car Insurance?</h1>
+              <h1 className="fw-bold">What's Covered in Car Insurance?</h1>
             </div>
           </div>
           <div className="row">
@@ -713,9 +624,9 @@ const CarInsurance = () => {
         <div className="container">
           <div className="row justify-content-center text-center mb-4">
             <div className="col-md-8">
-              <h1 className="fw-bold">What’s Not Covered?</h1>
+              <h1 className="fw-bold">What's Not Covered?</h1>
               <p>
-                It is equally important to know what’s not covered in your car
+                It is equally important to know what's not covered in your car
                 insurance policy to avoid surprises when you make a claim.
               </p>
             </div>
@@ -765,37 +676,31 @@ const CarInsurance = () => {
         description={downloadpolicydata.description}
         list={downloadpolicydata.list}
       />
-      {/* <CarPremiumRate 
-       heading="Third Party Car Insurance Premuin Rates"
-        para = "A Third-Party Car Insurance Premium Calculator depends on your car’s engine cc and even the respective premium rates are predetermined by the IRDAI, which are as follows:"
-        tablehead="Private cars with Engibe Capacity"
+     
+      <CarPremiumRate
+        heading="Third Party Car Insurance Premium Rates"
+        para="A Third-Party Car Insurance Premium Calculator depends on your car's engine cc and even the respective premium rates are predetermined by the IRDAI, which are as follows:"
+        tablehead="Private cars with Engine Capacity"
         tablehead1="The premium for 2019-20 in INR"
-        tablehead2={"New 4W TP rate (effective 1st June 2022"}
-       /> */}
-        <CarPremiumRate
-          heading="Third Party Car Insurance Premium Rates"
-          para="A Third-Party Car Insurance Premium Calculator depends on your car’s engine cc and even the respective premium rates are predetermined by the IRDAI, which are as follows:"
-          tablehead="Private cars with Engine Capacity"
-          tablehead1="The premium for 2019-20 in INR"
-          tablehead2="New 4W TP rate (effective 1st June 2022)"
-          tableData={[
-            {
-              capacity: "Not Exceeding 1000 cc",
-              oldPremium: "₹2,072",
-              newPremium: "₹2,094",
-            },
-            {
-              capacity: "Exceeding 1000 cc but not exceeding 1500 cc",
-              oldPremium: "₹3,221",
-              newPremium: "₹3,416",
-            },
-            {
-              capacity: "Exceeding 1500 cc",
-              oldPremium: "₹7,890",
-              newPremium: "₹7,897",
-            },
-          ]}
-        />
+        tablehead2="New 4W TP rate (effective 1st June 2022)"
+        tableData={[
+          {
+            capacity: "Not Exceeding 1000 cc",
+            oldPremium: "₹2,072",
+            newPremium: "₹2,094",
+          },
+          {
+            capacity: "Exceeding 1000 cc but not exceeding 1500 cc",
+            oldPremium: "₹3,221",
+            newPremium: "₹3,416",
+          },
+          {
+            capacity: "Exceeding 1500 cc",
+            oldPremium: "₹7,890",
+            newPremium: "₹7,897",
+          },
+        ]}
+      />
 
       <ElectricCarRate
         heading="Electric Car Insurance Premium Rates"
@@ -824,6 +729,7 @@ const CarInsurance = () => {
           },
         ]}
       />
+
       <DepreciationCalculated
         heading="How is Depreciation Calculated in Car Insurance?"
         para={[
@@ -860,7 +766,7 @@ const CarInsurance = () => {
         ]}
       />
 
-      <NeedHelp
+<NeedHelp
         heading="Need Help?"
         paragraph="Have queries related to Digit motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
         head={["WhatsApp", "Email", "Contact"]}
@@ -880,4 +786,4 @@ const CarInsurance = () => {
   );
 };
 
-export default CarInsurance;
+export default Carinsurance;

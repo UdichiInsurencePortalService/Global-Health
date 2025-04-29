@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState,useRef,useEffect } from "react";
 import {
   Card,
   Row,
@@ -26,6 +26,8 @@ import RequiredDocuments from "../../../Reuse/RequireDocuments/RequireDocument";
 import Insuranceclaim from "../../../Reuse/Insuranceclaim/Insuranceclaim";
 import Downloadpolycy from "../../../Reuse/Downloadpolycy/Downloadpolycy";
 import NeedHelp from "../../../Reuse/NeedHelp/NeedHelp";
+
+
 
 
 
@@ -70,119 +72,83 @@ const Bikeinsurance = () => {
     },
   ];
 
-  const Bikefeatures1 = [
-    {
-      id: 1,
-      img: bike1,
-      title: "Accidents",
-      text: "Damages and losses that may arise due to an accident or collision",
-    },
-    {
-      id: 2,
-      img: bike2,
-      title: "Bike Theft",
-      text: "Covers for your losses in case your two-wheeler is unfortunately stolen!",
-    },
-    {
-      id: 3,
-      img: bike3,
-      title: "Bike Got Fire",
-      text: "Damages and losses to your two-wheeler in case of an accidental fire!",
-    },
-    {
-      id: 4,
-      img: bike4,
-      title: "Natural Disasters",
-      text: "Damages caused to your two-wheeler due to nature’s many furies, such as due to floods, cyclones, etc.",
-    },
-    {
-      id: 5,
-      img: bike5,
-      title: "Personal Accident",
-      text: "Covers for your expenses in cases where you’ve hurt yourself too bad!",
-    },
-    {
-      id: 6,
-      img: bike6,
-      title: "Third Party Losses",
-      text: "When a person, a vehicle or a property is hurt or damaged due to your bike's actions.",
-    },
-  ];
+  // const Bikefeatures1 = [
+  //   {
+  //     id: 1,
+  //     img: bike1,
+  //     title: "Accidents",
+  //     text: "Damages and losses that may arise due to an accident or collision",
+  //   },
+  //   {
+  //     id: 2,
+  //     img: bike2,
+  //     title: "Bike Theft",
+  //     text: "Covers for your losses in case your two-wheeler is unfortunately stolen!",
+  //   },
+  //   {
+  //     id: 3,
+  //     img: bike3,
+  //     title: "Bike Got Fire",
+  //     text: "Damages and losses to your two-wheeler in case of an accidental fire!",
+  //   },
+  //   {
+  //     id: 4,
+  //     img: bike4,
+  //     title: "Natural Disasters",
+  //     text: "Damages caused to your two-wheeler due to nature’s many furies, such as due to floods, cyclones, etc.",
+  //   },
+  //   {
+  //     id: 5,
+  //     img: bike5,
+  //     title: "Personal Accident",
+  //     text: "Covers for your expenses in cases where you’ve hurt yourself too bad!",
+  //   },
+  //   {
+  //     id: 6,
+  //     img: bike6,
+  //     title: "Third Party Losses",
+  //     text: "When a person, a vehicle or a property is hurt or damaged due to your bike's actions.",
+  //   },
+  // ];
 
-  const Bikefeatures2 = [
-    {
-      id: 1,
-      img: own1,
-      title: "Own Damages for Third-Party Policy holder",
-      text: "In the case of a Third-Party or Liability Only Bike Policy, damages to own vehicle won’t be covered.",
-    },
-    {
-      id: 2,
-      img: drunk2,
-      title: "Drunk Riding or without a Licence",
-      text: "Your bike insurance won’t cover for you in situations where you were riding drunk or without a valid two-wheeler licence.",
-    },
-    {
-      id: 3,
-      img: driving3,
-      title: "Driving without a valid Driving Licence holder",
-      text: "If you hold a learner’s licence and were riding your two-wheeler without a valid licence-holder on the pillion seat- then your claim in those situations won’t be covered.",
-    },
-    {
-      id: 4,
-      img: consequential4,
-      title: "Consequential Damages",
-      text: "Any damage which is not a direct result of the accident (e.g. after an accident, if the damaged two-wheeler is being used incorrectly and the engine gets damaged, it is considered as consequential damage and it will not be covered).",
-    },
-    {
-      id: 5,
-      img: contributory5,
-      title: "Contributory Negligences",
-      text: "Any contributory negligence (e.g. damage due to driving a two-wheeler in a flood, which is not recommended as per the manufacturer’s driving manual, will not be covered).",
-    },
-    {
-      id: 6,
-      img: add6,
-      title: "Add-ons not Bought",
-      text: "Some situations are covered in add-ons. If you haven’t bought those add-ons, the corresponding situations will not be covered.",
-    },
-  ];
-
-  const [registrationNumber, setRegistrationNumber] = useState(
-    localStorage.getItem("registrationNumber") || ""
-  );
-  const [vehicleDetails, setVehicleDetails] = useState(
-    JSON.parse(localStorage.getItem("vehicleDetails")) || null
-  );
-  const [error, setError] = useState(null);
-  const modalRef = useRef(null);
-
-  useEffect(() => {
-    localStorage.setItem("registrationNumber", registrationNumber);
-  }, [registrationNumber]);
-
-  useEffect(() => {
-    if (vehicleDetails) {
-      localStorage.setItem("vehicleDetails", JSON.stringify(vehicleDetails));
-    } else {
-      localStorage.removeItem("vehicleDetails");
-    }
-  }, [vehicleDetails]);
-
-  useEffect(() => {
-    console.log("Modal Ref:", modalRef.current); // Debugging to ensure ref is assigned
-  }, []);
-/**
- * CarInsurance Component
- * 
- * This component handles vehicle registration lookup with a simplified approach:
- * 1. First checks PostgreSQL database using the registration number
- * 2. Falls back to Surepass API if data is not found in database
- * 3. Fetches ex-showroom price separately if needed
- * 4. Stores all data to PostgreSQL for future lookups
- * 5. Includes mobile number in the database save
- */
-const Bikeinsurance = () => {
+  // const Bikefeatures2 = [
+  //   {
+  //     id: 1,
+  //     img: own1,
+  //     title: "Own Damages for Third-Party Policy holder",
+  //     text: "In the case of a Third-Party or Liability Only Bike Policy, damages to own vehicle won’t be covered.",
+  //   },
+  //   {
+  //     id: 2,
+  //     img: drunk2,
+  //     title: "Drunk Riding or without a Licence",
+  //     text: "Your bike insurance won’t cover for you in situations where you were riding drunk or without a valid two-wheeler licence.",
+  //   },
+  //   {
+  //     id: 3,
+  //     img: driving3,
+  //     title: "Driving without a valid Driving Licence holder",
+  //     text: "If you hold a learner’s licence and were riding your two-wheeler without a valid licence-holder on the pillion seat- then your claim in those situations won’t be covered.",
+  //   },
+  //   {
+  //     id: 4,
+  //     img: consequential4,
+  //     title: "Consequential Damages",
+  //     text: "Any damage which is not a direct result of the accident (e.g. after an accident, if the damaged two-wheeler is being used incorrectly and the engine gets damaged, it is considered as consequential damage and it will not be covered).",
+  //   },
+  //   {
+  //     id: 5,
+  //     img: contributory5,
+  //     title: "Contributory Negligences",
+  //     text: "Any contributory negligence (e.g. damage due to driving a two-wheeler in a flood, which is not recommended as per the manufacturer’s driving manual, will not be covered).",
+  //   },
+  //   {
+  //     id: 6,
+  //     img: add6,
+  //     title: "Add-ons not Bought",
+  //     text: "Some situations are covered in add-ons. If you haven’t bought those add-ons, the corresponding situations will not be covered.",
+  //   },
+  // ];
   const navigate = useNavigate();
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
@@ -826,6 +792,7 @@ const Bikeinsurance = () => {
             />
     </>
   );
-};
+}
+
 
 export default Bikeinsurance;
