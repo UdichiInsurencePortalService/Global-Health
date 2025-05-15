@@ -14,19 +14,27 @@ import Bikeinsurance from "./Features/product/Bikeinsurance/Bikeinsurance.jsx";
 import Healthinsurance from "./Features/product/Healthinsurance/Healthinsurance.jsx";
 import Homeinsurance from "./Features/product/Homeinsurance/Homeinsurance.jsx";
 
+//footer links
+ import Faq from "./Features/product/Faq/Faq.jsx";
+ import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx"
+
 
 import  Autoinsurance  from "./Features/product/Autoinsurance/Autoinsurance.jsx";
 import User from "./Features/product/CarInsurance/User-Data/User.jsx";
 import Carinsurance from "./Features/product/CarInsurance/CarInsurance.jsx";
 import Document from "./Claims/DocumentUpload/Document.jsx";
 import Policy from "./Policy/Policy.jsx";
+import Termcondition from "./Features/product/Termcondition/Termcondition.jsx";
+import Support from "./Features/product/Support/Support.jsx";
+import { Privacypolicy } from "./Features/product/Privacypolicy/Privacypolicy.jsx";
+
+
 
 function App() {
   return (
     <>
 
       <Navbar />
-
       <Routes>
 
         <Route path="/" element={<Home />} />
@@ -38,11 +46,17 @@ function App() {
         {/* <Route path="/product" element={<Product />} /> */}
         <Route path="/carinsurance" element={<Carinsurance />} />
         <Route path="/user-data" element={<UserData/>}/>
-        <Route path="Bikeinsurance" element={<Bikeinsurance />} />
+        <Route path="/Bikeinsurance" element={<Bikeinsurance />} />
         <Route path="/Healthinsurance" element={<Healthinsurance />} />
         <Route path="/Autoinsurance" element={<Autoinsurance />} />
         <Route path="/Homeinsurance" element={<Homeinsurance />} />
 
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/companyinfo" element={<Companyinfo />} />
+        {/* <Route path="/privacypolicy" element={<Privacypolicy/>} /> */}
+        
+        <Route path="/termcondition" element={<Termcondition/>} />
+        <Route path="/support" element={<Support/>} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/intimateclaims" element={<Intimate />} />

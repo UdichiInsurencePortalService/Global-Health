@@ -1,109 +1,41 @@
-/* Policy.css */
+.policy-section {
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
 
-.policy-heading h1 {
-    font-size: 40px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-weight: 600;
-    position: relative;
-    display: inline-block;
-    color: #2c3e50;
-  }
-  
-  .policy-heading h1::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -8px;
-    width: 100%;
-    height: 4px;
-    background-color: blue;
-    border-radius: 2px;
-  }
-  
-  .policy-section {
-    background-color: #f8f9fa;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    min-height: 100vh;
-  }
-  
-  .check-section {
-    transition: all 0.3s ease;
-  }
-  
-  .check-section:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  .check-section input {
-    width: 100%;
-    max-width: 400px;
-    padding: 12px;
-    font-size: 16px;
-  }
-  
-  .check-section button {
-    padding: 12px 24px;
-    font-size: 16px;
-    white-space: nowrap;
-  }
-  
-  .upload-card {
-    border-radius: 12px;
-    transition: all 0.3s ease;
-  }
-  
-  .upload-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
-  }
-  
-  .upload-section h2,
-  .upload-card h2 {
-    font-size: 28px;
-    font-weight: 500;
-    margin-bottom: 15px;
-  }
-  
-  .border-dashed {
-    border-style: dashed !important;
-    border-color: #ced4da !important;
-  }
-  
-  .upload-area {
-    transition: all 0.2s ease;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .upload-area:hover {
-    background-color: #e9ecef !important;
-  }
-  
-  .file-input {
-    cursor: pointer;
-    z-index: 2;
-  }
-  
-  .selected-file {
-    border: 1px solid #dee2e6;
-  }
-  
-  @media (max-width: 768px) {
-    .policy-heading h1 {
-      font-size: 32px;
-    }
-  
-    .check-section {
-      flex-direction: column;
-    }
-  
-    .check-section input,
-    .upload-section input[type="file"] {
-      max-width: 100%;
-    }
-  }
-  
-  
+.policy-heading {
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+/* .logo-img {
+  max-width: 100%;
+  height: auto;
+} */
+
+.form-section {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-control {
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}

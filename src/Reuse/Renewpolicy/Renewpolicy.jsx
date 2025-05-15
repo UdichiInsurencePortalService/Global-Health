@@ -1,4 +1,4 @@
-import { Italic } from "lucide-react";
+  import { Italic } from "lucide-react";
 import React from "react";
 
 const Renewpolicy = ({ heading, steps }) => {

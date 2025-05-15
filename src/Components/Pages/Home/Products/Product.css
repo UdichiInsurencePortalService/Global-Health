@@ -1,101 +1,179 @@
 .products-section {
-    background-color: rgb(245, 250, 255);
-  }
-  
-  /* Card design */
+  background-color: rgb(245, 250, 255);
+}
+
+/* Card design */
+.card-section {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: border 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+
+
+.product-icon {
+  width: 50%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Center title below card */
+.card-title {
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .card-section {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background-color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: border 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.5rem;
+    width: 100px;
+    height: 100px;
   }
-  
-  .card-section:hover {
-    border: 2px solid #007bff;
-  }
-  
+
   .product-icon {
-    width: 50%;
-    height: auto;
-    object-fit: contain;
+    width: 60%;
   }
-  
-  /* Center title below card */
+
   .card-title {
-    text-align: center;
-    font-size: 1rem;
-    margin-top: 0.5rem;
-    font-weight: 500;
+    font-size: 0.9rem;
   }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .card-section {
-      width: 100px;
-      height: 100px;
-    }
-  
-    .product-icon {
-      width: 60%;
-    }
-  
-    .card-title {
-      font-size: 0.9rem;
-    }
-  }
-  .products-section {
-    background-color: #f9f9f9;
-  }
-  
+}
+.products-section {
+  background-color: #f9f9f9;
+}
+
+.card-section {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: border 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.card-section:hover {
+  border: 2px solid #007bff;
+}
+
+.product-icon {
+  width: 50%;
+  height: auto;
+  object-fit: contain;
+}
+
+.card-title {
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
   .card-section {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background-color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: border 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.5rem;
+    width: 100px;
+    height: 100px;
   }
-  
-  .card-section:hover {
-    border: 2px solid #007bff;
-  }
-  
+
   .product-icon {
-    width: 50%;
-    height: auto;
-    object-fit: contain;
+    width: 60%;
   }
-  
+
   .card-title {
-    text-align: center;
-    font-size: 1rem;
-    margin-top: 0.5rem;
-    font-weight: 500;
+    font-size: 0.9rem;
   }
-  
-  /* Responsive tweaks */
-  @media (max-width: 768px) {
-    .card-section {
-      width: 100px;
-      height: 100px;
-    }
-  
-    .product-icon {
-      width: 60%;
-    }
-  
-    .card-title {
-      font-size: 0.9rem;
-    }
+}
+
+.about-section {
+  background-color: #f7f9fc;
+}
+
+.section-title {
+  font-size: 2rem;
+  color: black;
+  font-weight: 700;
+}
+
+/* .about-card {
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+  } */
+
+/* .about-card:hover {
+    transform: translateY(-5px);
   }
-    
+   */
+.about-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #333;
+}
+
+.readmore-btn {
+  padding: 10px 25px;
+  width: 15%;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: background-color 0.3s ease;
+}
+
+.readmore-btn:hover {
+  background-color: #004085;
+  color: #fff;
+}
+
+
+.PBAdvantage-section {
+  background-color: #f8f9fa;
+  padding: 40px 0;
+}
+
+.pb-advantage-heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content:center;
+}
+
+.pb-advantage-paragraph {
+  font-size: 1.1rem;
+  color: #333;
+  margin-right: 50%;
+  /* max-width: 800px; */
+  /* margin: 0 auto; */
+  display: flex;
+  align-items: flex-start;
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  background-color: #ffffff;
+  transition: 0.3s ease-in-out;
+  text-align: center;
+  background-color: white;
+  
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+

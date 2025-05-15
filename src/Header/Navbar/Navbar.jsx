@@ -9,9 +9,13 @@ import { ToastContainer } from "react-toastify";
 import { handleSuccess } from "../../errortoast";
 import Top from "./TopBar/Top";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
+import { handleError } from "../../errortoast";
+
 
 const Navbar = () => {
-  const [username, setUsername] = useState(localStorage.getItem("loggedInUser") || "");
+  const [username, setUsername] = useState(
+    localStorage.getItem("loggedInUser") || ""
+  );
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const formRef = useRef(null);
@@ -99,11 +103,12 @@ const Navbar = () => {
       zIndex: 1000,
       transition: "all 0.3s ease-in-out",
       transform: visible ? "translateY(0)" : "translateY(-100%)",
-      backgroundColor: isScrolled ? "rgb(29, 26, 26)" : "rgba(255, 255, 255, 0.7)",
+      backgroundColor: isScrolled
+        ? "rgb(29, 26, 26)"
+        : "rgba(255, 255, 255, 0.7)",
       backdropFilter: "blur(10px)",
       boxShadow: isScrolled ? "0 2px 10px rgba(0, 0, 0, 0.1)" : "none",
-      padding:10,
-      
+      padding: 10,
     },
   };
 
@@ -136,52 +141,114 @@ const Navbar = () => {
             <div className="col-lg-6 col-md-6 d-none d-md-block">
               <nav className="navigation">
                 <ul className="nav menu">
-                  <li><Link to="/">Home</Link></li>
+                  <li>
+                    <Link to="/">Home</Link>
+                  </li>
                   <li className="nav-item dropdown">
                     <Link to="#">Product</Link>
-                    <ul className="dropdown large-dropdown" style={{width:'450px'}}>
-                      <li style={{margin:'20px'}}>
-                        <h2 className="dropdown-header">Individual Insurance</h2>
+                    <ul
+                      className="dropdown large-dropdown"
+                      style={{ width: "450px" }}
+                    >
+                      <li style={{ margin: "20px" }}>
+                        <h2 className="dropdown-header">
+                          Individual Insurance
+                        </h2>
                         <ul className="list-unstyled">
-                          <li><Link to="/carinsurance">Car Insurance</Link></li>
-                          <li><Link to="/Bikeinsurance">Bike Insurance</Link></li>
-                          <li><Link to="/Healthinsurance">Health Insurance</Link></li>
-                          <li><Link to="/Autoinsurance">Auto Insurance</Link></li>
-                          <li><Link to="/Homeinsurance">Home Insurance</Link></li>
+                          <li>
+                            <Link to="/carinsurance">Car Insurance</Link>
+                          </li>
+                          <li>
+                            <Link to="/Bikeinsurance">Bike Insurance</Link>
+                          </li>
+                          <li>
+                            <Link to="/Healthinsurance">Health Insurance</Link>
+                          </li>
+                          <li>
+                            <Link to="/Autoinsurance">Auto Insurance</Link>
+                          </li>
+                          <li>
+                            <Link to="/Homeinsurance">Home Insurance</Link>
+                          </li>
                         </ul>
                       </li>
-                      <li style={{margin:'20px'}}>
+                      <li style={{ margin: "20px" }}>
                         <h2 className="dropdown-header">Business Insurance</h2>
                         <ul className="list-unstyled">
-                          <li><Link to="/product/commercial-insurance">Commercial Insurance</Link></li>
-                          <li><Link to="/product/liability-insurance">Liability Insurance</Link></li>
-                          <li><Link to="/product/property-insurance">Property Insurance</Link></li>
+                          <li>
+                            <Link
+                              onClick={() =>
+                                handleError("This page is Under-development")
+                              }
+                            >
+                              Commercial Insurance
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() =>
+                                handleError("This page is under Development")
+                              }
+                            >
+                              Liability Insurance
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() =>
+                                handleError("This page is under Development")
+                              }
+                            >
+                              Property Insurance
+                            </Link>
+                          </li>
                         </ul>
                       </li>
                     </ul>
                   </li>
-                  <li><Link to="/policy">Policy</Link></li>
+                  <li>
+                    <Link to="#">Support</Link>
+                    <ul className="dropdown" style={{ width: "300px" }}>
+                      <li>
+                        <Link to="/policy">Download policy pdf</Link>
+                      </li>
+                    </ul>
+                  </li>
                   <li>
                     <Link to="#">Claims</Link>
-                    <ul className="dropdown" style={{width:'300px'}}>
-                      <li><Link to="/intimateclaims">Intimate Claims</Link></li>
-                      <li><Link to="/documentupload">Document Upload</Link></li>
+                    <ul className="dropdown" style={{ width: "300px" }}>
+                      <li>
+                        <Link to="/intimateclaims">Intimate Claims</Link>
+                      </li>
+                      <li>
+                        <Link to="/documentupload">Document Upload</Link>
+                      </li>
                       {/* <li><Link to="/product/auto-insurance">Auto Insurance</Link></li>
                       <li><Link to="/product/home-insurance">Home Insurance</Link></li> */}
                     </ul>
                   </li>
-                  <li><Link to="#" onClick={showDrawer}>Contact Us</Link></li>
+                  <li>
+                    <Link to="#" onClick={showDrawer}>
+                      Contact Us
+                    </Link>
+                  </li>
                 </ul>
               </nav>
             </div>
 
             <div className="col-lg-2 col-md-3 col-6 d-flex justify-content-end align-items-center">
               <div className="get-quote">
-                {username && <span className="username-display">Hello, {username}</span>}
+                {username && (
+                  <span className="username-display">Hello, {username}</span>
+                )}
                 {username ? (
-                  <button onClick={handleLogout} className="logout-btn">Log Out</button>
+                  <button onClick={handleLogout} className="logout-btn">
+                    Log Out
+                  </button>
                 ) : (
-                  <Link to="/login" className="navbar-btn">Login</Link>
+                  <Link to="/login" className="navbar-btn">
+                    Login
+                  </Link>
                 )}
               </div>
               <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
@@ -193,7 +260,10 @@ const Navbar = () => {
       </header>
 
       {/* Mobile Menu */}
-      <div className={`mobile-menu-overlay ${mobileMenuOpen ? "open" : ""}`} onClick={toggleMobileMenu}></div>
+      <div
+        className={`mobile-menu-overlay ${mobileMenuOpen ? "open" : ""}`}
+        onClick={toggleMobileMenu}
+      ></div>
       <div className={`mobile-nav-container ${mobileMenuOpen ? "open" : ""}`}>
         <div className="mobile-nav-header">
           <h3>Menu</h3>
@@ -202,84 +272,220 @@ const Navbar = () => {
           </button>
         </div>
         <ul className="mobile-nav-menu">
-          <li><Link to="/" onClick={toggleMobileMenu}>Home</Link></li>
           <li>
-            <button onClick={() => toggleDropdown("products")} className="mobile-dropdown-toggle">
+            <Link to="/" onClick={toggleMobileMenu}>
+              Home
+            </Link>
+          </li>
+          <li>
+            <button
+              onClick={() => toggleDropdown("products")}
+              className="mobile-dropdown-toggle"
+            >
               Products <span>{activeDropdown === "products" ? "−" : "+"}</span>
             </button>
-            <div className={`mobile-dropdown-content ${activeDropdown === "products" ? "active" : ""}`}>
+            <div
+              className={`mobile-dropdown-content ${
+                activeDropdown === "products" ? "active" : ""
+              }`}
+            >
               <div className="mobile-dropdown-header">Individual Insurance</div>
               <ul>
-                <li><Link to="/carinsurance" onClick={toggleMobileMenu}>Car Insurance</Link></li>
-                <li><Link to="/product/health-insurance" onClick={toggleMobileMenu}>Health Insurance</Link></li>
-                <li><Link to="/product/auto-insurance" onClick={toggleMobileMenu}>Auto Insurance</Link></li>
-                <li><Link to="/product/home-insurance" onClick={toggleMobileMenu}>Home Insurance</Link></li>
+                <li>
+                  <Link to="/carinsurance" onClick={toggleMobileMenu}>
+                    Car Insurance
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/product/health-insurance"
+                    onClick={toggleMobileMenu}
+                  >
+                    Health Insurance
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/product/auto-insurance" onClick={toggleMobileMenu}>
+                    Auto Insurance
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/product/home-insurance" onClick={toggleMobileMenu}>
+                    Home Insurance
+                  </Link>
+                </li>
               </ul>
               <div className="mobile-dropdown-header">Business Insurance</div>
               <ul>
-                <li><Link to="/product/commercial-insurance" onClick={toggleMobileMenu}>Commercial Insurance</Link></li>
-                <li><Link to="/product/liability-insurance" onClick={toggleMobileMenu}>Liability Insurance</Link></li>
-                <li><Link to="/product/property-insurance" onClick={toggleMobileMenu}>Property Insurance</Link></li>
+                <li>
+                  <Link
+                    to="/product/commercial-insurance"
+                    onClick={toggleMobileMenu}
+                  >
+                    Commercial Insurance
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/product/liability-insurance"
+                    onClick={toggleMobileMenu}
+                  >
+                    Liability Insurance
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/product/property-insurance"
+                    onClick={toggleMobileMenu}
+                  >
+                    Property Insurance
+                  </Link>
+                </li>
               </ul>
             </div>
           </li>
-          <li><Link to="#" onClick={toggleMobileMenu}>Policy</Link></li>
-          <li><Link to="#" onClick={toggleMobileMenu}>Claims</Link></li>
-          <li><Link to="#" onClick={() => { toggleMobileMenu(); showDrawer(); }}>Contact Us</Link></li>
+          <li>
+            <Link to="#" onClick={toggleMobileMenu}>
+              Policy
+            </Link>
+          </li>
+          <li>
+            <Link to="#" onClick={toggleMobileMenu}>
+              Claims
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="#"
+              onClick={() => {
+                toggleMobileMenu();
+                showDrawer();
+              }}
+            >
+              Contact Us
+            </Link>
+          </li>
         </ul>
 
         <div className="mobile-user-section">
-          {username && <span className="mobile-username">Hello, {username}</span>}
+          {username && (
+            <span className="mobile-username">Hello, {username}</span>
+          )}
           {username ? (
-            <button onClick={() => { toggleMobileMenu(); handleLogout(); }} className="navbar-btn">Log Out</button>
+            <button
+              onClick={() => {
+                toggleMobileMenu();
+                handleLogout();
+              }}
+              className="navbar-btn"
+            >
+              Log Out
+            </button>
           ) : (
-            <Link to="/login" className="navbar-btn" onClick={toggleMobileMenu}>Log In</Link>
+            <Link to="/login" className="navbar-btn" onClick={toggleMobileMenu}>
+              Log In
+            </Link>
           )}
         </div>
       </div>
 
       {/* Contact Drawer */}
+        
       <Drawer
-        title="We’re Here to Help! Let Us Know Your Query"
+        title="We're Here to Help! Let Us Know Your Query"
         width={window.innerWidth > 768 ? 600 : "90%"}
         onClose={onClose}
         open={open}
+        bodyStyle={{ padding: "24px" }}
+        headerStyle={{ 
+          borderBottom: "1px solid #f0f0f0", 
+          padding: "16px 24px",
+          fontWeight: "bold",
+          fontSize: "18px"
+        }}
       >
-        <p className="contact-description">Fill out the form below, and our team will get back to you as soon as possible.</p>
-        <Form layout="vertical" ref={formRef} onFinish={sendEmail}>
-          <Row gutter={16}>
-            <Col xs={24} sm={12}>
-              <Form.Item name="user_name" label="Name" rules={[{ required: true }]}>
-                <Input className="contact-input" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={12}>
-              <Form.Item name="user_email" label="Email" rules={[{ required: true }]}>
-                <Input type="email" className="contact-input" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={12}>
-              <Form.Item name="user_address" label="Address" rules={[{ required: true }]}>
-                <Input className="contact-input" />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={12}>
-              <Form.Item name="user_number" label="Number" rules={[{ required: true }]}>
-                <Input type="number" className="contact-input" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <div className="contact-buttons">
-            <Button onClick={onClose} className="cancel-btn">Cancel</Button>
-            <Button type="primary" htmlType="submit" className="submit-btn">Submit</Button>
-          </div>
-        </Form>
-
-        <h3 className="contact-title">Contact Information</h3>
-        <ul className="contact-list">
-          <li><b>Muscat Office:</b> P.O. Box 556. Postal code No. 103. Muscat, Sultanate of Oman; Telephone: (968) 928 655 17, (968) 992 134 62</li>
-          <li><b>Mauritius Office:</b> 301, Cyber City, Ebene.</li>
-        </ul>
+        <div className="space-y-6">
+          <p className="text-gray-600">
+            Fill out the form below, and our team will get back to you as soon as possible.
+          </p>
+          
+          <Form layout="vertical" ref={formRef} onFinish={sendEmail} className="space-y-4">
+            <Row gutter={16}>
+              <Col xs={24} sm={12}>
+                <Form.Item
+                  name="user_name"
+                  label="Name"
+                  rules={[{ required: true, message: 'Please enter your name' }]}
+                >
+                  <Input className="rounded-md shadow-sm border-gray-300" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={12}>
+                <Form.Item
+                  name="user_email"
+                  label="Email"
+                  rules={[
+                    { required: true, message: 'Please enter your email' },
+                    { type: 'email', message: 'Please enter a valid email' }
+                  ]}
+                >
+                  <Input type="email" className="rounded-md shadow-sm border-gray-300" />
+                </Form.Item>
+              </Col>
+            </Row>
+            
+            <Row gutter={16}>
+              <Col xs={24} sm={12}>
+                <Form.Item
+                  name="user_phone"
+                  label="Phone Number"
+                  rules={[{ required: true, message: 'Please enter your phone number' }]}
+                >
+                  <Input type="tel" className="rounded-md shadow-sm border-gray-300" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={12}>
+                <Form.Item
+                  name="user_address"
+                  label="Address"
+                  rules={[{ required: true, message: 'Please enter your address' }]}
+                >
+                  <Input className="rounded-md shadow-sm border-gray-300" />
+                </Form.Item>
+              </Col>
+            </Row>
+            
+            {/* Full-width message field */}
+            <Row>
+              <Col span={24}>
+                <Form.Item
+                  name="user_message"
+                  label="Message"
+                  rules={[{ required: true, message: 'Please enter your message' }]}
+                >
+                  <Input.TextArea 
+                    rows={5} 
+                    className="rounded-md shadow-sm border-gray-300" 
+                    placeholder="How can we help you today?"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            
+            <div className="flex justify-end space-x-3 pt-4">
+             
+            
+              <Button 
+                htmlType="submit"
+                className=" "
+              >
+                Submit
+              </Button>
+            </div>
+          </Form>
+          
+     
+        </div>
       </Drawer>
 
       <ToastContainer />
