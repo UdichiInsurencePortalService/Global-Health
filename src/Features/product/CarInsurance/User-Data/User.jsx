@@ -17,7 +17,7 @@ const User = () => {
     // Retrieve vehicle details from localStorage
     try {
       const storedDetails = localStorage.getItem("vehicleDetails");
-      console.log("Retrieved from localStorage:", storedDetails);
+      console.log("Retrieved from localStorage:>>>>>>>>>>>>>>>>>>", storedDetails);
       
       if (storedDetails) {
         const parsedDetails = JSON.parse(storedDetails);
@@ -132,15 +132,24 @@ const User = () => {
                         {vehicleDetails.maker_model || "N/A"}
                       </Descriptions.Item>
                       <Descriptions.Item label="Ex-Showroom Price" span={1}>
-                        {vehicleDetails.ex_showroom_price || "14000"}
+                        {vehicleDetails.ex_showroom_price || "1000000"}
                       </Descriptions.Item>
-                      <Descriptions.Item label="Engine Capacity" span={1}>
-                        {vehicleDetails.cubic_capacity || "N/A"}
+                      <Descriptions.Item label="Financer" span={1}>
+                        {vehicleDetails?.financer || "N/A"}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Register At (RTO)" span={1}>
+                        {vehicleDetails?.register_at || "N/A"}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Vehicle Engine Number" span={1}>
+                        {vehicleDetails?.engine_number || "N/A"}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Vehicle Chasi Number" span={1}>
+                        {vehicleDetails?.chasi_number || "N/A"}
                       </Descriptions.Item>
                     
                     </Descriptions>
                     
-                    <div className="view-price-button-container">
+                    <div className="view-price-button-container pt-2">
                       <Button 
                         type="primary" 
                         size="large" 

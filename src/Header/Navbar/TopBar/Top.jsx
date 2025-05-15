@@ -28,7 +28,7 @@ const Top = () => {
           <div className="col-md-6 col-12 text-md-end d-flex justify-content-md-end align-items-center">
             <ul className="top-contact" style={{ display: "flex", gap: "15px", listStyle: "none", padding: 0, margin: 0, color: "white" }}>
               <li style={{ color: "white" }}>
-                <FontAwesomeIcon icon={faPhone} /> 9205401500
+                <FontAwesomeIcon icon={faPhone} /> 9818152403
               </li>
               <li style={{ color: "white" }}>
                 <FontAwesomeIcon icon={faEnvelope} />{" "}

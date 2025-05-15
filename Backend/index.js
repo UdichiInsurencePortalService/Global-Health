@@ -13,7 +13,9 @@ require('./Models/postgressdb') // postgres connection here
 const vehiclePostgresRoutes = require('./Routes/vehiclePostgresRoutes');
 const BikePostgressRoutes = require('./Routes/BikePostgressRouter')
 const AutoPostgressRoutes = require('./Routes/AutoPostgresRouter')
-
+const paymentdata = require('./Routes/PaymentData')
+const chat  = require('./Routes/chatRoutes.js')
+const RazorPayment = require('./Routes/RazorPayment.js')
 const app = express();
 app.use(express.json()); // ✅ This must come BEFORE route handlers
 
@@ -34,6 +36,9 @@ app.use(cors({
 app.use('/api', vehiclePostgresRoutes); //
 app.use('/api', BikePostgressRoutes); //
 app.use('/api',AutoPostgressRoutes);
+app.use('/api', paymentdata);
+app.use('/api', chat);
+app.use('/api', RazorPayment)
 
 
 

@@ -21,6 +21,7 @@ import lifeicon from '../../../../src/assets/Home/life-icon.png';
 import homeicon from '../../../../src/assets/Home/home-icon.png';
 import travelicon from '../../../../src/assets/Home/travel-icon.png';
 import Products from "./Products/Products";
+import { PenBox } from "lucide-react";
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState("Car");
@@ -337,6 +338,7 @@ const Home = () => {
         <Seprate />
       </div>
       
+     
       <div className="py-3">
         <Benefit />
       </div>

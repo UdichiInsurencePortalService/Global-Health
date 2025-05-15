@@ -1,0 +1,120 @@
+/* ChatBot Styles */
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+  
+  .chatbot-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .chatbot-button:hover {
+    background-color: #0055aa;
+    transform: scale(1.05);
+  }
+  
+  .chatbot-window {
+    bottom: 70px;
+    right: 0;
+    width: 543px;
+    background-color: white;
+    border-radius: 10px;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .chatbot-header {
+    background-color: #0066cc;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .chatbot-header h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .chatbot-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .message {
+    padding: 10px 15px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+  }
+  
+  .message.bot {
+    background-color: #f1f1f1;
+    align-self: flex-start;
+  }
+  
+  .message.user {
+    background-color: #0066cc;
+    color: white;
+    align-self: flex-end;
+  }
+  
+  .chatbot-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #eee;
+  }
+  
+  .chatbot-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    margin-right: 10px;
+  }
+  
+  .send-button {
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .send-button:hover {
+    background-color: #0055aa;
+  }

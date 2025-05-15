@@ -32,6 +32,7 @@ import CarPremiumRate from "../../../Reuse/CarPremiumRate/CarPremiumRate";
 import ElectricCarRate from "../../../Reuse/ElecrtricCarRate/ElecrtricCarRate";
 import DepreciationCalculated from "../../../Reuse/DepreciationCalculated/DepreciationCalculated";
 import NeedHelp from "../../../Reuse/NeedHelp/NeedHelp";
+import { handleError } from "../../../errortoast";
 
 const Carinsurance = () => {
   const navigate = useNavigate();
@@ -243,6 +244,167 @@ const Carinsurance = () => {
    * @param {string} regNum - Vehicle registration number
    * @returns {Object|null} - Vehicle data or null if not found
    */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Data validation and normalization
+    const regNum = registrationNumber.trim().toUpperCase();
+    const mobile = mobileNumber.trim();
+  
+    // Form validation
+    if (!regNum) {
+      msgApi.error("Please enter a registration number.");
+      return;
+    }
+    
+    if (!mobile || !/^\d{10}$/.test(mobile)) {
+      msgApi.error("Enter a valid 10-digit mobile number.");
+      return;
+    }
+  
+    setLoading(true);
+  
+    try {
+      // Variables to store our vehicle data and price
+      let vehicleData = null;
+      let exShowroomPrice = "1000"; // Default price if not found
+  
+      // STEP 1: Try to get data from PostgreSQL database first
+      try {
+        console.log("🔍 Checking database for vehicle: " + regNum);
+        const dbUrl = `${import.meta.env.VITE_LOCALHOST_GET_CAR_API}?registration_number=${regNum}`;
+        console.log("Database URL:", dbUrl);
+        
+        const dbRes = await fetch(dbUrl);
+        const dbResult = await dbRes.json();
+        console.log("Database response:>>>>>>", dbResult);
+        if (dbResult?.cubic_capacity>700) {
+          handleError("This is car  number or something else In Our  ....")
+          navigate('/carinsurance')
+        }else if(dbResult?.cubic_capacity<700){
+          handleError("This is bike number go to bike page")
+          navigate('/Bikeinsurance')
+        }
+        // Check if we got data back as an array or single object
+        if (dbRes.ok && dbResult) {
+          console.log("✅ Vehicle found in database!");
+          
+          // Handle if response is an array (choose first matching record)
+          if (Array.isArray(dbResult)) {
+            // Find the matching registration or take the first item
+            const matchingVehicle = dbResult.find(
+              vehicle => vehicle.registration_number?.toUpperCase() === regNum
+            ) || dbResult[0];
+            
+            if (matchingVehicle) {
+              vehicleData = matchingVehicle;
+            } else {
+              throw new Error("NOT_IN_DB");
+            }
+          } else {
+            // If response is a single object
+            vehicleData = dbResult;
+          }
+          
+          // Safely get ex-showroom price
+          exShowroomPrice = vehicleData?.exshowroom?.toString() || vehicleData?.sale_amount || "1000";
+          console.log("💰 Ex-showroom price from database: " + exShowroomPrice);
+        } else {
+          console.log("❓ Vehicle not found in database.");
+          throw new Error("NOT_IN_DB");
+        }
+       
+      } 
+      catch (dbError) {
+        console.log("Database error or not found:", dbError.message);
+        
+        // STEP 2: If not in database, fetch from Surepass API
+        if (dbError.message === "NOT_IN_DB") {
+          console.log("🔄 Fetching from Surepass API...");
+          
+          // Get main vehicle data from Surepass
+          vehicleData = await fetchVehicleFromSurepass(regNum);
+          
+          if (vehicleData) {
+            // Get ex-showroom price separately if needed
+            const priceFromAPI = await fetchExShowroomPrice(regNum);
+            if (priceFromAPI) {
+              exShowroomPrice = priceFromAPI;
+              vehicleData.exshowroom = priceFromAPI;
+              console.log("💰 Ex-showroom price from Surepass: " + exShowroomPrice);
+            }
+            
+            // Save to PostgreSQL database with mobile number
+            await saveVehicleToDatabase(regNum, mobile, vehicleData);
+          } else {
+            // If Surepass also fails, create minimal data
+            vehicleData = { registration_number: regNum };
+            console.log("⚠️ Could not retrieve detailed vehicle information");
+            msgApi.warning("Limited vehicle data available. Some fields may be missing.");
+            
+            // Still save the minimal data with mobile number
+            await saveVehicleToDatabase(regNum, mobile, vehicleData);
+          }
+        } else {
+          // If it's another error, we need to re-throw it
+          throw dbError;
+        }
+      }
+  
+      // STEP 3: Prepare data for display
+      console.log("📋 Preparing vehicle summary for display>>>>>>>>>>>>", vehicleData);
+      
+      // Create a consistent summary object for the UI
+      const summary = {
+        vehicle_no: vehicleData?.registration_number || regNum,
+        registration_date: vehicleData?.registration_date || "Not Available",
+        owner: vehicleData?.owner_name || "Not Available", 
+        fuel_type: vehicleData?.fuel_type || "Not Available",
+        color: vehicleData?.color || "Not Available",
+        insurance_company: vehicleData?.insurance_company || "Not Available",
+        address: vehicleData?.address || vehicleData?.permanent_address|| "Not Available",
+        date_of_buy: vehicleData?.purchase_date || vehicleData?.registration_date || "Not Available",
+        maker_model: vehicleData?.maker_model || "Not Available",
+        cubic_capacity: vehicleData?.engine_capacity?.toString()  || vehicleData?.cubic_capacity || "Not Available",
+        ex_showroom_price: vehicleData?.exshowroom?.toString() || exShowroomPrice,
+        engine_number:vehicleData?.vehicle_engine_number || vehicleData?.engine_number|| "N/A",
+        chasi_number:vehicleData?.vehicle_chasi_number || vehicleData?.chasi_number || "N/A",
+        register_at:vehicleData?.registered_at || "N/A",
+        financer:vehicleData?.financer || "N/A",
+        mobile_number: mobile, // Add mobile number to summary,
+       
+      };
+  
+      console.log("✨ Vehicle summary ready:>>>>>>>", summary);
+      
+      // Clear any existing data before setting new data
+      localStorage.removeItem("vehicleDetails");
+      
+      // Store data in localStorage for UI display
+      localStorage.setItem("vehicleDetails", JSON.stringify(summary));
+      
+      console.log("Data stored in localStorage, now navigating to /user");
+      msgApi.success("Vehicle details fetched successfully!");
+      
+      // Navigate to user page after a short delay
+      setTimeout(() => {
+        navigate("/user");
+      });
+    } catch (error) {
+      // Handle any errors that occurred during the process
+      console.error("❌ Error fetching vehicle data:", error);
+      msgApi.error(error.message || "Error fetching vehicle data. Please try again.");
+    } finally {
+      // Always reset loading state
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Fetch vehicle data from Surepass API
+   * @param {string} regNum - Vehicle registration number
+   * @returns {Object|null} - Vehicle data or null if not found
+   */
   const fetchVehicleFromSurepass = async (regNum) => {
     try {
       console.log("📞 Calling Surepass API for vehicle data");
@@ -256,13 +418,20 @@ const Carinsurance = () => {
       });
     
       const surepassData = await surepassRes.json();
+      if (surepassData?.cubic_capacity>700) {
+        handleError("This is car  number or something else In Our  ....")
+        navigate('/carinsurance')
+      }else if(surepassData?.cubic_capacity<700){
+        handleError("This is bike number go to bike page")
+        navigate('/Bikeinsurance')
+      }
       
       if (!surepassData.success) {
         console.error("❌ Surepass API returned error:", surepassData);
         return null;
       }
       
-      console.log("✅ Successfully got vehicle data from Surepass");
+      console.log("✅ Successfully got vehicle data from Surepass>>>>>>>>>>>",surepassData);
       return surepassData.data;
     } catch (error) {
       console.error("❌ Error calling Surepass API:", error);
@@ -317,7 +486,7 @@ const Carinsurance = () => {
       const payload = {
         // Map fields from vehicleData to match database column names
         owner_name: vehicleData?.owner_name || null,
-        address: vehicleData?.permanent_address || vehicleData?.present_address || null,
+        address: vehicleData?.permanent_address || vehicleData?.permanent_address || null,
         registration_number: regNum,
         color: vehicleData?.color || null,
         insurance_company: vehicleData?.insurance_company || null,
@@ -325,7 +494,7 @@ const Carinsurance = () => {
         purchase_date: vehicleData?.purchase_date || null,
         maker_model: vehicleData?.maker_model || null,
         // Convert exshowroom to a number if it's a string
-        exshowroom: vehicleData?.exshowroom || vehicleData?.sale_amount || 1000000,
+        exshowroom: vehicleData?.exshowroom || vehicleData?.sale_amount || 1000,
         engine_capacity: vehicleData?.cubic_capacity || null,
         registration_date: vehicleData?.registration_date || null,
         // If client_id starts with "rc_" or is non-numeric, use null instead
@@ -333,11 +502,15 @@ const Carinsurance = () => {
             ? parseInt(vehicleData?.client_id) 
             : null,
         fuel_type: vehicleData?.fuel_type || null,
+        engine_number:vehicleData?.vehicle_engine_number || "N/A",
+        chasi_number:vehicleData?.vehicle_chasi_number || "N/A",
+        register_at:vehicleData?.registered_at || "N/A",
+        financer:vehicleData?.financer || "N/A",
         mobile_number: mobile // Use the input mobile number directly
       };
       
-      console.log("Payload being sent to database:", payload);
-    
+      console.log("Payload being sent to database:>>>>>>>>>>", payload);
+      
       const saveRes = await fetch(import.meta.env.VITE_LOCALHOST_CAR_API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -347,171 +520,42 @@ const Carinsurance = () => {
       // Check if response indicates success
       if (!saveRes.ok) {
         // Handle error response
+        let errorMessage;
         try {
+          // Try to parse error as JSON first
           const errorData = await saveRes.json();
-          console.error("Database save error:", errorData);
-          return false;
-        } catch (e) {
-          console.error("Error parsing database response:", e);
-          return false;
+          errorMessage = errorData.error || "Failed to save vehicle data";
+        } catch (jsonError) {
+          // If not JSON, get as text
+          errorMessage = await saveRes.text();
         }
+        
+        console.error("⚠️ Failed to save to database:", saveRes.status, errorMessage);
+        msgApi.warning("Vehicle data retrieved but failed to save to database.");
+        return false;
       }
       
-      console.log("✅ Successfully saved vehicle data to database");
-      return true;
-    } catch (error) {
-      console.error("❌ Error saving vehicle data to database:", error);
+      // Try to parse the successful response
+      try {
+        const saveResult = await saveRes.json();
+        console.log("✅ Database save response:", saveResult);
+        msgApi.success("Vehicle data successfully saved to database");
+        return true;
+      } catch (parseError) {
+        // Handle case where response isn't JSON
+        const textResponse = await saveRes.text();
+        console.log("✅ Database save response (text):", textResponse);
+        msgApi.success("Vehicle data saved to database");
+        return true;
+      }
+    } catch (saveError) {
+      // Handle general errors in the save process
+      console.error("❌ Error saving to database:", saveError);
+      msgApi.warning("Vehicle data retrieved but could not be saved to database.");
       return false;
     }
   };
 
-  /**
-   * Handles form submission and implements the data fetching logic
-   * @param {Event} e - Form submit event
-   */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    // Data validation and normalization
-    const regNum = registrationNumber.trim().toUpperCase();
-    const mobile = mobileNumber.trim();
-
-    // Form validation
-    if (!regNum) {
-      msgApi.error("Please enter a registration number.");
-      return;
-    }
-    
-    if (!mobile || !/^\d{10}$/.test(mobile)) {
-      msgApi.error("Enter a valid 10-digit mobile number.");
-      return;
-    }
-  
-    setLoading(true);
-  
-    try {
-      // Variables to store our vehicle data and price
-      let vehicleData = null;
-      let exShowroomPrice = "1000000"; // Default price if not found
-  
-      // STEP 1: Try to get data from PostgreSQL database first
-      try {
-        console.log("🔍 Checking database for vehicle: " + regNum);
-        const dbUrl = `${import.meta.env.VITE_LOCALHOST_GET_CAR_API}?registration_number=${regNum}`;
-        console.log("Database URL:", dbUrl);
-        
-        const dbRes = await fetch(dbUrl);
-        const dbResult = await dbRes.json();
-        console.log("Database response:>>>>>>", dbResult);
-        
-        // Check if we got data back as an array or single object
-        if (dbRes.ok && dbResult) {
-          console.log("✅ Vehicle found in database!");
-          
-          // Handle if response is an array (choose first matching record)
-          if (Array.isArray(dbResult)) {
-            // Find the matching registration or take the first item
-            const matchingVehicle = dbResult.find(
-              vehicle => vehicle.registration_number?.toUpperCase() === regNum
-            ) || dbResult[0];
-            
-            if (matchingVehicle) {
-              vehicleData = matchingVehicle;
-            } else {
-              throw new Error("NOT_IN_DB");
-            }
-          } else {
-            // If response is a single object
-            vehicleData = dbResult;
-          }
-          
-          // Safely get ex-showroom price
-          exShowroomPrice = vehicleData?.exshowroom?.toString() || vehicleData?.sale_amount || "1000000";
-          console.log("💰 Ex-showroom price from database: " + exShowroomPrice);
-        } else {
-          console.log("❓ Vehicle not found in database.");
-          throw new Error("NOT_IN_DB");
-        }
-      } catch (dbError) {
-        console.log("Database error or not found:", dbError.message);
-        
-        // STEP 2: If not in database, fetch from Surepass API
-        if (dbError.message === "NOT_IN_DB") {
-          console.log("🔄 Fetching from Surepass API...");
-          
-          // Get main vehicle data from Surepass
-          vehicleData = await fetchVehicleFromSurepass(regNum);
-          
-          if (vehicleData) {
-            // Get ex-showroom price separately if needed
-            const priceFromAPI = await fetchExShowroomPrice(regNum);
-            if (priceFromAPI) {
-              exShowroomPrice = priceFromAPI;
-              vehicleData.exshowroom = priceFromAPI;
-              console.log("💰 Ex-showroom price from Surepass: " + exShowroomPrice);
-            }
-            
-            // Save to PostgreSQL database with mobile number
-            await saveVehicleToDatabase(regNum, mobile, vehicleData);
-          } else {
-            // If Surepass also fails, create minimal data
-            vehicleData = { registration_number: regNum };
-            console.log("⚠️ Could not retrieve detailed vehicle information");
-            msgApi.warning("Limited vehicle data available. Some fields may be missing.");
-            
-            // Still save the minimal data with mobile number
-            await saveVehicleToDatabase(regNum, mobile, vehicleData);
-          }
-        } else {
-          // If it's another error, we need to re-throw it
-          throw dbError;
-        }
-      }
-  
-      // STEP 3: Prepare data for display
-      console.log("📋 Preparing vehicle summary for display", vehicleData);
-      
-      // Create a consistent summary object for the UI
-      const summary = {
-        vehicle_no: vehicleData?.registration_number || regNum,
-        registration_date: vehicleData?.registration_date || "Not Available",
-        owner: vehicleData?.owner_name || "Not Available", 
-        fuel_type: vehicleData?.fuel_type || "Not Available",
-        color: vehicleData?.color || "Not Available",
-        insurance_company: vehicleData?.insurance_company || "Not Available",
-        address: vehicleData?.address || vehicleData?.permanent_address|| "Not Available",
-        date_of_buy: vehicleData?.purchase_date || vehicleData?.registration_date || "Not Available",
-        maker_model: vehicleData?.maker_model || "Not Available",
-        cubic_capacity: vehicleData?.engine_capacity?.toString() || vehicleData?.cubic_capacity || "Not Available",
-        ex_showroom_price: vehicleData?.exshowroom?.toString() || exShowroomPrice,
-        mobile_number: mobile // Add mobile number to summary
-      };
-  
-      console.log("✨ Vehicle summary ready:", summary);
-      
-      // Clear any existing data before setting new data
-      localStorage.removeItem("vehicleDetails");
-      
-      // Store data in localStorage for UI display
-      localStorage.setItem("vehicleDetails", JSON.stringify(summary));
-      
-      console.log("Data stored in localStorage, now navigating to /user");
-      msgApi.success("Vehicle details fetched successfully!");
-      
-      // Navigate to user page after a short delay
-      setTimeout(() => {
-        navigate("/user");
-      }, 1000);
-    } catch (error) {
-      // Handle any errors that occurred during the process
-      console.error("❌ Error fetching vehicle data:", error);
-      msgApi.error(error.message || "Error fetching vehicle data. Please try again.");
-    } finally {
-      // Always reset loading state
-      setLoading(false);
-    }
-  };
-  
   return (
     <>
       {contextHolder}
