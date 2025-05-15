@@ -1,67 +1,109 @@
-import React from 'react'
-import './Product.css'
-import car from '../../../../assets/Home/car-icons.png'
-import bike from '../../../../assets/Home/bike-icon.png'
-import rick from '../../../../assets/Home/rick.png'
-import health from '../../../../assets/Home/health-icon.png'
-import travel from '../../../../assets/Home/travel-icon.png'
-import home from '../../../../assets/Home/home-icon.png'
-import { Link } from 'react-router-dom'
-
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
+import React from "react";
+import "./Product.css";
+import img1 from "../../../../assets/reuseimage/money.png";
+import img2 from "../../../../assets/reuseimage/guide.png";
+import img3 from "../../../../assets/reuseimage/agreement.png";
+import img4 from "../../../../assets/reuseimage/claim (1).png";
+import img5 from "../../../../assets/reuseimage/24-hours-support.png";
 
 const Products = () => {
-  const products = [
-    { name: "Car", img: car ,link:'/carinsurance' },
-    { name: "Bike", img: bike  , link:'/Bikeinurance'},
-    { name: "Rickshaw", img:rick ,link:'/Autoinsurance'  },
-    { name: "Travel", img:travel  },
-    { name: "health", img: health , link:'/Healthinsurance' },
-    { name: "Home", img: home }
-  ]
+  const features = [
+    {
+      img: img1,
+      title: "Affordable Plans",
+      description:
+        "One of the best prices in the market, guaranteed by Global Health and Allied Insurance.",
+    },
+    {
+      img: img2,
+      title: "Honest Guidance",
+      description: "Unbiased advice that always puts our customers first.",
+    },
+    {
+      img: img3,
+      title: "Trusted & Regulated",
+      description: "100% reliable and fully regulated by IRDAI.",
+    },
+    {
+      img: img4,
+      title: "Easy Claim Process",
+      description: "Claims support made stress-free and simple.",
+    },
+
+  ];
 
   return (
-    <section className='products-section py-5'>
+    <div className="PBAdvantage-section">
       <div className="container">
-        <h2 className='text-center fw-bold mb-4'>What are you looking to secure today?</h2>
+        <div className="row">
+          <div className="col-lg-12 col-md-6 text-center">
+            <h1 className="pb-advantage-heading ">Global Health Advantage</h1>
+            
+          </div>
+        </div>
 
-        {/* For larger screens */}
-        <div className="row d-none d-md-flex justify-content-center">
-          {products.map((item, index) => (
-            <div key={index} className='col-lg-2 col-md-4 col-sm-6 d-flex flex-column align-items-center mb-4'>
-            <Link to={item.link}>
-              <div className="card card-section text-center">
-                <div className="card-body d-flex align-items-center justify-content-center">
-                  <img src={item.img} alt={item.name} className=' product-icon' />
-                </div>
+        <div className="row justify-content-center mt-4">
+          {features.map((feature, idx) => (
+            <div key={idx} className="col-md-6 col-lg-3 mb-4 d-flex">
+              <div className="card h-100 shadow-sm p-3 text-center w-100">
+                <img
+                  src={feature.img}
+                  className="card-img-top pb-2"
+                  alt="feature"
+                  style={{
+                    width: "60px",
+                    height: "60px",
+                    objectFit: "contain",
+                    margin: "0 auto",
+                  }}
+                />
+                <h5 className="card-title mt-2 text-center d-flex justify-content-center">{feature.title}</h5>
+                <p className="card-texts">{feature.description}</p>
               </div>
-              </Link>
-              <h5 className="card-title">{item.name}</h5>
             </div>
           ))}
         </div>
-
-        {/* Swiper for mobile & tablet */}
-        <div className="d-md-none">
-          <Swiper spaceBetween={20} slidesPerView={2}>
-            {products.map((item, index) => (
-              <SwiperSlide key={index}>
-                <div className='d-flex flex-column align-items-center'>
-                  <div className="card card-section text-center mx-2">
-                    <div className="card-body d-flex align-items-center justify-content-center">
-                      <img src={item.img} alt={item.name} className='img-fluid product-icon' />
-                    </div>
-                  </div>
-                  <h5 className="card-title">{item.name}</h5>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
       </div>
-    </section>
-  )
-}
+    </div>
+  );
+};
 
-export default Products
+export default Products;
+
+// import React from 'react';
+// import './Product.css';
+// import { Link } from 'react-router-dom';
+
+// const Products = () => {
+//   return (
+//     <div className='about-section py-5'>
+//       <div className='container'>
+//         <div className='row mb-4'>
+//           <div className='col-12 text-center'>
+//             <h1 className='section-title'>About Global Health And Allied Insurance</h1>
+//           </div>
+//         </div>
+
+//         <div className='row justify-content-center'>
+//           <div className='col-md-10'>
+//             <div className=' p-4 text-center about-card'>
+//               <p className='about-text mb-4'>
+//                 Global Health and Allied Non-Life Insurance Services is a global leader in providing
+//                 affordable and comprehensive health and non-life insurance solutions. With offices strategically
+//                 located in Muscat, Mauritius, Toronto, Texas, London, Paris, and Mumbai, we offer the most competitive
+//                 premiums to ensure individuals, families, and businesses receive the protection they need. We specialize
+//                 in high-quality insurance coverage across health, travel, home, auto, and business sectors — making
+//                 insurance accessible and affordable worldwide.
+//               </p>
+//               <Link to ='/aboutus'>
+//               <button  className='btn btn-primary readmore-btn'>Read More</button>
+//               </Link>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Products;

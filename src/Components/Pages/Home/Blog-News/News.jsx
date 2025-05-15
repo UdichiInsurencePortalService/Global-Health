@@ -118,26 +118,26 @@ const News = () => {
           "On Our website, enter car's registration number, and click on 'View Prices'.And Take Your Insurance.",
       },
     ],
-    billing: [
-      {
-        id: "billing-1",
-        question: "What is life insurance?",
-        answer:
-            "Life insurance is a contract between you and an insurer that provides financial support to your beneficiaries after your passing."
-      },
-      {
-        id: "billing-2",
-        question: "Why do I need life insurance?",
-        answer:
-          "It ensures your loved ones are financially secure in case of unforeseen events"
-      },
-      {
-        id: "billing-3",
-        question: "How do my beneficiaries claim life insurance?",
-        answer:
-          "They must file a claim with the insurer, submit necessary documents, and wait for approval."
-      },
-    ],
+    // billing: [
+    //   {
+    //     id: "billing-1",
+    //     question: "What is life insurance?",
+    //     answer:
+    //         "Life insurance is a contract between you and an insurer that provides financial support to your beneficiaries after your passing."
+    //   },
+    //   {
+    //     id: "billing-2",
+    //     question: "Why do I need life insurance?",
+    //     answer:
+    //       "It ensures your loved ones are financially secure in case of unforeseen events"
+    //   },
+    //   {
+    //     id: "billing-3",
+    //     question: "How do my beneficiaries claim life insurance?",
+    //     answer:
+    //       "They must file a claim with the insurer, submit necessary documents, and wait for approval."
+    //   },
+    // ],
     claims: [
       { 
         id: "claims-1",
@@ -204,32 +204,32 @@ const News = () => {
           "Coverage varies but often includes hospitalization, outpatient care, emergency services, and preventive care",
       },
     ],
-    Travel: [
-      { 
-        id: "claims-1",
-        question: "What does travel insurance cover?",
-        answer:
-        "Coverage includes trip cancellations, medical emergencies, lost or delayed baggage, and travel assistance."
-      },
-      {
-        id: "claims-2",
-        question: "Does travel insurance cover COVID-19?",
-        answer:
-          "No , But Many policies now include COVID-19 coverage for medical treatment and trip cancellations due to infection.",
-      },
-      {
-        id: "claims-3",
-        question: "What is the difference between single-trip and multi-trip insurance?",
-        answer:
-        "Single-trip insurance covers one journey, while multi-trip insurance provides coverage for multiple trips within a set period"
-      },
-      {
-        id: "claims-4",
-        question: "Can I buy travel insurance after booking my trip?",
-        answer:
-        "No, but it's best to purchase it early to cover unforeseen cancellations or delays."
-      },
-    ],
+    // Travel: [
+    //   { 
+    //     id: "claims-1",
+    //     question: "What does travel insurance cover?",
+    //     answer:
+    //     "Coverage includes trip cancellations, medical emergencies, lost or delayed baggage, and travel assistance."
+    //   },
+    //   {
+    //     id: "claims-2",
+    //     question: "Does travel insurance cover COVID-19?",
+    //     answer:
+    //       "No , But Many policies now include COVID-19 coverage for medical treatment and trip cancellations due to infection.",
+    //   },
+    //   {
+    //     id: "claims-3",
+    //     question: "What is the difference between single-trip and multi-trip insurance?",
+    //     answer:
+    //     "Single-trip insurance covers one journey, while multi-trip insurance provides coverage for multiple trips within a set period"
+    //   },
+    //   {
+    //     id: "claims-4",
+    //     question: "Can I buy travel insurance after booking my trip?",
+    //     answer:
+    //     "No, but it's best to purchase it early to cover unforeseen cancellations or delays."
+    //   },
+    // ],
   };
 
   return (
@@ -249,12 +249,12 @@ const News = () => {
         >
           Car Insurance
         </button>
-        <button
+        {/* <button
           className={`tab-button ${activeTab === "billing" ? "active" : ""}`}
           onClick={() => handleTabClick("billing")}
         >
           Life Insurance
-        </button>
+        </button> */}
         <button
           className={`tab-button ${activeTab === "claims" ? "active" : ""}`}
           onClick={() => handleTabClick("claims")}
@@ -273,12 +273,12 @@ const News = () => {
         >
           Health Insurance
         </button>
-        <button
+        {/* <button
           className={`tab-button ${activeTab === "Travel" ? "active" : ""}`}
           onClick={() => handleTabClick("Travel")}
         >
           Travel Insurance
-        </button>
+        </button> */}
       </div>
 
       <div className="mobile-instructions">

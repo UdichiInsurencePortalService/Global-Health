@@ -19,7 +19,7 @@ const Top = () => {
                 <Link to="/Blog" style={{ color: "white", textDecoration: "none" }}>Blogs</Link>
               </li>
               <li>
-                <Link to="/" style={{ color: "white", textDecoration: "none" }}>FAQ</Link>
+                <Link to="/faq" style={{ color: "white", textDecoration: "none" }}>FAQ</Link>
               </li>
             </ul>
           </div>

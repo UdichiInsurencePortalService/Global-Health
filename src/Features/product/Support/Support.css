@@ -1,0 +1,20 @@
+.support-container {
+    margin: 40px auto;
+    padding: 24px;
+    max-width: 700px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .form-title {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .support-form .ant-form-item-label {
+    font-weight: bold;
+  }
+  

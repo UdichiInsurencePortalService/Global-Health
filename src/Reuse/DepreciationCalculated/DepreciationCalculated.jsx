@@ -44,10 +44,10 @@ export default function DepreciationCalculated({
             <tbody>
               {tableData.map((row, index) => (
                 <tr key={index}>
-                  <td className="border border-gray-300 px-5 py-4 text-start ">
+                  <td className="border border-gray-300 px-4 py-4 text-start ">
                     {row.duration}
                   </td>
-                  <td className="border border-gray-300 text-center">
+                  <td className="border border-gray-300 px-4 text-start">
                     {row.discount}
                   </td>
                 </tr>
