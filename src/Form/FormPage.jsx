@@ -7,7 +7,7 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import logo from '../assets/Home/global-logo.png';
 import qr from '../assets/kunal.jpeg';
-
+import { handleError } from '../errortoast';
 // Base URL for API
 const API_BASE_URL = 'http://localhost:8080/api';
 
@@ -112,68 +112,57 @@ const FormPage = () => {
   const validateForm = () => {
     // Basic validation rules
     if (!userForm.username || userForm.username.trim() === '') {
-      setErrorMessage("Please enter your full name");
-      setShowError(true);
+      handleError("Please enter your full name");
       return false;
     }
     
     if (!userForm.email || !/\S+@\S+\.\S+/.test(userForm.email)) {
-      setErrorMessage("Please enter a valid email address");
-      setShowError(true);
+      handleError("Please enter a valid email address");
       return false;
     }
     
     if (!userForm.age || isNaN(userForm.age) || userForm.age <= 0) {
-      setErrorMessage("Please enter a valid age");
-      setShowError(true);
+      handleError("Please enter a valid age");
       return false;
     }
     
     if (!userForm.mobile_number || !/^\d{10}$/.test(userForm.mobile_number)) {
-      setErrorMessage("Please enter a valid 10-digit mobile number");
-      setShowError(true);
+      handleError("Please enter a valid 10-digit mobile number");
       return false;
     }
     
     if (!userForm.pan_number || !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(userForm.pan_number)) {
-      setErrorMessage("Please enter a valid PAN number (e.g., ABCDE1234F)");
-      setShowError(true);
+      handleError("Please enter a valid PAN number (e.g., ABCDE1234F)");
       return false;
     }
     
     if (!userForm.aadhar_card || !/^\d{12}$/.test(userForm.aadhar_card)) {
-      setErrorMessage("Please enter a valid 12-digit Aadhaar number");
-      setShowError(true);
+      handleError("Please enter a valid 12-digit Aadhaar number");
       return false;
     }
     
     if (!userForm.registrationNumber || userForm.registrationNumber.trim() === '') {
-      setErrorMessage("Please enter your vehicle registration number");
-      setShowError(true);
+      handleError("Please enter your vehicle registration number");
       return false;
     }
     
     if (!userForm.address || userForm.address.trim() === '') {
-      setErrorMessage("Please enter your home address");
-      setShowError(true);
+      handleError("Please enter your home address");
       return false;
     }
     
     if (!userForm.nominee_name || userForm.nominee_name.trim() === '') {
-      setErrorMessage("Please enter nominee name");
-      setShowError(true);
+      handleError("Please enter nominee name");
       return false;
     }
     
     if (!userForm.Nominee_Age || isNaN(userForm.Nominee_Age) || userForm.Nominee_Age <= 0) {
-      setErrorMessage("Please enter a valid nominee age");
-      setShowError(true);
+      handleError("Please enter a valid nominee age");
       return false;
     }
     
     if (!userForm.nominee_Relationship || userForm.nominee_Relationship.trim() === '') {
-      setErrorMessage("Please enter nominee relationship");
-      setShowError(true);
+      handleError("Please enter nominee relationship");
       return false;
     }
     
@@ -184,7 +173,7 @@ const FormPage = () => {
   const saveUserData = () => {
     try {
       localStorage.setItem('userData', JSON.stringify(userForm));
-      console.log("User data saved to localStorage:", userForm);
+      console.log("User data saved to localStorage:>>>><<<<<<<<<", userForm);
       return true;
     } catch (error) {
       console.error("Error saving data to localStorage:", error);
@@ -360,170 +349,640 @@ const FormPage = () => {
   };
 
   // Generate PDF document
-  const generatePDF = (userData) => {
+  const generatePDF = (setUserForm,setVehicleDetails, setPremiumComponents,userData) => {
     try {
-      // Create a new jsPDF instance
-      const doc = new jsPDF();
-      
-      // Generate a policy number if not already set
-      if (!userData.policyNumber) {
-        userData.policyNumber = generatePolicyNumber();
-      }
-      
-      // Add company logo
-      try {
-        doc.addImage(logo, 'PNG', 15, 10, 60, 20);
-      } catch (error) {
-        console.warn("Could not add logo to PDF:", error);
-      }
-      
-      // Add title
-      doc.setFontSize(18);
-      doc.setTextColor(0, 0, 128);
-      doc.text('INSURANCE POLICY CERTIFICATE', 105, 20, { align: 'center' });
-      
-      // Add policy details
-      doc.setFontSize(11);
-      doc.setTextColor(0, 0, 0);
-      doc.text(`Policy Number: ${userData.policyNumber || 'N/A'}`, 15, 40);
-      doc.text(`Issue Date: ${new Date().toLocaleDateString()}`, 15, 47);
-      doc.text(`Valid Until: ${new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString()}`, 15, 54);
-      
-      // Insured Person Details
-      doc.setFont(undefined, 'bold');
-      doc.text('INSURED DETAILS', 15, 65);
-      doc.setFont(undefined, 'normal');
-      
-      // Create table for insured details
-      autoTable(doc, {
-        startY: 68,
-        head: [],
-        body: [
-          ['Name', userData.username || 'N/A'],
-          ['Age', userData.age || 'N/A'],
-          ['Mobile', userData.mobile_number || 'N/A'],
-          ['Email', userData.email || 'N/A'],
-          ['PAN Number', userData.pan_number || 'N/A'],
-          ['Aadhaar Number', userData.aadhar_card || 'N/A']
-        ],
-        theme: 'plain',
-        styles: { fontSize: 10, cellPadding: 2 },
-        columnStyles: {
-          0: { fontStyle: 'bold', cellWidth: 40 },
-          1: { cellWidth: 100 }
-        }
-      });
-      
-      // Nominee Details
-      doc.setFont(undefined, 'bold');
-      doc.text('NOMINEE DETAILS', 15, doc.lastAutoTable.finalY + 15);
-      doc.setFont(undefined, 'normal');
-      
-      autoTable(doc, {
-        startY: doc.lastAutoTable.finalY + 18,
-        head: [],
-        body: [
-          ['Name', userData.nominee_name || 'N/A'],
-          ['Age', userData.Nominee_Age || 'N/A'],
-          ['Relationship', userData.nominee_Relationship || 'N/A']
-        ],
-        theme: 'plain',
-        styles: { fontSize: 10, cellPadding: 2 },
-        columnStyles: {
-          0: { fontStyle: 'bold', cellWidth: 40 },
-          1: { cellWidth: 100 }
-        }
-      });
-      
-      // Vehicle Details
-      doc.setFont(undefined, 'bold');
-      doc.text('VEHICLE DETAILS', 15, doc.lastAutoTable.finalY + 15);
-      doc.setFont(undefined, 'normal');
-      
-      const vehicleRows = [
-        ['Registration No.', userData.registrationNumber || vehicleDetails.vehicle_no || 'N/A'],
-        ['Make/Model', vehicleDetails.maker_model || 'N/A'],
-        ['Cubic Capacity', vehicleDetails.cubic_capacity || 'N/A'],
-        ['Engine No.', vehicleDetails.engine_no || 'N/A'],
-        ['Chassis No.', vehicleDetails.chassis_no || 'N/A'],
-        ['Fuel Type', vehicleDetails.fuel_type || 'N/A']
-      ];
-      
-      autoTable(doc, {
-        startY: doc.lastAutoTable.finalY + 18,
-        head: [],
-        body: vehicleRows,
-        theme: 'plain',
-        styles: { fontSize: 10, cellPadding: 2 },
-        columnStyles: {
-          0: { fontStyle: 'bold', cellWidth: 40 },
-          1: { cellWidth: 100 }
-        }
-      });
-      
-      // Premium Details
-      doc.setFont(undefined, 'bold');
-      doc.text('PREMIUM DETAILS', 15, doc.lastAutoTable.finalY + 15);
-      doc.setFont(undefined, 'normal');
-      
-      const premiumRows = [
-        ['Own Damage Premium', `₹${premiumComponents.ownDamagePremium || 0}`],
-        ['Add-ons Premium', `₹${premiumComponents.addOnsPremium || 0}`],
-        ['GST (18%)', `₹${premiumComponents.gst || 0}`],
-        ['NCB Discount', `₹${premiumComponents.ncbDiscount || 0}`],
-        ['Total Premium', `₹${premiumComponents.totalPremium || 0}`]
-      ];
-      
-      autoTable(doc, {
-        startY: doc.lastAutoTable.finalY + 18,
-        head: [],
-        body: premiumRows,
-        theme: 'plain',
-        styles: { fontSize: 10, cellPadding: 2 },
-        columnStyles: {
-          0: { fontStyle: 'bold', cellWidth: 60 },
-          1: { cellWidth: 60, halign: 'right' }
-        }
-      });
-      
-      // Address
-      doc.setFont(undefined, 'bold');
-      doc.text('CORRESPONDENCE ADDRESS', 15, doc.lastAutoTable.finalY + 15);
-      doc.setFont(undefined, 'normal');
-      
-      const addressLines = formatAddress(userData.address);
-      
-      autoTable(doc, {
-        startY: doc.lastAutoTable.finalY + 18,
-        head: [],
-        body: [['Address', addressLines.join('\n')]],
-        theme: 'plain',
-        styles: { fontSize: 10, cellPadding: 2 },
-        columnStyles: {
-          0: { fontStyle: 'bold', cellWidth: 40 },
-          1: { cellWidth: 100 }
-        }
-      });
-      
-      // Add QR code (if available)
-      try {
-        doc.addImage(qr, 'JPEG', 160, 20, 35, 35);
-      } catch (error) {
-        console.warn("Could not add QR code to PDF:", error);
-      }
-      
-      // Footer
-      doc.setFontSize(8);
-      doc.setTextColor(100, 100, 100);
-      doc.text('This is a digitally generated document and does not require a physical signature.', 105, 280, { align: 'center' });
-      doc.text('Global Health And Allied Insurance Service', 105, 285, { align: 'center' });
-      
-      return doc;
-    } catch (error) {
-      console.error("Error generating Insurance PDF:", error);
-      throw error;
-    }
+    console.log("Vehicle details inside generatePDF:>><<<<", setVehicleDetails, "User info:>>>><<<<<", setUserForm, "Premium components:", setPremiumComponents,"userdata components:", userData,);
+    const doc = new jsPDF();
+
+      userForm.policyNumber = generatePolicyNumber(userForm.insuranceType);
+    console.log("Using policy number:>>>>>>>>><<<<<<<<<<<<", userForm.policyNumber);
+    
+    // Reference number is same as policy number
+    const refNumber = userForm.policyNumber;
+    
+    // Set margins
+    const margin = 20;
+    let yPos = margin;
+    
+    // Add company logo - Using an image if available
+    // This assumes you have a base64 encoded logo or a URL to an image
+    // For example with a base64 string:
+    const logoWidth = 40;
+    const logoHeight = 35;
+    const qrCodeSize = 25; // Adjust QR code size as needed
+    const pageWidth = doc.internal.pageSize.getWidth();
+    
+    // Draw rounded rectangle for logo background
+    doc.setDrawColor(0, 102, 204);
+    doc.setFillColor(240, 240, 240);
+    doc.roundedRect(margin, yPos, logoWidth, logoHeight, 2, 2, 'FD');
+    doc.setFontSize(8);
+    doc.setTextColor(0, 102, 204);
+    
+    // Add logo image (left side)
+    const logoUrl = logo;
+    doc.addImage(logoUrl, 'PNG', margin, yPos, logoWidth, logoHeight);
+    
+    // Add QR code image (right side)
+    const qrCodeUrl = qr; // Assuming 'qr' is your QR code image
+    doc.addImage(qrCodeUrl, 'PNG', pageWidth - margin - qrCodeSize, yPos, qrCodeSize, qrCodeSize);
+    
+    // Update yPos after adding the logo and QR code
+    yPos += logoHeight + 8;
+    
+    // Add company name with improved positioning
+    doc.setFontSize(18);
+    doc.setTextColor(0, 102, 204); // Blue color for branding
+    doc.text("Global Health & Allied Insurance Service", margin, yPos);
+    yPos += 6;
+
+    // Add a line under the header
+    doc.setDrawColor(200, 200, 200);
+    doc.line(margin, yPos, doc.internal.pageSize.width - margin, yPos);
+    yPos += 10;
+    
+    // Reference number and date section
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Ref No.: ${refNumber}`, margin, yPos);
+    yPos += 7;
+    
+    // Current date
+    const today = new Date();
+    const formattedDate = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
+    doc.text(`Date: ${formattedDate}`, margin, yPos);
+    yPos += 10;
+    
+    // Recipient details with better spacing
+    doc.text("To,", margin, yPos);
+    yPos += 7;
+    doc.setFont(undefined, "bold");
+    doc.text(`MR. ${vehicleDetails?.owner?.toUpperCase() || 'CUSTOMER NAME'}`, margin, yPos);
+    yPos += 7;
+    
+    // Address formatting with improved spacing
+    const addressLines = formatAddress(userForm?.address || '');
+    addressLines.forEach(line => {
+      doc.setFont(undefined, "normal");
+      doc.text(line, margin, yPos);
+      yPos += 6;
+    });
+    yPos += 2;
+    
+    // Contact details
+    doc.text(`Contact Details: ${vehicleDetails?.mobile_number || ''}`, margin, yPos);
+    yPos += 10;
+    
+    // Policy details with better spacing
+    doc.text(`Policy number: ${userForm.policyNumber}`, margin, yPos);
+    yPos += 7;
+    doc.text(`CRN: ${userForm.crn || 'ID'}`, margin, yPos);
+    yPos += 10;
+    
+    // Subject line with proper spacing
+    doc.setFont(undefined, "bold");
+    doc.text("Subject: Risk assumption for Car Secure", margin, yPos);
+    yPos += 10;
+    
+    // Salutation
+    doc.text(`Dear MR. ${vehicleDetails.owner?.toUpperCase() || 'CUSTOMER NAME'},`, margin, yPos);
+    yPos += 10;
+    
+    // Content sections with improved spacing and margins
+    doc.setFont(undefined, "normal");
+    const sectionSpacing = 8;
+    const lineSpacing = 6;
+    
+    // Welcome message
+    const welcomeText = "We welcome you to Global Health & Allied Insurance Service and thank you for choosing us as your preferred service provider.";
+    const welcomeLines = doc.splitTextToSize(welcomeText, doc.internal.pageSize.width - (margin * 2));
+    doc.text(welcomeLines, margin, yPos);
+    yPos += welcomeLines.length * lineSpacing + sectionSpacing;
+    
+    // Policy reference message
+    const refText = "This is with reference to your above mentioned Policy issued under Car Secure.";
+    doc.text(refText, margin, yPos);
+    yPos += lineSpacing + sectionSpacing;
+    
+    // Policy schedule message
+    const scheduleText = "Enclosed please find the Policy Schedule outlining the details of your policy. Kindly note that the proposal is underwritten and policy is issued based on the information submitted to us by you, as well as acceptance of the terms and conditions. Policy schedule must be read in conjunction with the product brochure and policy wordings. Please visit https://www.globalhealth.com/customersupport/";
+    const scheduleLines = doc.splitTextToSize(scheduleText, doc.internal.pageSize.width - (margin * 2));
+    doc.text(scheduleLines, margin, yPos);
+    yPos += scheduleLines.length * lineSpacing + sectionSpacing;
+    
+    // Request for verification with improved font size
+    doc.setFontSize(11);
+    const verifyText = "We request you to carefully go through the same once again and in case of any disagreement, discrepancy or clarifications, please call us on our toll free number 1800-266-4545 or write to us at globalhealth235@gmail.com within 15 days from the date of this letter.";
+    const verifyLines = doc.splitTextToSize(verifyText, doc.internal.pageSize.width - (margin * 2));
+    doc.text(verifyLines, margin, yPos);
+    yPos += verifyLines.length * lineSpacing + sectionSpacing;
+    
+    // Information verification note
+    const infoVerifyText = "Please note that the information provided by you will be verified at the time of claim and the captured Policy shall be treated as void in case of any untrue or incorrect statement, misrepresentation, non-description or non-disclosure in any form whatsoever made by you or by your agent.";
+    const infoVerifyLines = doc.splitTextToSize(infoVerifyText, doc.internal.pageSize.width - (margin * 2));
+    doc.text(infoVerifyLines, margin, yPos);
+    yPos += infoVerifyLines.length * lineSpacing + sectionSpacing;
+    
+    // Updates request
+    const updatesText = "As a valued customer, we would like to provide regular updates on your policy through email and SMS. We therefore request you to keep us updated of any change in your contact details.";
+    const updatesLines = doc.splitTextToSize(updatesText, doc.internal.pageSize.width - (margin * 2));
+    doc.text(updatesLines, margin, yPos);
+    yPos += updatesLines.length * lineSpacing + sectionSpacing;
+    
+    
+    // Add a footer with proper positioning
+    const footerY = doc.internal.pageSize.height - 15;
+    doc.setFontSize(8);
+    doc.text("Global Health & Allied Insurance Services", margin, footerY);
+    doc.text("Page 1 of 2", doc.internal.pageSize.width - margin, footerY, { align: "right" });
+    
+    // Add a second page with improved layout
+    doc.addPage();
+    
+    // Reset position for the second page
+    yPos = margin;
+    
+    // Add header for the second page
+    // Add logo placeholder on second page too
+    // Logo section with better spacing
+    const logoWidths = 40;
+    const logoHeights = 35;
+    const qrCodeSizes = 25; // Adjust QR code size as needed
+    const pageWidths = doc.internal.pageSize.getWidth();
+    
+    // Draw rounded rectangle for logo background
+    doc.setDrawColor(0, 102, 204);
+    doc.setFillColor(240, 240, 240);
+    doc.roundedRect(margin, yPos, logoWidth, logoHeight, 2, 2, 'FD');
+    doc.setFontSize(8);
+    doc.setTextColor(0, 102, 204);
+    
+    // Add logo image (left side)
+    const logoUrls = logo;
+    doc.addImage(logoUrls, 'PNG', margin, yPos, logoWidths, logoHeights);
+    
+    // Add QR code image (right side)
+    const qrCodeUrls = qr; // Assuming 'qr' is your QR code image
+    doc.addImage(qrCodeUrls, 'PNG', pageWidths - margin - qrCodeSizes, yPos, qrCodeSizes, qrCodeSizes);
+    
+    // Update yPos after adding the logo and QR code
+    yPos += logoHeight + 8;
+// Center aligned titles for second page
+const pageCenter = doc.internal.pageSize.width / 2;
+const leftColumn = 20;
+const rightColumn = 110;
+const valueOffset = 45; // Increased offset for values
+const rightValueOffset = 150;
+const rowSpacing = 10; // Consistent row spacing
+
+// Display policy number with better formatting
+doc.setFontSize(11);
+doc.setTextColor(0, 0, 0);
+doc.setFont(undefined, "normal");
+doc.text("Policy / Certificate No: ", pageCenter - 50, yPos);
+doc.setFont(undefined, "bold");
+doc.text(userForm.policyNumber, pageCenter + 10, yPos);
+yPos += 20; // Increased spacing after policy number
+
+// Support text
+doc.setFont(undefined, "normal");
+doc.setFontSize(10);
+doc.text("For any assistance please call 1800 266 4545 or visit www.globalhealth.com", pageCenter, yPos, { align: "center" });
+yPos += 20; // Increased spacing after support text
+
+// --- INSURED & POLICY DETAILS ---
+const headerHeight = 10; // Increased header height
+doc.setFontSize(11);
+doc.setFont(undefined, "bold");
+doc.setTextColor(255, 255, 255); // White text for blue headers
+doc.setFillColor(0, 102, 204); // Blue background
+doc.rect(15, yPos, 180, headerHeight, 'F'); // Full width header background
+doc.text("INSURED DETAILS", 105, yPos + headerHeight/2 + 2, { align: "center", baseline: "middle" });
+
+// Reset to black for content
+doc.setTextColor(0, 0, 0);
+
+// Initialize starting position after header
+let y = yPos + headerHeight + 15; // Added more space after header
+
+// First row with consistent spacing
+doc.setFont(undefined, "bold");
+doc.text("Name:", leftColumn, y);
+doc.setFont(undefined, "normal");
+doc.text(vehicleDetails.owner || "N/A", valueOffset,y );
+
+doc.setFont(undefined, "bold");
+doc.text("Policy Issuing Office:", rightColumn, y);
+doc.setFont(undefined, "normal");
+doc.text(userForm.policyOffice || "Muscat, Oman (Headquarters)", rightValueOffset, y);
+y += rowSpacing;
+
+// Second row - Address
+doc.setFont(undefined, "bold");
+doc.text("Address:", leftColumn, y);
+doc.setFont(undefined, "normal");
+const addressLinesFormatted = doc.splitTextToSize(userForm.address, 60);
+doc.text(addressLinesFormatted, valueOffset, y);
+
+// Period of Insurance
+doc.setFont(undefined, "bold");
+doc.text("Period of Insurance:", rightColumn, y);
+doc.setFont(undefined, "normal");
+
+function generateInsurancePeriod() {
+  const startDate = new Date();
+  const endDate = new Date(startDate);
+  endDate.setFullYear(endDate.getFullYear() + 1);
+  endDate.setDate(endDate.getDate() - 1);
+  
+  const options = { day: '2-digit', month: 'short', year: 'numeric' };
+  const fromFormatted = startDate.toLocaleDateString('en-GB', options);
+  const toFormatted = endDate.toLocaleDateString('en-GB', options);
+  
+  return {
+    startDate: startDate,
+    endDate: endDate,
+    fromFormatted: fromFormatted,
+    toFormatted: toFormatted
   };
+}
+
+if (!userForm.periodOfInsurance) {
+  userForm.periodOfInsurance = generateInsurancePeriod();
+}
+
+// Display period of insurance
+const periodText = `${userForm.periodOfInsurance.fromFormatted} to ${userForm.periodOfInsurance.toFormatted}`;
+doc.text(periodText, rightValueOffset, y);
+
+// Calculate next y position based on address lines length
+const addressLineCount = addressLinesFormatted.length;
+y += Math.max(addressLineCount * 5, rowSpacing);
+y += 5; // Add a bit more space after address
+
+// Third row
+doc.setFont(undefined, "bold");
+doc.text("Phone:", leftColumn, y);
+doc.setFont(undefined, "normal");
+doc.text(vehicleDetails?.mobile_number || "NA", valueOffset, y);
+
+doc.setFont(undefined, "bold");
+doc.text("Type of Vehicle:", rightColumn, y);
+doc.setFont(undefined, "normal");
+doc.text(userForm.vehicleType || "Private Vehicle", rightValueOffset, y);
+y += rowSpacing;
+
+// Fourth row
+doc.setFont(undefined, "bold");
+doc.text("Mobile:", leftColumn, y);
+doc.setFont(undefined, "normal");
+doc.text(vehicleDetails?.mobile_number || "N/A", valueOffset, y);
+
+doc.setFont(undefined, "bold");
+doc.text("Hypothecated to:", rightColumn, y);
+doc.setFont(undefined, "normal");
+doc.text(vehicleDetails?.financer || "N/A", rightValueOffset, y);
+y += rowSpacing;
+
+// Fifth row
+doc.setFont(undefined, "bold");
+doc.text("Email:", leftColumn, y);
+doc.setFont(undefined, "normal");
+doc.text(userForm.email || "N/A", valueOffset, y);
+y += rowSpacing;
+
+// Sixth row (optional GSTIN)
+if (userForm.gstin) {
+  doc.setFont(undefined, "bold");
+  doc.text("GSTIN:", leftColumn, y);
+  doc.setFont(undefined, "normal");
+  doc.text(userForm.gstin, valueOffset, y);
+  y += rowSpacing;
+}
+    
+    // --- INTERMEDIARY DETAILS ---
+    // Add some spacing before this section
+    // Blue background header
+   
+    // --- VEHICLE DETAILS ---
+    
+    // Section header
+    doc.setFillColor(0, 102, 204);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, "bold");
+    doc.rect(15, y, 180, 8, 'F');
+    doc.text("VEHICLE DETAILS", 105, y + 6, { align: "center" });
+    
+    // Reset font and color
+    doc.setFont(undefined, "normal");
+    doc.setTextColor(0, 0, 0);
+    
+    y += 15; // Space after header
+    
+    // Format vehicle data
+    const vehicleBody = [
+      ["Owner Name", vehicleDetails?.owner || 'NA'],
+      ["Mobile number", vehicleDetails?.mobile_number || 'NA'],
+
+      ["Registration Number", vehicleDetails?.vehicle_no || 'NA'],
+      ["Maker Model", vehicleDetails?.maker_model || 'NA'],
+      ["Variant", vehicleDetails?.variant || 'NA'],
+      ["Year", vehicleDetails?.year || 'NA'],
+      ["Engine No", vehicleDetails?.engine_no || 'NA'],
+      ["Chassis No", vehicleDetails?.chassis_no || 'NA'],
+      ["Cubic Capacity", vehicleDetails?.cubic_capacity || 'NA'],
+      ["Fuel Type", vehicleDetails?.fuel_type || 'NA'],
+      ["RTO", vehicleDetails?.registered_at || 'NA'],
+      ["Financer", vehicleDetails?.financer || '']
+
+
+    ];
+    console.log("the data is vehiclebody>>>>>",vehicleBody)
+    // Use autotable for vehicle details
+    autoTable(doc, {
+      startY: y,
+      body: vehicleBody,
+      theme: 'grid',
+      styles: { fontSize: 9 },
+      columnStyles: { 
+        0: { fontStyle: 'bold', cellWidth: 60 },
+        1: { cellWidth: 120 }
+      },
+      margin: { left: 15, right: 15 }
+    });
+    
+    // Get the y position after the vehicle table
+    y = doc.lastAutoTable.finalY + 5;
+        // --- PREMIUM COMPUTATION TABLE ---
+    // Section header for premium table
+    doc.setFillColor(0, 102, 204);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, "bold");
+    doc.rect(15, y, 180, 8, 'F');
+    doc.text("PREMIUM TABLE", 105, y + 6, { align: "center" });
+    
+    y += 10;
+    
+    // Premium table
+    autoTable(doc, {
+      startY: y,
+      head: [[
+        "Section I", "", "Section II", "", "Section III", ""
+      ]],
+      body: [
+        ["Basic Own Damage", premiumComponents?.ownDamagePremium|| "N/A", "Basic TP incl. TPPD", premiumComponents?.thirdPartyPremium || "N/A", "", ""],
+        ["Add Covers", premiumComponents?.addOnsPremium || "N/A", "Total Liability", premiumComponents?.thirdPartyPremium || "N/A", "", ""],
+        ["No Claim Bonus", premiumComponents?.ncbDiscount || "N/A", "", "", "", ""],
+        ["No Claim Bonus Percentage %", premiumComponents?.ncbPercentage || "N/A", "", "", "", ""],
+        ["Insured Value (IDV)", premiumComponents?.idv || "N/A", "", "", "", ""],
+        ["IGST @ 18%", "", "", "", "", premiumComponents?.gst || "N/A"],
+        ["Total Premium", "", "", "", "", premiumComponents?.totalPremium || "N/A"]
+      ],
+      theme: 'grid',
+      styles: { fontSize: 8 },
+      margin: { left: 15, right: 15 }
+    });
+    
+    // Update y position after premium table
+    y = doc.lastAutoTable.finalY + 5;
+    
+    // --- NOMINEE TABLE ---
+    // Nominee table header - immediately after premium table
+    doc.setFillColor(0, 102, 204);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, "bold");
+    doc.rect(15, y, 180, 8, 'F');
+    doc.text("NOMINEE DETAILS", 105, y + 6, { align: "center" });
+    
+    y += 10;
+    
+    // Nominee table content
+    autoTable(doc, {
+      startY: y,
+      body: [
+        ["Nominee Name", userForm?.nominee_name || "N/A", "Nominee Relationship", userForm?.nominee_Relationship || "N/A", "Nominee Age", userForm?.Nominee_Age || "N/A"]
+      ],
+      theme: 'grid',
+      styles: { fontSize: 8 },
+      columnStyles: { 
+        0: { fontStyle: 'bold', cellWidth: 30 },
+        1: { cellWidth: 30 },
+        2: { fontStyle: 'bold', cellWidth: 40 },
+        3: { cellWidth: 30 },
+        4: { fontStyle: 'bold', cellWidth: 30 },
+        5: { cellWidth: 20 }
+      },
+      margin: { left: 15, right: 15 }
+    });
+    y = doc.lastAutoTable.finalY + 5;
+
+    // 
+    doc.setFillColor(0, 102, 204);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, "bold");
+    doc.rect(15, y, 180, 8, 'F');
+    doc.text("CUSTOMER DECLARATION FOR CNG/ LPG KIT", 105, y + 6, { align: "center" });
+    
+    y += 17;
+    
+    // Reset text color for declaration content
+    doc.setTextColor(0, 0, 0);
+    doc.setFont(undefined, "normal");
+    doc.setFontSize(12);
+
+    
+    const declarationText = " I/ We agree and undertake to immediately inform the Company in case of change on account of addition of CNG/LPG kit and obtain necessary endorsement in the Policy.";
+    const declarationLines = doc.splitTextToSize(declarationText, 170);
+    doc.text(declarationLines, 20, y);
+    y += 17;
+
+    doc.setFillColor(0, 102, 204);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, "bold");
+    doc.rect(15, y, 180, 8, 'F');
+    doc.text(" DISCLAIMER", 105, y + 6, { align: "center" });
+    
+    y += 17;
+    
+    // Reset text color for declaration content
+    doc.setTextColor(0, 0, 0);
+    doc.setFont(undefined, "normal");
+    doc.setFontSize(12);
+
+    
+    const disclaimerText = " For complete details on terms and conditions governing the coverage and NCB please read the Policy Wordings. This document is to be read with the Policy Wordings(which are also available on the Company website i.e. www.zurichkotak.com). Please refer to the claim form for necessary documents to be submitted for processing the claim";
+    const disclaimerLines = doc.splitTextToSize(disclaimerText, 170);
+    doc.text(disclaimerLines, 20, y);
+    
+    y += 17;
+
+   // Start with PUC DECLARATION section
+
+// --- PUC DECLARATION SECTION ---
+doc.setFillColor(0, 102, 204);
+doc.setTextColor(255, 255, 255);
+doc.setFont(undefined, "bold");
+doc.rect(15, y, 180, 8, 'F');
+doc.text("PUC DECLARATION", 105, y + 6, { align: "center" });
+
+y += 17;
+
+// Reset text color for declaration content
+doc.setTextColor(0, 0, 0);
+doc.setFont(undefined, "normal");
+doc.setFontSize(12);
+
+const SPECIALCONDITIONS = "Previous policy document is required at the time of claim verification. All type of pre – existing damages or cost of repair of such damage will be excluded at the time of claim settlement.";
+const SPECIALCONDITIONSLines = doc.splitTextToSize(SPECIALCONDITIONS, 170);
+doc.text(SPECIALCONDITIONSLines, 20, y);
+y += SPECIALCONDITIONSLines.length * doc.getLineHeight() + 10; // `10` is bottom spacing
+
+// Start new page for NO CLAIM BONUS
+doc.addPage();
+y = 20; // Reset y position for the new page
+
+// --- NO CLAIM BONUS SCALE SECTION ---
+doc.setFillColor(0, 102, 204);
+doc.setTextColor(255, 255, 255);
+doc.setFont(undefined, "bold");
+doc.rect(15, y, 180, 8, 'F');
+doc.text("NO CLAIM BONUS SCALE", 105, y + 6, { align: "center" });
+
+y += 10;
+
+// NCB Scale table
+autoTable(doc, {
+  startY: y,
+  head: [[
+    "Description", "Discount"
+  ]],
+  body: [
+    ["No claim made or pending during the preceding full year of insurance", "20%"],
+    ["No claim made or pending during the preceding 2 consecutive years of insurance", "25%"],
+    ["No claim made or pending during the preceding 3 consecutive years of insurance", "35%"],
+    ["No claim made or pending during the preceding 4 consecutive years of insurance", "45%"],
+    ["No claim made or pending during the preceding 5 consecutive years of insurance", "50%"]
+  ],
+  theme: 'grid',
+  styles: { fontSize: 8 },
+  columnStyles: {
+    0: { cellWidth: 140 },
+    1: { cellWidth: 40, halign: 'center' }
+  },
+  margin: { left: 15, right: 15 }
+});
+
+// Get the final Y position after the NCB table
+y = doc.lastAutoTable.finalY + 10;
+
+// --- DETAILS OF DEPRECIATION SECTION ---
+doc.setFillColor(0, 102, 204);
+doc.setTextColor(255, 255, 255);
+doc.setFont(undefined, "bold");
+doc.rect(15, y, 180, 8, 'F');
+doc.text("DETAILS OF DEPRECIATION", 105, y + 6, { align: "center" });
+
+y += 10;
+
+// Depreciation table
+autoTable(doc, {
+  startY: y,
+  head: [[
+    "Description", "Discount"
+  ]],
+  body: [
+    ["Not exceeding 6 Months", "5%"],
+    ["Exceeding 6 months but not exceeding 1 year", "15%"],
+    ["Exceeding 1 year but not exceeding 2 years", "20%"],
+    ["Exceeding 2 years but not exceeding 3 years", "30%"],
+    ["Exceeding 3 years but not exceeding 4 years", "40%"],
+    ["Exceeding 4 years but not exceeding 5 years", "50%"]
+  ],
+  theme: 'grid',
+  styles: { fontSize: 8 },
+  columnStyles: {
+    0: { cellWidth: 140 },
+    1: { cellWidth: 40, halign: 'center' }
+  },
+  margin: { left: 15, right: 15 }
+});
+
+// Add footer to this page
+doc.setFontSize(8);
+doc.setFont(undefined, "normal");
+doc.text("Global Health & Allied Insurance Services", 15, 280);
+doc.text("Page 2 of 3", 180, 280);
+
+// Start new page for TAX INVOICE
+doc.addPage();
+
+
+// Reset y position to start TAX INVOICE from the top of the third page
+y = 20;
+
+// --- TAX INVOICE SECTION ---
+doc.setFillColor(0, 102, 204);
+doc.setTextColor(255, 255, 255);
+doc.setFont(undefined, "bold");
+doc.rect(15, y, 180, 8, 'F');
+doc.setFontSize(16); // ← Set your desired font size here
+
+doc.text("TAX INVOICE", 105, y + 6, { align: "center" });
+
+// Reset font and color
+doc.setFont(undefined, "normal");
+doc.setTextColor(0, 0, 0);
+
+y += 10; // Space after header
+
+// Format vehicle data
+const vehicleBodya = [
+  ["Policy Number", userForm?.policyNumber || 'NA'],
+  ["Owner Name", vehicleDetails?.owner || 'NA'],
+  ["Mobile number", vehicleDetails?.mobile_number || 'NA'],
+  ["Registration Number", vehicleDetails?.vehicle_no || 'NA'],
+  ["Name", "Global Health & Allied Insurance Service"],
+  ["PAN Number", userForm?.pan_number || 'NA'],
+  ["Email", userForm?.email || 'NA'],
+  ["Maker Model", vehicleDetails?.maker_model || 'NA'],
+  ["Variant", vehicleDetails?.variant || 'NA'],
+  ["Year", vehicleDetails?.year || 'NA'],
+  ["Engine No", vehicleDetails?.engine_no || 'NA'],
+  ["Chassis No", vehicleDetails?.chassis_no || 'NA'],
+  ["Cubic Capacity", vehicleDetails?.cubic_capacity || 'NA'],
+  ["Fuel Type", vehicleDetails?.fuel_type || 'NA'],
+  ["RTO", vehicleDetails?.registered_at || 'NA'],
+  ["Financer", vehicleDetails?.financer || 'NA'],     
+  ["IDV", premiumComponents?.idv || 'NA'],     
+  ["IGST @ 18%", premiumComponents?.gst || 'NA'],     
+  ["Total Invoice", premiumComponents?.totalPremium || 'NA']
+];
+
+// Use autotable for vehicle details - centered in the page
+autoTable(doc, {
+  startY: y,
+  body: vehicleBodya,
+  theme: 'grid',
+  styles: { fontSize: 9 },
+  columnStyles: { 
+    0: { fontStyle: 'bold', cellWidth: 60 },
+    1: { cellWidth: 120 }
+  },
+  margin: { left: 15, right: 15 }
+});
+
+// Add footer to the second page
+doc.setFontSize(8);
+doc.setFont(undefined, "normal");
+doc.text("Global Health & Allied Insurance Services", 15, 280);
+doc.text("Page 2 of 2", 180, 280);
+
+return doc;
+  } catch (error) {
+    console.error("Error generating Insurance PDF:", error);
+    throw error; // Re-throw error to be caught by the calling function
+  }
+};
 
   // Download PDF
   const downloadPDFLocally = (userData) => {
@@ -686,120 +1145,123 @@ const FormPage = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center py-4">
-      <Card className="shadow-lg border-0" style={{ width: '100%', maxWidth: '1000px' }}>
-        <Card.Body className="p-5">
-          <h2 className="text-center mb-4">User Registration</h2>
-          
-          {showError && (
-            <Alert variant="danger" onClose={closeErrorAlert} dismissible>
-              {errorMessage}
-            </Alert>
-          )}
-          
-          <Row className="g-4">
-            {/* Premium Details Card - Left Side */}
-            <Col md={5}>
-              <Card className="border-primary h-100">
-                <Card.Header className="bg-primary text-white text-center">
-                  <h4 className="mb-0">Premium Details</h4>
-                </Card.Header>
-                <Card.Body className="d-flex flex-column justify-content-between">
-                  {premiumComponents && Object.keys(premiumComponents).length > 0 ? (
-                    <>
-                      <div>
+<div className="d-flex justify-content-center align-items-center py-5">
+  <Card className="shadow-lg border-0" style={{ width: '100%', maxWidth: '1000px' }}>
+    <Card.Body className="p-4 p-md-5">
+      <h2 className="text-center mb-4 fw-bold">User Registration</h2>
+      
+      {showError && (
+        <Alert variant="danger" onClose={closeErrorAlert} dismissible>
+          {errorMessage}
+        </Alert>
+      )}
+      
+      <Row className="g-4">
+        {/* Premium Details Card - Left Side - IMPROVED STICKY POSITIONING */}
+        <Col md={5}>
+          <div style={{position: 'sticky', top: '40px'}}>
+            <Card className="border-primary h-100 mb-4 mb-md-0">
+              <Card.Header className="bg-primary text-white text-center py-3">
+                <h4 className="mb-0 fw-bold">Premium Details</h4>
+              </Card.Header>
+              <Card.Body className="d-flex flex-column justify-content-between p-4">
+                {premiumComponents && Object.keys(premiumComponents).length > 0 ? (
+                  <>
+                    <div>
+                      <Row className="mb-3">
+                        <Col xs={8} className="text-start">
+                          <strong>Own-Damage-Premium:</strong>
+                        </Col>
+                        <Col xs={4} className="text-end">
+                          ₹{premiumComponents.ownDamagePremium || 0}
+                        </Col>
+                      </Row>
+                      
+                      {premiumComponents.add_ons && (
                         <Row className="mb-3">
                           <Col xs={8} className="text-start">
-                            <strong>Own-Damage-Premium:</strong>
-                          </Col>
-                          <Col xs={4} className="text-end">
-                            ₹{premiumComponents.ownDamagePremium || 0}
-                          </Col>
-                        </Row>
-                        
-                        {premiumComponents.add_ons && (
-                          <Row className="mb-3">
-                            <Col xs={8} className="text-start">
-                              <strong>Add-ons:</strong>
-                            </Col>
-                            <Col xs={4} className="text-end">
-                              ₹{premiumComponents.addOnsPremium || 0}
-                            </Col>
-                          </Row>
-                        )}
-                        
-                        <Row className="mb-3">
-                          <Col xs={8} className="text-start">
-                            <strong>GST (18%):</strong>
-                          </Col>
-                          <Col xs={4} className="text-end">
-                            ₹{premiumComponents.gst || 0}
-                          </Col>
-                        </Row>
-
-                        <Row className="mb-3">
-                          <Col xs={8} className="text-start">
-                            <strong>NCB:</strong>
-                          </Col>
-                          <Col xs={4} className="text-end">
-                            ₹{premiumComponents.ncbDiscount || 0}
-                          </Col>
-                        </Row>
-                        
-                        <Row className="mb-3">
-                          <Col xs={8} className="text-start">
-                            <strong>Add-Ons Premium:</strong>
+                            <strong>Add-ons:</strong>
                           </Col>
                           <Col xs={4} className="text-end">
                             ₹{premiumComponents.addOnsPremium || 0}
                           </Col>
                         </Row>
-                      </div>
+                      )}
                       
-                      <div className="mt-auto">
-                        <hr />
-                        <Row className="mb-0">
-                          <Col xs={8} className="text-start">
-                            <h5>Total Premium:</h5>
-                          </Col>
-                          <Col xs={4} className="text-end">
-                            <h5 className="text-success">₹{premiumComponents?.totalPremium || 0}</h5>
-                          </Col>
-                        </Row>
-                      </div>
-                    </>
-                  ) : (
-                    <p className="text-muted mb-0">Premium details not available</p>
-                  )}
-                </Card.Body>
-                <Card.Footer className="bg-white border-top-0 d-flex justify-content-center">
-                  <Button 
-                    variant="success" 
-                    type="button" 
-                    size="lg" 
-                    disabled={isSubmitting || paymentStatus === 'success'}
-                    onClick={handlePayment}
-                    className="w-100"
-                  >
-                    {isSubmitting ? 'Processing...' : 
-                     paymentStatus === 'success' ? 'Payment Completed' : 
-                     `Pay Now - ₹${premiumComponents?.totalPremium || 0}`}
-                  </Button>
-                </Card.Footer>
-              </Card>
-            </Col>
+                      <Row className="mb-3">
+                        <Col xs={8} className="text-start">
+                          <strong>GST (18%):</strong>
+                        </Col>
+                        <Col xs={4} className="text-end">
+                          ₹{premiumComponents.gst || 0}
+                        </Col>
+                      </Row>
 
-        
-        {/* Registration Form - Right Side */}
+                      <Row className="mb-3">
+                        <Col xs={8} className="text-start">
+                          <strong>NCB:</strong>
+                        </Col>
+                        <Col xs={4} className="text-end">
+                          ₹{premiumComponents.ncbDiscount || 0}
+                        </Col>
+                      </Row>
+                      
+                      <Row className="mb-3">
+                        <Col xs={8} className="text-start">
+                          <strong>Add-Ons Premium:</strong>
+                        </Col>
+                        <Col xs={4} className="text-end">
+                          ₹{premiumComponents.addOnsPremium || 0}
+                        </Col>
+                      </Row>
+                    </div>
+                    
+                    <div className="mt-4">
+                      <hr className="my-3" />
+                      <Row className="mb-0">
+                        <Col xs={7} className="text-start">
+                          <h5 className="fw-bold">Total Premium:</h5>
+                        </Col>
+                        <Col xs={5} className="text-end">
+                          <h5 className="text-success fw-bold">₹{premiumComponents?.totalPremium || 0}</h5>
+                        </Col>
+                      </Row>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-muted mb-0">Premium details not available</p>
+                )}
+              </Card.Body>
+              <Card.Footer className="bg-white border-top-0 p-4">
+                <Button 
+                  variant="success" 
+                  type="button" 
+                  size="lg" 
+                  disabled={isSubmitting || paymentStatus === 'success'}
+                  onClick={handlePayment}
+                  className="w-100 fw-bold py-2"
+                >
+                  {isSubmitting ? 'Processing...' : 
+                   paymentStatus === 'success' ? 'Payment Completed' : 
+                   `Pay Now - ₹${premiumComponents?.totalPremium || 0}`}
+                </Button>
+              </Card.Footer>
+            </Card>
+          </div>
+        </Col>
+
+        {/* Registration Form - Right Side - IMPROVED SPACING AND LAYOUT */}
         <Col md={7}>
           <Card className="border h-100">
-            <Card.Body>
+            <Card.Body className="p-4">
               <Form id="registrationForm" onSubmit={handleSubmit}>
-                {/* Name and Email in parallel */}
+                {/* Personal Information */}
+                <h5 className="mb-3">Personal Information</h5>
+                
+                {/* Name and Email in parallel - CONSISTENT SPACING */}
                 <Row className="mb-3">
                   <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Full Name <span className="text-danger">*</span></Form.Label>
+                    <Form.Group className="mb-3 mb-md-0">
                       <Form.Control
                         type="text"
                         name="username"
@@ -811,8 +1273,7 @@ const FormPage = () => {
                     </Form.Group>
                   </Col>
                   <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Email Address <span className="text-danger">*</span></Form.Label>
+                    <Form.Group className="mb-3 mb-md-0">
                       <Form.Control
                         type="email"
                         name="email"
@@ -824,12 +1285,11 @@ const FormPage = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-      
+  
                 {/* Age and Mobile in parallel */}
                 <Row className="mb-3">
                   <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Age <span className="text-danger">*</span></Form.Label>
+                    <Form.Group className="mb-3 mb-md-0">
                       <Form.Control
                         type="number"
                         name="age"
@@ -841,8 +1301,7 @@ const FormPage = () => {
                     </Form.Group>
                   </Col>
                   <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Mobile Number <span className="text-danger">*</span></Form.Label>
+                    <Form.Group className="mb-3 mb-md-0">
                       <Form.Control
                         type="text"
                         name="mobile_number"
@@ -854,12 +1313,11 @@ const FormPage = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-      
+  
                 {/* PAN and Aadhaar in parallel */}
-                <Row className="mb-3">
+                <Row className="mb-4">
                   <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>PAN Number <span className="text-danger">*</span></Form.Label>
+                    <Form.Group className="mb-3 mb-md-0">
                       <Form.Control
                         type="text"
                         name="pan_number"
@@ -871,8 +1329,7 @@ const FormPage = () => {
                     </Form.Group>
                   </Col>
                   <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Aadhaar Number <span className="text-danger">*</span></Form.Label>
+                    <Form.Group className="mb-3 mb-md-0">
                       <Form.Control
                         type="text"
                         name="aadhar_card"
@@ -885,13 +1342,11 @@ const FormPage = () => {
                   </Col>
                 </Row>
 
-                {/* Nomineee form */}
-
-
+                {/* Nominee Information - SECTION HEADING ADDED */}
+                <h5 className="mb-3 mt-4">Nominee Information</h5>
                 <Row className="mb-3">
                   <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Nominee Name <span className="text-danger">*</span></Form.Label>
+                    <Form.Group className="mb-3 mb-md-0">
                       <Form.Control
                         type="text"
                         name="nominee_name"
@@ -903,8 +1358,7 @@ const FormPage = () => {
                     </Form.Group>
                   </Col>
                   <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Nominee Age<span className="text-danger">*</span></Form.Label>
+                    <Form.Group className="mb-3 mb-md-0">
                       <Form.Control
                         type="number"
                         name="Nominee_Age"
@@ -915,14 +1369,15 @@ const FormPage = () => {
                       />
                     </Form.Group>
                   </Col>
+                </Row>
 
+                <Row className="mb-4">
                   <Col md={12}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Nominee-Relationship <span className="text-danger">*</span></Form.Label>
+                    <Form.Group>
                       <Form.Control
                         type="text"
                         name="nominee_Relationship"
-                        placeholder="Nominee-Relatoinship"
+                        placeholder="Nominee Relationship"
                         onChange={handleChange}
                         value={userForm?.nominee_Relationship || ''}
                         required
@@ -930,15 +1385,10 @@ const FormPage = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-
-
-
                 
-                {/* nommiee form */}
-      
-                {/* Vehicle Registration */}
+                {/* Vehicle & Address Information - SECTION HEADING ADDED */}
+                <h5 className="mb-3 mt-4">Vehicle & Address Information</h5>
                 <Form.Group className="mb-3">
-                  <Form.Label>Vehicle Registration Number <span className="text-danger">*</span></Form.Label>
                   <Form.Control
                     type="text"
                     name="registrationNumber"
@@ -948,10 +1398,9 @@ const FormPage = () => {
                     required
                   />
                 </Form.Group>
-      
-                {/* Home Address */}
+  
                 <Form.Group className="mb-0">
-                  <Form.Label>Home Address <span className="text-danger">*</span></Form.Label>
+                  {/* <Form.Label>Home Address <span className="text-danger">*</span></Form.Label> */}
                   <Form.Control
                     as="textarea"
                     rows={3}
@@ -972,27 +1421,27 @@ const FormPage = () => {
 
   {/* Success Modal */}
   <Modal show={showSuccessModal} onHide={handleCloseSuccessModal} centered>
-    <Modal.Header closeButton>
-      <Modal.Title>Payment Successful!</Modal.Title>
+    <Modal.Header closeButton className="border-bottom pb-3">
+      <Modal.Title className="fw-bold">Payment Successful!</Modal.Title>
     </Modal.Header>
-    <Modal.Body>
+    <Modal.Body className="py-4">
       <div className="text-center">
-        <i className="fa fa-check-circle text-success" style={{ fontSize: '48px' }}></i>
-        <h4 className="mt-3">Thank you for your payment!</h4>
+        <i className="fa fa-check-circle text-success" style={{ fontSize: '54px' }}></i>
+        <h4 className="mt-4 mb-3">Thank you for your payment!</h4>
         <p>Your registration details have been sent to your email address. Please check your inbox.</p>
-        <div className="mt-3">
+        <div className="mt-4">
           <Button 
             variant="outline-primary" 
             onClick={downloadPDFLocally}
-            className="mt-2"
+            className="px-4 py-2"
           >
             Download PDF Copy
           </Button>
         </div>
       </div>
     </Modal.Body>
-    <Modal.Footer>
-      <Button variant="success" onClick={handleCloseSuccessModal}>
+    <Modal.Footer className="border-top pt-3">
+      <Button variant="success" onClick={handleCloseSuccessModal} className="px-4">
         Close
       </Button>
     </Modal.Footer>

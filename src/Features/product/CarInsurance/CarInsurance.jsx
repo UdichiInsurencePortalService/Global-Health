@@ -267,7 +267,7 @@ const Carinsurance = () => {
     try {
       // Variables to store our vehicle data and price
       let vehicleData = null;
-      let exShowroomPrice = "1000"; // Default price if not found
+      let exShowroomPrice = "800"; // Default price if not found
   
       // STEP 1: Try to get data from PostgreSQL database first
       try {
@@ -307,7 +307,7 @@ const Carinsurance = () => {
           }
           
           // Safely get ex-showroom price
-          exShowroomPrice = vehicleData?.exshowroom?.toString() || vehicleData?.sale_amount || "1000";
+          exShowroomPrice = vehicleData?.exshowroom?.toString() || vehicleData?.sale_amount || "800";
           console.log("💰 Ex-showroom price from database: " + exShowroomPrice);
         } else {
           console.log("❓ Vehicle not found in database.");
@@ -327,16 +327,17 @@ const Carinsurance = () => {
           
           if (vehicleData) {
             // Get ex-showroom price separately if needed
-            const priceFromAPI = await fetchExShowroomPrice(regNum);
-            if (priceFromAPI) {
-              exShowroomPrice = priceFromAPI;
-              vehicleData.exshowroom = priceFromAPI;
-              console.log("💰 Ex-showroom price from Surepass: " + exShowroomPrice);
-            }
+            // const priceFromAPI = await fetchExShowroomPrice(regNum);
+            // if (priceFromAPI) {
+            //   exShowroomPrice = priceFromAPI;
+            //   vehicleData.exshowroom = priceFromAPI;
+            //   console.log("💰 Ex-showroom price from Surepass: " + exShowroomPrice);
+            // }
             
             // Save to PostgreSQL database with mobile number
             await saveVehicleToDatabase(regNum, mobile, vehicleData);
-          } else {
+          } 
+          else {
             // If Surepass also fails, create minimal data
             vehicleData = { registration_number: regNum };
             console.log("⚠️ Could not retrieve detailed vehicle information");
@@ -444,32 +445,32 @@ const Carinsurance = () => {
    * @param {string} regNum - Vehicle registration number
    * @returns {string|null} - Price as string or null if not found
    */
-  const fetchExShowroomPrice = async (regNum) => {
-    try {
-      console.log("📞 Calling Surepass API for ex-showroom price");
-      const showroomRes = await fetch(import.meta.env.VITE_SUREPASS_EX_SHOWROOM_API, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: import.meta.env.VITE_SUREPASS_EX_SHOWROOM_TOKEN,
-        },
-        body: JSON.stringify({ id_number: regNum }),
-      });
+  // const fetchExShowroomPrice = async (regNum) => {
+  //   try {
+  //     console.log("📞 Calling Surepass API for ex-showroom price");
+  //     const showroomRes = await fetch(import.meta.env.VITE_SUREPASS_EX_SHOWROOM_API, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: import.meta.env.VITE_SUREPASS_EX_SHOWROOM_TOKEN,
+  //       },
+  //       body: JSON.stringify({ id_number: regNum }),
+  //     });
     
-      const showroomData = await showroomRes.json();
+  //     const showroomData = await showroomRes.json();
       
-      if (!showroomData.success || !showroomData?.data?.sale_amount) {
-        console.log("⚠️ No ex-showroom price found in Surepass");
-        return null;
-      }
+  //     if (!showroomData.success || !showroomData?.data?.sale_amount) {
+  //       console.log("⚠️ No ex-showroom price found in Surepass");
+  //       return null;
+  //     }
       
-      console.log("✅ Successfully got ex-showroom price from Surepass");
-      return showroomData.data.sale_amount;
-    } catch (error) {
-      console.error("❌ Error fetching ex-showroom price:", error);
-      return null;
-    }
-  };
+  //     console.log("✅ Successfully got ex-showroom price from Surepass");
+  //     return showroomData.data.sale_amount;
+  //   } catch (error) {
+  //     console.error("❌ Error fetching ex-showroom price:", error);
+  //     return null;
+  //   }
+  // };
 
   /**
    * Save vehicle data to PostgreSQL database
@@ -494,7 +495,7 @@ const Carinsurance = () => {
         purchase_date: vehicleData?.purchase_date || null,
         maker_model: vehicleData?.maker_model || null,
         // Convert exshowroom to a number if it's a string
-        exshowroom: vehicleData?.exshowroom || vehicleData?.sale_amount || 1000,
+        exshowroom: vehicleData?.exshowroom || vehicleData?.sale_amount || 800,
         engine_capacity: vehicleData?.cubic_capacity || null,
         registration_date: vehicleData?.registration_date || null,
         // If client_id starts with "rc_" or is non-numeric, use null instead
@@ -591,11 +592,12 @@ const Carinsurance = () => {
                   />
 
                   <Button
-                    type="primary"
-                    htmlType="submit"
+                  type="primary"
+                     htmlType="submit"
                     size="large"
                     loading={loading}
                     block
+                    className="vehicle-button"
                   >
                     {loading ? "Fetching Vehicle Data..." : "Get Vehicle Details"}
                   </Button>

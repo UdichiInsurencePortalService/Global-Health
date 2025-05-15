@@ -1,0 +1,26 @@
+/* .head h2{
+    text-decoration: dashed;
+} */
+.head span{
+    color: black;
+    font-style: italic;
+    /* font-size: 50px; */
+}
+
+.presence-section {
+    background-color: #f9fbfc;
+  }
+  
+  .presence-section .card {
+    border-radius: 15px;
+    transition: all 0.3s ease;
+  }
+  
+  .presence-section .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .para{
+    font-weight: 700;
+  }

@@ -5,29 +5,70 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { motion, AnimatePresence } from "framer-motion";
 
-import Insurance from "./Insurance/Insurance";
+// import Insurance from "./Insurance/Insurance";
 import Choose from "./ChooseUs/Choose";
 import News from "./Blog-News/News";
 import Seprate from "./Seprate Insurance/Seprate";
 import Newsletter from "./Newsletter/Newsletter";
 import Benefit from "../Home/Benifit/Benifit";
 
+import support from "../../../assets/reuseimage/help-desk.png"
+import policies from "../../../assets/reuseimage/job.png";
+import paperless from "../../../assets/reuseimage/paperless (1).png"
+import secure from "../../../assets/reuseimage/secure-payment.png"
+
+
+
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
-import { FaIdCard, FaCar, FaMotorcycle, FaCalendarAlt, FaUser, FaHome, FaMapMarkerAlt } from "react-icons/fa";
-import caricon from '../../../../src/assets/Home/car-icons.png';
-import bikeicon from '../../../../src/assets/Home/bike-icon.png';
-import healthicon from '../../../../src/assets/Home/health-icon.png';
-import lifeicon from '../../../../src/assets/Home/life-icon.png';
-import homeicon from '../../../../src/assets/Home/home-icon.png';
-import travelicon from '../../../../src/assets/Home/travel-icon.png';
+import {
+  FaIdCard,
+  FaCar,
+  FaMotorcycle,
+  FaCalendarAlt,
+  FaUser,
+  FaHome,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
+import caricon from "../../../../src/assets/Home/car-icons.png";
+import bikeicon from "../../../../src/assets/Home/bike-icon.png";
+import healthicon from "../../../../src/assets/Home/health-icon.png";
+import lifeicon from "../../../../src/assets/Home/life-icon.png";
+import homeicon from "../../../../src/assets/Home/home-icon.png";
+import travelicon from "../../../../src/assets/Home/travel-icon.png";
 import Products from "./Products/Products";
 import { PenBox } from "lucide-react";
+import Favourite from "./Favourite/Favourite";
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState("Car");
   const [focusField, setFocusField] = useState(null);
   const [bikeInsuranceType, setBikeInsuranceType] = useState(null);
 
+  const trustData = [
+    {
+      img: support,
+      title: "24x7 Support",
+      description:
+        "Get round-the-clock assistance for all your insurance queries and claims.",
+    },
+    {
+      img: policies,
+      title: "Instant Policy",
+      description:
+        "Buy and download your policy instantly with just a few clicks.",
+    },
+    {
+      img: paperless,
+      title: "100% Paperless",
+      description:
+        "Experience a completely digital process – no paperwork needed.",
+    },
+    {
+      img: secure,
+      title: "Secure Payments",
+      description: "All transactions are encrypted and completely secure.",
+    },
+  ];
 
   const categories = [
     { name: "Car", icon: caricon },
@@ -46,9 +87,9 @@ const Home = () => {
                 <Form.Label className="fw-bold text-secondary">
                   <FaIdCard className="me-2" /> Mobile Number
                 </Form.Label>
-                <Form.Control 
-                  type="text" 
-                  placeholder="Enter Mobile No." 
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Mobile No."
                   className="py-2 rounded-lg text-center"
                   onFocus={() => setFocusField("mobile")}
                   onBlur={() => setFocusField(null)}
@@ -60,9 +101,9 @@ const Home = () => {
                 <Form.Label className="fw-bold text-secondary">
                   <FaCar className="me-2" /> Car Registration
                 </Form.Label>
-                <Form.Control 
-                  type="text" 
-                  placeholder="Eg. TN10AB1234" 
+                <Form.Control
+                  type="text"
+                  placeholder="Eg. TN10AB1234"
                   className="py-2 rounded-lg text-center"
                   onFocus={() => setFocusField("registration")}
                   onBlur={() => setFocusField(null)}
@@ -79,9 +120,9 @@ const Home = () => {
                 <Form.Label className="fw-bold text-secondary">
                   <FaMotorcycle className="me-2" /> Bike Model
                 </Form.Label>
-                <Form.Control 
-                  type="text" 
-                  placeholder="Enter Bike Model" 
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Bike Model"
                   className="py-2 rounded-lg text-center"
                   onFocus={() => setFocusField("bikeModel")}
                   onBlur={() => setFocusField(null)}
@@ -93,9 +134,9 @@ const Home = () => {
                 <Form.Label className="fw-bold text-secondary">
                   <FaCalendarAlt className="me-2" /> Year of Manufacture
                 </Form.Label>
-                <Form.Control 
-                  type="text" 
-                  placeholder="Enter Year" 
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Year"
                   className="py-2 rounded-lg text-center"
                   onFocus={() => setFocusField("bikeYear")}
                   onBlur={() => setFocusField(null)}
@@ -112,9 +153,9 @@ const Home = () => {
                 <Form.Label className="fw-bold text-secondary">
                   <FaUser className="me-2" /> Your Age
                 </Form.Label>
-                <Form.Control 
-                  type="number" 
-                  placeholder="Enter Your Age" 
+                <Form.Control
+                  type="number"
+                  placeholder="Enter Your Age"
                   className="py-2 rounded-lg text-center"
                   onFocus={() => setFocusField("healthAge")}
                   onBlur={() => setFocusField(null)}
@@ -126,9 +167,9 @@ const Home = () => {
                 <Form.Label className="fw-bold text-secondary">
                   <FaIdCard className="me-2" /> Mobile Number
                 </Form.Label>
-                <Form.Control 
-                  type="text" 
-                  placeholder="Your Contact Number" 
+                <Form.Control
+                  type="text"
+                  placeholder="Your Contact Number"
                   className="py-2 rounded-lg text-center"
                   onFocus={() => setFocusField("healthMobile")}
                   onBlur={() => setFocusField(null)}
@@ -146,7 +187,7 @@ const Home = () => {
                 <Form.Label className="fw-bold text-secondary">
                   <FaHome className="me-2" /> Property Type
                 </Form.Label>
-                <Form.Select 
+                <Form.Select
                   className="py-2 rounded-lg text-center"
                   onFocus={() => setFocusField("homeType")}
                   onBlur={() => setFocusField(null)}
@@ -163,9 +204,9 @@ const Home = () => {
                 <Form.Label className="fw-bold text-secondary">
                   <FaMapMarkerAlt className="me-2" /> Property Value
                 </Form.Label>
-                <Form.Control 
-                  type="text" 
-                  placeholder="Approximate Value (₹)" 
+                <Form.Control
+                  type="text"
+                  placeholder="Approximate Value (₹)"
                   className="py-2 rounded-lg text-center"
                   onFocus={() => setFocusField("homeValue")}
                   onBlur={() => setFocusField(null)}
@@ -174,7 +215,7 @@ const Home = () => {
             </Col>
           </>
         );
-   
+
       default:
         return <></>;
     }
@@ -186,11 +227,15 @@ const Home = () => {
         <Container className="">
           <Row className="justify-content-center mb-5">
             <Col md={8} className="text-center">
-              <h2 className="fw-bold mb-4">Insure with Confidence, Live Without Worries.</h2>
-              <p className="text-muted">Compare quotes from top insurers and save up to 85% on premiums</p>
+              <h2 className="fw-bold mb-4">
+                Insure with Confidence, Live Without Worries.
+              </h2>
+              <p className="text-muted">
+                Compare quotes from top insurers and save up to 85% on premiums
+              </p>
             </Col>
           </Row>
-          
+
           <Row className="justify-content-center mb-5">
             <Col lg={10}>
               <div className="category-container d-flex flex-wrap justify-content-center gap-4">
@@ -206,81 +251,88 @@ const Home = () => {
                           top: -15,
                           left: "50%",
                           transform: "translateX(-50%)",
-                          zIndex: 1
+                          zIndex: 1,
                         }}
                       >
                         <motion.div
                           className=" rounded-circle d-flex align-items-center justify-content-center"
                           style={{ width: 40, height: 40 }}
-                          animate={{ 
-                            y: [0, -1, 0], 
-                            scale: [1, 1.1, 1]
+                          animate={{
+                            y: [0, -1, 0],
+                            scale: [1, 1.1, 1],
                           }}
-                          transition={{ 
+                          transition={{
                             repeat: Infinity,
-                            duration: 1.5
+                            duration: 1.5,
                           }}
                         >
                           {/* <img src={category.icon} alt={category.name} width="24" height="34" /> */}
                           <motion.img
-  src={category.icon}
-  alt={category.name}
-  width="32"
-  height="32"
-  animate={
-    selectedCategory === category.name
-      ? ["Car", "Bike", "Travel"].includes(category.name)
-        ? {
-            y: [0, -5, 0],
-            scale: [1, 1.05, 1],
-            rotate: [0, 1, -1, 0],
-          }
-        : {
-            scale: [1, 1.2, 1],
-          }
-      : {}
-  }
-  transition={
-    ["Car", "Bike", "Travel"].includes(category.name)
-      ? {
-          repeat: Infinity,
-          duration: 2,
-          ease: "easeInOut",
-        }
-      : {
-          duration: 0.4,
-          ease: "easeOut",
-        }
-  }
-/>
+                            src={category.icon}
+                            alt={category.name}
+                            width="32"
+                            height="32"
+                            animate={
+                              selectedCategory === category.name
+                                ? ["Car", "Bike", "Travel"].includes(
+                                    category.name
+                                  )
+                                  ? {
+                                      y: [0, -5, 0],
+                                      scale: [1, 1.05, 1],
+                                      rotate: [0, 1, -1, 0],
+                                    }
+                                  : {
+                                      scale: [1, 1.2, 1],
+                                    }
+                                : {}
+                            }
+                            transition={
+                              ["Car", "Bike", "Travel"].includes(category.name)
+                                ? {
+                                    repeat: Infinity,
+                                    duration: 2,
+                                    ease: "easeInOut",
+                                  }
+                                : {
+                                    duration: 0.4,
+                                    ease: "easeOut",
+                                  }
+                            }
+                          />
                         </motion.div>
                       </motion.div>
                     )}
-                    
+
                     <motion.div
                       className={`category-item d-flex align-items-center justify-content-center ${
-                        selectedCategory === category.name 
-                          ? "border-primary" 
+                        selectedCategory === category.name
+                          ? "border-primary"
                           : "border-secondary"
                       }`}
-                      style={{ 
+                      style={{
                         cursor: "pointer",
-                        width: 70, 
-                        height: 70, 
-                        borderRadius: "50%", 
+                        width: 70,
+                        height: 70,
+                        borderRadius: "50%",
                         border: "2px solid",
-                        background: "#fff"
+                        background: "#fff",
                       }}
-                      whileHover={{ 
-                        borderColor: "#3498db", 
-                        boxShadow: "0 4px 10px rgba(0,0,0,0.1)" 
+                      whileHover={{
+                        borderColor: "#3498db",
+                        boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
                       }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setSelectedCategory(category.name)}
                     >
-                      <img src={category.icon} alt={category.name} width="32" height="32" />
+                      <img
+                        src={category.icon}
+                        alt={category.name}
+                        width="32"
+                        height="32"
+                      />
                     </motion.div>
-                    
+
                     <div className="text-center mt-2">
                       <small className="fw-bold">{category.name}</small>
                     </div>
@@ -289,7 +341,7 @@ const Home = () => {
               </div>
             </Col>
           </Row>
-          
+
           <Row className="justify-content-center">
             <Col md={10}>
               <AnimatePresence mode="wait">
@@ -304,7 +356,12 @@ const Home = () => {
                     <Card.Body className="p-5">
                       <Row className="g-4 justify-content-center">
                         {renderFormFields()}
-                        <Col lg={2} md={2} sm={12} className="d-flex align-items-end">
+                        <Col
+                          lg={2}
+                          md={2}
+                          sm={12}
+                          className="d-flex align-items-end"
+                        >
                           <div className="w-100 text-center">
                             <Form.Label className="fw-bold text-secondary invisible">
                               Button
@@ -317,7 +374,10 @@ const Home = () => {
                                 border: "none",
                                 position: "relative",
                               }}
-                              whileHover={{ scale: 1.05, backgroundColor: "#2980b9" }}
+                              whileHover={{
+                                scale: 1.05,
+                                backgroundColor: "#2980b9",
+                              }}
                               whileTap={{ scale: 0.95 }}
                             >
                               <span className="fw-bold">View Price</span>
@@ -333,12 +393,17 @@ const Home = () => {
           </Row>
         </Container>
       </div>
-      
+
       <div className="py-3">
         <Seprate />
       </div>
       
      
+
+      <div className="py-3">
+        <Favourite/>
+      </div>
+
       <div className="py-3">
         <Benefit />
       </div>
@@ -346,19 +411,19 @@ const Home = () => {
       <div className="py-3">
         <Products />
       </div>
-      
-      <div className="py-5">
+
+      {/* <div className="py-5">
         <Insurance />
-      </div>
-      
+      </div> */}
+
       <div className="py-3">
         <Choose />
       </div>
-      
+
       <div className="">
         <News />
       </div>
-      
+
       <div className="py-5">
         <Newsletter />
       </div>
