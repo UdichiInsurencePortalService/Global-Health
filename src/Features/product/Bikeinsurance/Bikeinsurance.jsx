@@ -26,6 +26,7 @@ import RequiredDocuments from "../../../Reuse/RequireDocuments/RequireDocument";
 import Insuranceclaim from "../../../Reuse/Insuranceclaim/Insuranceclaim";
 import Downloadpolycy from "../../../Reuse/Downloadpolycy/Downloadpolycy";
 import NeedHelp from "../../../Reuse/NeedHelp/NeedHelp";
+import { handleError } from "../../../errortoast";
 
 
 
@@ -72,83 +73,7 @@ const Bikeinsurance = () => {
     },
   ];
 
-  // const Bikefeatures1 = [
-  //   {
-  //     id: 1,
-  //     img: bike1,
-  //     title: "Accidents",
-  //     text: "Damages and losses that may arise due to an accident or collision",
-  //   },
-  //   {
-  //     id: 2,
-  //     img: bike2,
-  //     title: "Bike Theft",
-  //     text: "Covers for your losses in case your two-wheeler is unfortunately stolen!",
-  //   },
-  //   {
-  //     id: 3,
-  //     img: bike3,
-  //     title: "Bike Got Fire",
-  //     text: "Damages and losses to your two-wheeler in case of an accidental fire!",
-  //   },
-  //   {
-  //     id: 4,
-  //     img: bike4,
-  //     title: "Natural Disasters",
-  //     text: "Damages caused to your two-wheeler due to nature’s many furies, such as due to floods, cyclones, etc.",
-  //   },
-  //   {
-  //     id: 5,
-  //     img: bike5,
-  //     title: "Personal Accident",
-  //     text: "Covers for your expenses in cases where you’ve hurt yourself too bad!",
-  //   },
-  //   {
-  //     id: 6,
-  //     img: bike6,
-  //     title: "Third Party Losses",
-  //     text: "When a person, a vehicle or a property is hurt or damaged due to your bike's actions.",
-  //   },
-  // ];
-
-  // const Bikefeatures2 = [
-  //   {
-  //     id: 1,
-  //     img: own1,
-  //     title: "Own Damages for Third-Party Policy holder",
-  //     text: "In the case of a Third-Party or Liability Only Bike Policy, damages to own vehicle won’t be covered.",
-  //   },
-  //   {
-  //     id: 2,
-  //     img: drunk2,
-  //     title: "Drunk Riding or without a Licence",
-  //     text: "Your bike insurance won’t cover for you in situations where you were riding drunk or without a valid two-wheeler licence.",
-  //   },
-  //   {
-  //     id: 3,
-  //     img: driving3,
-  //     title: "Driving without a valid Driving Licence holder",
-  //     text: "If you hold a learner’s licence and were riding your two-wheeler without a valid licence-holder on the pillion seat- then your claim in those situations won’t be covered.",
-  //   },
-  //   {
-  //     id: 4,
-  //     img: consequential4,
-  //     title: "Consequential Damages",
-  //     text: "Any damage which is not a direct result of the accident (e.g. after an accident, if the damaged two-wheeler is being used incorrectly and the engine gets damaged, it is considered as consequential damage and it will not be covered).",
-  //   },
-  //   {
-  //     id: 5,
-  //     img: contributory5,
-  //     title: "Contributory Negligences",
-  //     text: "Any contributory negligence (e.g. damage due to driving a two-wheeler in a flood, which is not recommended as per the manufacturer’s driving manual, will not be covered).",
-  //   },
-  //   {
-  //     id: 6,
-  //     img: add6,
-  //     title: "Add-ons not Bought",
-  //     text: "Some situations are covered in add-ons. If you haven’t bought those add-ons, the corresponding situations will not be covered.",
-  //   },
-  // ];
+  
   const navigate = useNavigate();
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
@@ -159,7 +84,7 @@ const Bikeinsurance = () => {
    * Handles form submission and implements the data fetching logic
    * @param {Event} e - Form submit event
    */
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
   
     // Data validation and normalization
@@ -182,7 +107,7 @@ const Bikeinsurance = () => {
     try {
       // Variables to store our vehicle data and price
       let vehicleData = null;
-      let exShowroomPrice = "14000"; // Default price if not found
+      let exShowroomPrice = "1000000"; // Default price if not found
   
       // STEP 1: Try to get data from PostgreSQL database first
       try {
@@ -193,7 +118,13 @@ const Bikeinsurance = () => {
         const dbRes = await fetch(dbUrl);
         const dbResult = await dbRes.json();
         console.log("Database response:>>>>>>", dbResult);
-        
+        if (dbResult?.cubic_capacity>700) {
+          handleError("This is car  number or something else In Our  ....")
+          navigate('/carinsurance')
+        }else if(dbResult?.cubic_capacity<700){
+          handleError("This is bike number go to bike page")
+          navigate('/Bikeinsurance')
+        }
         // Check if we got data back as an array or single object
         if (dbRes.ok && dbResult) {
           console.log("✅ Vehicle found in database!");
@@ -216,13 +147,15 @@ const Bikeinsurance = () => {
           }
           
           // Safely get ex-showroom price
-          exShowroomPrice = vehicleData?.exshowroom?.toString() || vehicleData?.sale_amount || "14000";
+          exShowroomPrice = vehicleData?.exshowroom?.toString() || vehicleData?.sale_amount || "1000000";
           console.log("💰 Ex-showroom price from database: " + exShowroomPrice);
         } else {
           console.log("❓ Vehicle not found in database.");
           throw new Error("NOT_IN_DB");
         }
-      } catch (dbError) {
+       
+      } 
+      catch (dbError) {
         console.log("Database error or not found:", dbError.message);
         
         // STEP 2: If not in database, fetch from Surepass API
@@ -259,7 +192,7 @@ const Bikeinsurance = () => {
       }
   
       // STEP 3: Prepare data for display
-      console.log("📋 Preparing vehicle summary for display", vehicleData);
+      console.log("📋 Preparing vehicle summary for display>>>>>>>>>>>>", vehicleData);
       
       // Create a consistent summary object for the UI
       const summary = {
@@ -274,10 +207,15 @@ const Bikeinsurance = () => {
         maker_model: vehicleData?.maker_model || "Not Available",
         cubic_capacity: vehicleData?.engine_capacity?.toString()  || vehicleData?.cubic_capacity || "Not Available",
         ex_showroom_price: vehicleData?.exshowroom?.toString() || exShowroomPrice,
-        mobile_number: mobile // Add mobile number to summary
+        engine_number:vehicleData?.vehicle_engine_number || vehicleData?.engine_number|| "N/A",
+        chasi_number:vehicleData?.vehicle_chasi_number || vehicleData?.chasi_number || "N/A",
+        register_at:vehicleData?.registered_at || "N/A",
+        financer:vehicleData?.financer || "N/A",
+        mobile_number: mobile, // Add mobile number to summary,
+       
       };
   
-      console.log("✨ Vehicle summary ready:", summary);
+      console.log("✨ Vehicle summary ready:>>>>>>>", summary);
       
       // Clear any existing data before setting new data
       localStorage.removeItem("vehicleDetails");
@@ -320,13 +258,20 @@ const Bikeinsurance = () => {
       });
     
       const surepassData = await surepassRes.json();
+      if (surepassData?.cubic_capacity>700) {
+        handleError("This is car  number or something else In Our  ....")
+        navigate('/carinsurance')
+      }else if(surepassData?.cubic_capacity<700){
+        handleError("This is bike number go to bike page")
+        navigate('/Bikeinsurance')
+      }
       
       if (!surepassData.success) {
         console.error("❌ Surepass API returned error:", surepassData);
         return null;
       }
       
-      console.log("✅ Successfully got vehicle data from Surepass");
+      console.log("✅ Successfully got vehicle data from Surepass>>>>>>>>>>>",surepassData);
       return surepassData.data;
     } catch (error) {
       console.error("❌ Error calling Surepass API:", error);
@@ -389,7 +334,7 @@ const Bikeinsurance = () => {
         purchase_date: vehicleData?.purchase_date || null,
         maker_model: vehicleData?.maker_model || null,
         // Convert exshowroom to a number if it's a string
-        exshowroom: vehicleData?.exshowroom || vehicleData?.sale_amount || 14000,
+        exshowroom: vehicleData?.exshowroom || vehicleData?.sale_amount || 1000000,
         engine_capacity: vehicleData?.cubic_capacity || null,
         registration_date: vehicleData?.registration_date || null,
         // If client_id starts with "rc_" or is non-numeric, use null instead
@@ -397,10 +342,14 @@ const Bikeinsurance = () => {
             ? parseInt(vehicleData?.client_id) 
             : null,
         fuel_type: vehicleData?.fuel_type || null,
+        engine_number:vehicleData?.vehicle_engine_number || "N/A",
+        chasi_number:vehicleData?.vehicle_chasi_number || "N/A",
+        register_at:vehicleData?.registered_at || "N/A",
+        financer:vehicleData?.financer || "N/A",
         mobile_number: mobile // Use the input mobile number directly
       };
       
-      console.log("Payload being sent to database:", payload);
+      console.log("Payload being sent to database:>>>>>>>>>>", payload);
       
       const saveRes = await fetch(import.meta.env.VITE_LOCALHOST_BIKE_API, {
         method: "POST",
@@ -446,7 +395,6 @@ const Bikeinsurance = () => {
       return false;
     }
   };
-
   return (
     <>
       {contextHolder}

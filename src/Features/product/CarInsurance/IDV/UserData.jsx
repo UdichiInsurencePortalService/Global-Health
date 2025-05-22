@@ -18,16 +18,70 @@ const UserData = () => {
     { id: 2, name: 'Engine Protection', selected: false, price: 800 },
     { id: 3, name: 'Roadside Assistance', selected: false, price: 500 },
     { id: 4, name: 'Return to Invoice', selected: false, price: 1200 },
+    { id: 5, name: 'PA Cover for Owner Driver of ₹ 15,00,000 ', selected: false, price: 330 },
+
     // Removed NCB Protection as requested
   ]);
-
+  useEffect(() => {
+    if (premium > 0 && vehicle) {
+      // Get all the premium components
+      const currentYear = new Date().getFullYear();
+      const purchaseYear = new Date(vehicle.date_of_buy).getFullYear();
+      const ageInYears = currentYear - purchaseYear;
+  
+      // Use the same rates as in calculatePremium
+      let basePremiumRate;
+      if (ageInYears <= 3) {
+        basePremiumRate = 0.008;
+      } else if (ageInYears <= 7) {
+        basePremiumRate = 0.009;
+      } else if (ageInYears <= 10) {
+        basePremiumRate = 0.011;
+      } else {
+        basePremiumRate = 0.013;
+      }
+  
+      // Calculate own damage premium before NCB
+      const ownDamagePremium = Math.round(idv * basePremiumRate);
+      
+      // Get third-party premium
+      const thirdPartyPremium = getThirdPartyPremium(vehicle);
+      
+      // Calculate add-ons premium
+      const addOnsPremium = addOns
+        .filter((addon) => addon.selected)
+        .reduce((total, addon) => total + addon.price, 0);
+      
+      // Calculate subtotal (before GST)
+      const subtotal = ownDamagePremium - ncbDiscount + thirdPartyPremium + addOnsPremium;
+      
+      // Calculate GST (18% of subtotal)
+      const gst = Math.round(subtotal * 0.18);
+  
+      // Store premium components in localStorage
+      const premiumComponents = {
+        totalPremium: premium,
+        ownDamagePremium: ownDamagePremium,
+        thirdPartyPremium: thirdPartyPremium,
+        addOnsPremium: addOnsPremium,
+        gst: gst,
+        ncbDiscount: ncbDiscount,
+        ncbPercentage: ncbPercentage,
+        idv: idv,
+        selectedAddOns: addOns.filter(addon => addon.selected)
+      };
+  
+      localStorage.setItem('premiumComponents', JSON.stringify(premiumComponents));
+      console.log('Premium components saved to localStorage>>>>>>>>>>>>', premiumComponents);
+    }
+  }, [premium, vehicle, idv, ncbDiscount, ncbPercentage, addOns]);
   useEffect(() => {
     const storedVehicleDetails = localStorage.getItem('vehicleDetails');
     if (storedVehicleDetails) {
       const vehicleDetails = JSON.parse(storedVehicleDetails);
       setVehicle(vehicleDetails);
       calculateIDV(vehicleDetails);
-      
+      console.log("data recived from userdata>>>>>>>>>>>>",vehicleDetails)
       // Set NCB based on vehicle age - just for demo, in real app this would come from user input
       const currentYear = new Date().getFullYear();
       const purchaseYear = new Date(vehicleDetails.date_of_buy).getFullYear();
@@ -167,7 +221,7 @@ const UserData = () => {
       // Private cars
       if (engineCC <= 1000) return 2094;
       if (engineCC <= 1500) return 3416;
-      return 7897;
+      return 7;
     }
   };
 
@@ -224,17 +278,17 @@ const UserData = () => {
 
       { key: '3', component: 'Third-Party Premium', amount: thirdPartyPremium },
       { key: '4', component: 'Add-Ons', amount: addOnsPremium },
-      { key: '5', component: 'GST (18%)', amount: gst },
+      // { key: '5', component: 'GST (18%)', amount: gst },
     ];
   };
 
   if (!vehicle) {
     return (
-      <div className="container text-center py-5">
+      <div className="container text-center">
         <h2>No vehicle details found</h2>
         <p>Please go back and enter your vehicle registration number</p>
         <Link to="/car-insurance">
-          <Button type="primary">Back to Vehicle Entry</Button>
+          <Button type="primary ">Back to Vehicle Entry</Button>
         </Link>
       </div>
     );
@@ -268,7 +322,7 @@ const UserData = () => {
       </Link>
       <div className="user-data-container py-5">
         <div className="container">
-          <h1 className="text-center mb-4">Your Insurance Premium Details</h1>
+          <h1 className="text-center mb-4" style={{fontStyle:"oblique"}}>Hello {vehicle?.owner} Your Premuin Details</h1>
           
           <Row gutter={[24, 24]}>
             <Col xs={24} lg={8}>
@@ -319,7 +373,7 @@ const UserData = () => {
             
             <Col xs={24} lg={8}>
               <Card 
-                title="Total Premium" 
+                title="Final  Premium" 
                 className="premium-card"
                 bordered={false}
                 hoverable
@@ -330,9 +384,11 @@ const UserData = () => {
                   <Tag color="green">NCB: {ncbPercentage}%</Tag>
                   <span className="ms-2 text-muted">Savings: ₹ {ncbDiscount.toLocaleString()}</span>
                 </div>
+                <Link to='/formpage'>
                 <Button type="primary" size="large" block>
                   Proceed to Payment
                 </Button>
+                </Link>
               </Card>
             </Col>
           </Row>
@@ -431,9 +487,11 @@ const UserData = () => {
             <Link to="/car-insurance">
               <Button>Back</Button>
             </Link>
+            <Link to="/formpage">
             <Button type="primary" className="ms-3">
               Proceed to Payment
             </Button>
+            </Link>
           </div>
         </div>
       </div>

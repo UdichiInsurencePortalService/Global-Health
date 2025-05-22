@@ -36,6 +36,7 @@ import lifeicon from "../../../../src/assets/Home/life-icon.png";
 import homeicon from "../../../../src/assets/Home/home-icon.png";
 import travelicon from "../../../../src/assets/Home/travel-icon.png";
 import Products from "./Products/Products";
+import { PenBox } from "lucide-react";
 import Favourite from "./Favourite/Favourite";
 
 const Home = () => {
@@ -396,6 +397,8 @@ const Home = () => {
       <div className="py-3">
         <Seprate />
       </div>
+      
+     
 
       <div className="py-3">
         <Favourite/>

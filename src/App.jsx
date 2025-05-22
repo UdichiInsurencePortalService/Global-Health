@@ -6,7 +6,7 @@ import Home from "./Components/Pages/Home/Home.jsx";
 import Login from "./Components/Pages/Authentication/Login/Login.jsx";
 import Footer from "./Header/Footer/Footer.jsx";
 import "./App.css";
-import Abouts from "./Abouts/Abouts.jsx"; // Make sure this path is correct
+import Abouts from "./Abouts/Abouts.jsx"; 
 import UserData from "./Features/product/CarInsurance/IDV/UserData.jsx";
 import Intimate from "./Claims/IntimateClaims/Intimate.jsx";
 import Blog from "./Blog/Blog.jsx";
@@ -23,6 +23,8 @@ import User from "./Features/product/CarInsurance/User-Data/User.jsx";
 import Carinsurance from "./Features/product/CarInsurance/CarInsurance.jsx";
 import Document from "./Claims/DocumentUpload/Document.jsx";
 import Policy from "./Policy/Policy.jsx";
+import FormPage from "./Form/FormPage.jsx";
+import Chat from "./ChatBot/Chat.jsx";
 import Termcondition from "./Features/product/Termcondition/Termcondition.jsx";
 import Support from "./Features/product/Support/Support.jsx";
 import { Privacypolicy } from "./Features/product/Privacypolicy/Privacypolicy.jsx";
@@ -43,6 +45,7 @@ function App() {
 
   return (
     <>
+
       {/* Conditionally render Navbar */}
       {!isAdminPage && <Navbar />}
       
@@ -53,6 +56,15 @@ function App() {
         <Route path="/Blog" element={<Blog />} />
 
         {/* <Route path="/product" element={<Product />} /> */}
+
+      <Navbar />
+      
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/aboutus" element={<Abouts />} />
+        <Route path="/Blog" element={<Blog />} />
+        
+
         <Route path="/carinsurance" element={<Carinsurance />} />
         <Route path="/user-data" element={<UserData/>}/>
         <Route path="/Bikeinsurance" element={<Bikeinsurance />} />
@@ -70,6 +82,7 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/intimateclaims" element={<Intimate />} />
+
         <Route path ="/documentupload" element={<Document/>}/>
         <Route path ='/policy' element={<Policy/>}/>
         <Route path="/Claimprocess" element={<Claimprocess/>}/>
@@ -78,7 +91,16 @@ function App() {
       </Routes>
       
       {/* Conditionally render Footer */}
-      {!isAdminPage && <Footer />}
+      {!isAdminPage && <Footer />
+        <Route path="/documentupload" element={<Document/>}/>
+        <Route path="/policy" element={<Policy/>}/>
+
+        <Route path="/user" element={<User />} />
+        <Route path="/formpage" element={<FormPage/>}/>
+      </Routes>
+      
+      <Footer />
+      <Chat/>
     </>
   );
 }

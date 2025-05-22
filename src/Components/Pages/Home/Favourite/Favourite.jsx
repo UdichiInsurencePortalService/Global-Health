@@ -30,14 +30,14 @@ const features = [
 
 const Favourite = () => {
   return (
-    <Container className="my-5">
+    <Container className="my-5 py-5">
       <Row className="align-items-center">
         {/* Left Section - Text */}
         <Col md={5}>
          <h1>
-  What makes <span>Global Health</span> stand out as <br />
-  <span>India’s go-to platform</span> <br />
-  for <span>insurance purchases</span>?
+  What makes <span className="spams">Global Health</span> stand out as <br />
+  <span className="spams">India’s go-to platform</span> <br />
+  for insurance purchases?
 </h1>
 
         </Col>

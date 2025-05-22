@@ -1,4 +1,7 @@
 
+.spams{
+    color:#3498db;
+}
 
 .favourite-card {
   transition: border 1s ease, transform 0.4s ease;

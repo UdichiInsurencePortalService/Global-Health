@@ -1,0 +1,52 @@
+[
+    {
+      "title": "Company Name",
+      "content": "Global Health & Allied Insurance Services , email globalhealth235@gmail.com and phone number 9818152403"
+    },
+    {
+      "title": "Location",
+      "content": "Head office located in Noida"
+    },
+    {
+      "title": "Establishment",
+      "content": "Founded in 2025 as a government-registered insurance provider under IRDAI guidelines"
+    },
+    {
+      "title": "Mission Statement",
+      "content": "Our mission is to empower businesses and individuals through cutting-edge digital insurance solutions and exceptional service. We deliver secure, scalable, and fast insurance products that prioritize transparency, affordability, and user convenience."
+    },
+    {
+      "title": "Leave Policy",
+      "content": "Employees are entitled to 20 days of paid leave annually. In addition, there are 10 public holidays observed by the company. Sick leave of up to 7 days is also allowed per year. All leaves must be applied through the HR portal at least 3 working days in advance, except in emergencies. Unused paid leave can be carried forward for up to 2 years, after which it will lapse."
+    },
+    {
+      "title": "WFH Policy",
+      "content": "The company offers a flexible Work From Home (WFH) policy. Employees can work remotely for up to 2 days per week with prior approval from their reporting manager. In special cases, such as health issues or relocation needs, extended WFH options can be approved by HR. All employees must be available online during core working hours, 10:00 AM to 5:00 PM."
+    },
+    {
+      "title": "Car Insurance",
+      "content": "Covers own damage, third-party liability, theft, natural disasters, personal accident cover. Optional add-ons include zero depreciation, engine protection, roadside assistance, and NCB protection. Not covered: illegal use, wear and tear, war damage, or driving without license."
+    },
+    {
+      "title": "Bike & Auto Insurance",
+      "content": "Covers own damage, theft, and third-party liabilities. Add-ons like zero depreciation and personal accident cover are available. Not covered: illegal usage, self-damage, or unauthorized driving."
+    },
+    {
+      "title": "Health Insurance",
+      "content": "Covers hospitalization, pre/post-hospitalization, daycare procedures, and critical illness (with add-ons). Not covered: cosmetic treatments, self-harm injuries, or unapproved treatments."
+    },
+    {
+      "title": "Why Choose Us",
+      "content": "Government registered under IRDAI. Lowest premiums in India. Super-fast premium calculation with just a few steps. Transparent process and customer-first support."
+    },
+    {
+      "title": "Car Premium Calculation",
+      "content": "Step 1: Enter car number and fetch vehicle details. Step 2: Calculate IDV based on model and age. Step 3: Add OD and TP premiums, apply NCB, and add add-ons if needed. Step 4: GST is added and final premium shown instantly."
+    },
+    {
+      "title": "Claim Process",
+      "content": "Fill the claim form, upload necessary documents (FIR, RC, License, Repair Bills, etc.), and submit. Quick processing and updates shared via SMS/email."
+    }
+   
+  ]
+  
