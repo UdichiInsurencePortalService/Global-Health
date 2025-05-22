@@ -1307,38 +1307,7 @@ const Healthinsurance = () => {
         sectionDescription=" When filing a health insurance claim, you need to submit certain documents to ensure a smooth and hassle-free process. Remember, not all of these documents may be necessary but your insurance provider may require them. Below is a list of essential documents required while filing a health insurance claim at Global Health:"
         data={documentclaim}
       />
-
-      <DepreciationCalculated
-        heading="Health Insurance Premium for Different Sum Insured Options"
-        tablehead="Sum Insured"
-        tablehead1="Starting Annual Premium excluding GST (for Infinity Wallet Plan)"
-        tableData={[
-          {
-            duration: "",
-            discount: "",
-          },
-          {
-            duration: "",
-            discount: "",
-          },
-          {
-            duration: "",
-            discount: "",
-          },
-          {
-            duration: "",
-            discount: "",
-          },
-          {
-            duration: "",
-            discount: "",
-          },
-          {
-            duration: "",
-            discount: "",
-          },
-        ]}
-      />
+      
 
       <div className="coverage-section">
         <div className="container">

@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./News.css";
+// import icon1 from "../../../../assets/reuseimage/whatsapp.png";
+// import icon2 from "../../../../assets/reuseimage/circle.png";
+
 
 const News = () => {
   const [activeTab, setActiveTab] = useState("general");
