@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./Header/Navbar/Navbar.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./Components/Pages/Home/Home.jsx";
@@ -15,11 +15,10 @@ import Healthinsurance from "./Features/product/Healthinsurance/Healthinsurance.
 import Homeinsurance from "./Features/product/Homeinsurance/Homeinsurance.jsx";
 
 //footer links
- import Faq from "./Features/product/Faq/Faq.jsx";
- import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx"
+import Faq from "./Features/product/Faq/Faq.jsx";
+import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx"
 
-
-import  Autoinsurance  from "./Features/product/Autoinsurance/Autoinsurance.jsx";
+import Autoinsurance from "./Features/product/Autoinsurance/Autoinsurance.jsx";
 import User from "./Features/product/CarInsurance/User-Data/User.jsx";
 import Carinsurance from "./Features/product/CarInsurance/CarInsurance.jsx";
 import Document from "./Claims/DocumentUpload/Document.jsx";
@@ -29,12 +28,35 @@ import Chat from "./ChatBot/Chat.jsx";
 import Termcondition from "./Features/product/Termcondition/Termcondition.jsx";
 import Support from "./Features/product/Support/Support.jsx";
 import { Privacypolicy } from "./Features/product/Privacypolicy/Privacypolicy.jsx";
+import Admin from "./Admin/Admin.jsx";
+import Claimprocess from "./Features/product/Claimprocess/Claimprocess.jsx";
 
 
+
+
+
+// import Requestpage from "./Features/product/Requestpage/Requestpage.jsx"
 
 function App() {
+  const location = useLocation();
+  
+  // Check if current path is admin page
+  const isAdminPage = location.pathname === "/Admin";
+
   return (
     <>
+
+      {/* Conditionally render Navbar */}
+      {!isAdminPage && <Navbar />}
+      
+      <Routes>
+        <Route path="/Admin" element={<Admin/>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/aboutus" element={<Abouts />} />
+        <Route path="/Blog" element={<Blog />} />
+
+        {/* <Route path="/product" element={<Product />} /> */}
+
       <Navbar />
       
       <Routes>
@@ -42,6 +64,7 @@ function App() {
         <Route path="/aboutus" element={<Abouts />} />
         <Route path="/Blog" element={<Blog />} />
         
+
         <Route path="/carinsurance" element={<Carinsurance />} />
         <Route path="/user-data" element={<UserData/>}/>
         <Route path="/Bikeinsurance" element={<Bikeinsurance />} />
@@ -55,9 +78,20 @@ function App() {
         
         <Route path="/termcondition" element={<Termcondition/>} />
         <Route path="/support" element={<Support/>} />
+        {/* <Route path="/Requestpage" element={<Requestpage/>} /> */}
 
         <Route path="/login" element={<Login />} />
         <Route path="/intimateclaims" element={<Intimate />} />
+
+        <Route path ="/documentupload" element={<Document/>}/>
+        <Route path ='/policy' element={<Policy/>}/>
+        <Route path="/Claimprocess" element={<Claimprocess/>}/>
+
+        <Route path="/user" element={<User />} />
+      </Routes>
+      
+      {/* Conditionally render Footer */}
+      {!isAdminPage && <Footer />
         <Route path="/documentupload" element={<Document/>}/>
         <Route path="/policy" element={<Policy/>}/>
 
