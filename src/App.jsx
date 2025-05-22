@@ -1,7 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-
+import { Routes, Route,  } from "react-router-dom";
 import Navbar from "./Header/Navbar/Navbar.jsx";
 import Footer from "./Header/Footer/Footer.jsx";
 import Chat from "./ChatBot/Chat.jsx";
@@ -26,14 +24,17 @@ import Autoinsurance from "./Features/product/Autoinsurance/Autoinsurance.jsx";
 
 // Claims
 import Intimate from "./Claims/IntimateClaims/Intimate.jsx";
+// Footer links
+import Faq from "./Features/product/Faq/Faq.jsx";
+import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx"
 import Document from "./Claims/DocumentUpload/Document.jsx";
 
 // Footer Pages
-import Faq from "./Features/product/Faq/Faq.jsx";
-import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx";
 import Termcondition from "./Features/product/Termcondition/Termcondition.jsx";
 import Support from "./Features/product/Support/Support.jsx";
 import { Privacypolicy } from "./Features/product/Privacypolicy/Privacypolicy.jsx";
+import Admin from "./Admin/Admin.jsx";
+import Claimprocess from "./Features/product/Claimprocess/Claimprocess.jsx";
 
 // Others
 import Policy from "./Policy/Policy.jsx";
@@ -41,19 +42,19 @@ import FormPage from "./Form/FormPage.jsx";
 import Googletranslation from "./Goggle/Googletranslation.jsx";
 
 function App() {
-
   return (
     <>
-          <Googletranslation/>
-
+      <Googletranslation />
       <Navbar />
-
+      
       <Routes>
+        <Route path="/admin" element={<Admin />} />
         <Route path="/" element={<Home />} />
         <Route path="/aboutus" element={<Abouts />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/login" element={<Login />} />
 
+        {/* Insurance Routes */}
         <Route path="/carinsurance" element={<Carinsurance />} />
         <Route path="/user-data" element={<UserData />} />
         <Route path="/user" element={<User />} />
@@ -62,21 +63,26 @@ function App() {
         <Route path="/homeinsurance" element={<Homeinsurance />} />
         <Route path="/autoinsurance" element={<Autoinsurance />} />
 
+        {/* Footer/Info Routes */}
         <Route path="/faq" element={<Faq />} />
         <Route path="/companyinfo" element={<Companyinfo />} />
         <Route path="/termcondition" element={<Termcondition />} />
         <Route path="/support" element={<Support />} />
         <Route path="/privacypolicy" element={<Privacypolicy />} />
 
+        {/* Claims Routes */}
         <Route path="/intimateclaims" element={<Intimate />} />
         <Route path="/documentupload" element={<Document />} />
+        <Route path="/claimprocess" element={<Claimprocess />} />
+
+        {/* Other Routes */}
         <Route path="/policy" element={<Policy />} />
         <Route path="/formpage" element={<FormPage />} />
       </Routes>
 
       <Footer />
       <Chat />
-    </>
+      </>
   );
 }
 
