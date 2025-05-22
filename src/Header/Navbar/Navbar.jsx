@@ -13,6 +13,7 @@ import { handleError } from "../../errortoast";
 
 
 const Navbar = () => {
+  
   const [username, setUsername] = useState(
     localStorage.getItem("loggedInUser") || ""
   );

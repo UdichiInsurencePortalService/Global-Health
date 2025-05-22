@@ -16,33 +16,47 @@ const AutoPostgressRoutes = require('./Routes/AutoPostgresRouter')
 const paymentdata = require('./Routes/PaymentData')
 const chat  = require('./Routes/chatRoutes.js')
 const RazorPayment = require('./Routes/RazorPayment.js')
-const app = express();
-app.use(express.json()); // ✅ This must come BEFORE route handlers
+const Fileuplaod = require('./Routes/UserPolicyFile.js')
+const intailclaim  = require('./Routes/Intailclaim.js')
+const accidentform = require('./Routes/Accidentform.js')
+const submitclaim = require('./Routes/documentupload.js')
 
+const app = express();
+
+// IMPORTANT: Configure JSON body parsers with increased limits ONCE, at the top level
+// This ensures all routes benefit from the increased limits
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
+
+// Configure bodyParser with the same limits for consistency
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }));
 
 const authRoutes = require("./Routes/authRouter"); // Google OAuth routes
 
 const PORT = process.env.PORT || 8080;
-app.use(express.json()); // ✅ This must come BEFORE route handlers
 
-// Middleware
-app.use(bodyParser.json());
+// Middleware for CORS
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true,
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
-app.use('/api', vehiclePostgresRoutes); //
-app.use('/api', BikePostgressRoutes); //
-app.use('/api',AutoPostgressRoutes);
+
+// API Routes
+app.use('/api', vehiclePostgresRoutes);
+app.use('/api', BikePostgressRoutes);
+app.use('/api', AutoPostgressRoutes);
 app.use('/api', paymentdata);
 app.use('/api', chat);
-app.use('/api', RazorPayment)
+app.use('/api', RazorPayment);
+app.use('/api', Fileuplaod);
+app.use('/api',intailclaim)
+app.use('/api',accidentform)
+app.use('/api',submitclaim)
 
-
-
-
+// Session configuration
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret",
@@ -76,8 +90,7 @@ passport.deserializeUser((user, done) => done(null, user));
 // Routes
 app.use("/auth", authRoutes); // 🔹 Google OAuth routes
 app.use("/api/auth", extendedAuthRoutes); // 🔹 Signup/Login/Vehicle Register routes
-app.use("/api/auth",UserVehicle ); // 🔹 Signup/Login/Vehicle Register routes
-
+app.use("/api/auth", UserVehicle); // 🔹 Signup/Login/Vehicle Register routes
 
 // 🔹 Google Auth endpoints
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile"] }));

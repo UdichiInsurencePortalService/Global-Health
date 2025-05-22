@@ -2,6 +2,8 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import { UserProvider } from '../src/Context/Usercontext';
+import './i18n.js'; // ✅ Import this!
+
 import { matchRoutes } from 'react-router-dom';
 import { 
   initializeFaro, 

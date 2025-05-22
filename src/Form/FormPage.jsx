@@ -1,13 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+  import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../Context/Usercontext';
-import { Card, Form, Button, Row, Col, Modal, Alert } from 'react-bootstrap';
+import { Card, Form, Button, Row, Col, Modal, Alert, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import { jsPDF } from 'jspdf';
+import { handleError } from '../errortoast';
+// Import jsPDF for PDF generation
+import { jsPDF } from "jspdf";
 import autoTable from 'jspdf-autotable';
+// Optional: Import autoTable for better table support in PDFs
+import 'jspdf-autotable';
 import logo from '../assets/Home/global-logo.png';
 import qr from '../assets/kunal.jpeg';
-import { handleError } from '../errortoast';
+
 // Base URL for API
 const API_BASE_URL = 'http://localhost:8080/api';
 
@@ -20,6 +24,8 @@ const FormPage = () => {
   const [vehicleDetails, setVehicleDetails] = useState({});
   const [premiumComponents, setPremiumComponents] = useState({});
   const [paymentStatus, setPaymentStatus] = useState('pending'); // 'pending', 'success', 'failed'
+  const [userId, setUserId] = useState(null); // To store the user ID returned from database
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // Load Razorpay script
   useEffect(() => {
@@ -170,122 +176,14 @@ const FormPage = () => {
   };
   
   // Save user data to localStorage
-  const saveUserData = () => {
+  const saveUserDataToLocalStorage = () => {
     try {
       localStorage.setItem('userData', JSON.stringify(userForm));
-      console.log("User data saved to localStorage:>>>><<<<<<<<<", userForm);
+      console.log("User data saved to localStorage:", userForm);
       return true;
     } catch (error) {
       console.error("Error saving data to localStorage:", error);
       return false;
-    }
-  };
-
-  // Payment success handler
-  const handlePaymentSuccess = (response) => {
-    setPaymentStatus('success');
-    console.log("Payment successful!", response);
-    
-    // Add payment details to form data
-    const updatedForm = {
-      ...userForm,
-      payment_id: response.razorpay_payment_id,
-      payment_status: 'success'
-    };
-    
-    setUserForm(updatedForm);
-    
-    // Save updated data
-    localStorage.setItem('userData', JSON.stringify(updatedForm));
-    
-    // Show success modal which will offer PDF download
-    setShowSuccessModal(true);
-  };
-
-  // Payment error handler
-  const handlePaymentError = (error) => {
-    setPaymentStatus('failed');
-    const errorMsg = typeof error === 'string' ? error : 'Payment failed. Please try again.';
-    setErrorMessage(errorMsg);
-    setShowError(true);
-    console.error("Payment failed:", error);
-  };
-
-  // Initiate payment
-  const handlePayment = async () => {
-    // First validate form before initiating payment
-    if (!validateForm()) {
-      return;
-    }
-    
-    const amount = premiumComponents?.totalPremium || 0;
-    if (amount <= 0) {
-      setErrorMessage("Invalid premium amount");
-      setShowError(true);
-      return;
-    }
-
-    try {
-      // Create a Razorpay order
-      const response = await fetch(`${API_BASE_URL}/payment/createorder`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount }),
-      });
-
-      const data = await response.json();
-
-      if (data.orderId) {
-        // Save user data before payment
-        saveUserData();
-        
-        // Open Razorpay checkout
-        openRazorpayCheckout(data);
-      } else {
-        handlePaymentError('Failed to create payment order');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      handlePaymentError('Payment failed to initiate');
-    }
-  };
-
-  // Open Razorpay checkout
-  const openRazorpayCheckout = (data) => {
-    const options = {
-      key: 'rzp_live_4GMG4265FQmj65', // Razorpay Key ID
-      amount: data.amount,
-      currency: data.currency || 'INR',
-      name: 'Global Health And Allied Insurance Service',
-      description: 'Premium Payment',
-      order_id: data.orderId,
-      handler: function (response) {
-        handlePaymentSuccess(response);
-      },
-      prefill: {
-        name: userForm.username || '',
-        email: userForm.email || '',
-        contact: userForm.mobile_number || ''
-      },
-      notes: {
-        address: userForm.address || ''
-      },
-      theme: {
-        color: '#3399cc',
-      },
-      modal: {
-        ondismiss: function() {
-          console.log('Payment modal dismissed');
-        }
-      }
-    };
-
-    try {
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-    } catch (error) {
-      console.error("Failed to open Razorpay:", error);
-      handlePaymentError("Failed to open payment gateway");
     }
   };
 
@@ -311,11 +209,106 @@ const FormPage = () => {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     
     // Create the full policy number with GIC prefix
-    return `GIC/${fiscalYear}/${typeCode}/${randomNum}`;
+    const policy = `GIC/${fiscalYear}/${typeCode}/${randomNum}`;
+    console.log("Generated policy number:", policy);
+    return policy;
   };
 
-  // Format address for PDF
-  const formatAddress = (address) => {
+  // Save user data to PostgreSQL database (after payment success)
+  const saveUserDataToDatabase = async (paymentResponse) => {
+    // Generate policy number
+    const policyNumber = generatePolicyNumber();
+    
+    // Update form with policy number and payment details
+    const updatedForm = {
+      ...userForm,
+      policyNumber,
+      payment_id: paymentResponse.razorpay_payment_id,
+      razorpay_order_id: paymentResponse.razorpay_order_id,
+      payment_status: 'success'
+    };
+    
+    setUserForm(updatedForm);
+    
+  const formData = {
+  username: updatedForm.username || '',
+  email: updatedForm.email || '',
+  age: updatedForm.age || '',
+  mobile_number: updatedForm.mobile_number || '',
+  pan_number: updatedForm.pan_number || '',
+  aadhar_card: updatedForm.aadhar_card || '',
+  registration_number: updatedForm.registrationNumber || '',
+  address: updatedForm.address || '',
+  policy_number: policyNumber,
+  nominee_name: updatedForm.nominee_name || '',
+  nominee_relation: updatedForm.nominee_Relationship || '',
+  nominee_age: updatedForm.nominee_Age || '',
+  payment_id: updatedForm.payment_id || paymentResponse.razorpay_payment_id,
+  payment_status: 'success'
+};
+
+// Format the period_of_insurance as a PostgreSQL daterange string
+if (updatedForm?.periodOfInsurance || updatedForm?.period_of_insurance || userForm?.periodOfInsurance || userForm?.period_of_insurance) {
+  const periodObj = updatedForm?.periodOfInsurance || updatedForm?.period_of_insurance || 
+                   userForm?.periodOfInsurance || userForm?.period_of_insurance;
+                   
+  if (periodObj.startDate && periodObj.endDate) {
+    // Format dates as ISO strings without time part
+    const startDate = new Date(periodObj.startDate).toISOString().split('T')[0];
+    const endDate = new Date(periodObj.endDate).toISOString().split('T')[0];
+    formData.period_of_insurance = `[${startDate},${endDate}]`;
+  }
+}
+
+console.log("Saving user form data to PostgreSQL:", formData);
+    try {
+      const userResponse = await axios.post(`${API_BASE_URL}/paymentuserdata`, formData, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      console.log('User data saved successfully to database:', userResponse.data);
+      
+      // Save user ID for potential updates
+      if (userResponse.data && userResponse.data.id) {
+        setUserId(userResponse.data.id);
+      }
+      
+      // Save updated data to localStorage with policy number
+      localStorage.setItem('userData', JSON.stringify(updatedForm));
+      
+      return userResponse.data;
+    } catch (error) {
+      console.error('Error saving user data to database:', error);
+      throw new Error('Failed to save user data to database. ' + (error.response?.data?.message || error.message));
+    }
+  };
+
+  // Payment success handler
+  const handlePaymentSuccess = async (response) => {
+    setPaymentStatus('success');
+    console.log("Payment successful!", response);
+    
+    try {
+      // Save data to database AFTER payment is successful
+      await saveUserDataToDatabase(response);
+      
+      // Show success modal which will offer PDF download
+      setShowSuccessModal(true);
+    } catch (error) {
+      console.error("Error processing successful payment:", error);
+      setErrorMessage("Payment was successful, but we couldn't save your data. Please try again or contact support.");
+      setShowError(true);
+    }
+  };
+
+  // Payment error handler
+  const handlePaymentError = (error) => {
+    setPaymentStatus('failed');
+    const errorMsg = typeof error === 'string' ? error : 'Payment failed. Please try again.';
+    setErrorMessage(errorMsg);
+    setShowError(true);
+    console.error("Payment failed:", error);
+  };
+   const formatAddress = (address) => {
     if (!address) return ['Address not provided'];
     
     // Split by commas
@@ -348,20 +341,16 @@ const FormPage = () => {
     return chunks;
   };
 
-  // Generate PDF document
-  const generatePDF = (setUserForm,setVehicleDetails, setPremiumComponents,userData) => {
+  // Generate PDF with policy details
+  const generatePDF = (setUserForm,setVehicleDetails, setPremiumComponents,userData,pdf,setUserId) => {
+    
     try {
-    console.log("Vehicle details inside generatePDF:>><<<<", setVehicleDetails, "User info:>>>><<<<<", setUserForm, "Premium components:", setPremiumComponents,"userdata components:", userData,);
+        console.log("Vehicle details inside generatePDF:>><<<<", setVehicleDetails, "User info:>>>><<<<<", setUserForm, "Premium components:", setPremiumComponents,"userdata components:", userData,"userdatapdf",setUserId);
     const doc = new jsPDF();
-
-      userForm.policyNumber = generatePolicyNumber(userForm.insuranceType);
-    console.log("Using policy number:>>>>>>>>><<<<<<<<<<<<", userForm.policyNumber);
-    
-    // Reference number is same as policy number
-    const refNumber = userForm.policyNumber;
-    
-    // Set margins
-    const margin = 20;
+      if (!userForm.policyNumber) {
+        throw new Error("Policy number is missing");
+      }
+         const margin = 20;
     let yPos = margin;
     
     // Add company logo - Using an image if available
@@ -404,7 +393,7 @@ const FormPage = () => {
     // Reference number and date section
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Ref No.: ${refNumber}`, margin, yPos);
+    // doc.text(`Ref No.: ${refNumber}`, margin, yPos);
     yPos += 7;
     
     // Current date
@@ -435,6 +424,11 @@ const FormPage = () => {
     
     // Policy details with better spacing
     doc.text(`Policy number: ${userForm.policyNumber}`, margin, yPos);
+        yPos += 7;
+
+        doc.text(`UserId: ${userData?.userid}`, margin, yPos);
+        console.log("user id generated>><<",userData)
+
     yPos += 7;
     doc.text(`CRN: ${userForm.crn || 'ID'}`, margin, yPos);
     yPos += 10;
@@ -542,13 +536,14 @@ doc.setFont(undefined, "normal");
 doc.text("Policy / Certificate No: ", pageCenter - 50, yPos);
 doc.setFont(undefined, "bold");
 doc.text(userForm.policyNumber, pageCenter + 10, yPos);
-yPos += 20; // Increased spacing after policy number
+
+yPos += 20;
 
 // Support text
 doc.setFont(undefined, "normal");
 doc.setFontSize(10);
 doc.text("For any assistance please call 1800 266 4545 or visit www.globalhealth.com", pageCenter, yPos, { align: "center" });
-yPos += 20; // Increased spacing after support text
+yPos += 10; // Increased spacing after support text
 
 // --- INSURED & POLICY DETAILS ---
 const headerHeight = 10; // Increased header height
@@ -563,13 +558,14 @@ doc.text("INSURED DETAILS", 105, yPos + headerHeight/2 + 2, { align: "center", b
 doc.setTextColor(0, 0, 0);
 
 // Initialize starting position after header
-let y = yPos + headerHeight + 15; // Added more space after header
+let y = yPos + headerHeight + 12; // Added more space after header
 
 // First row with consistent spacing
+const ownerName = (vehicleDetails.owner || "N/A").substring(0, 25);
 doc.setFont(undefined, "bold");
 doc.text("Name:", leftColumn, y);
 doc.setFont(undefined, "normal");
-doc.text(vehicleDetails.owner || "N/A", valueOffset,y );
+doc.text(ownerName, valueOffset, y);
 
 doc.setFont(undefined, "bold");
 doc.text("Policy Issuing Office:", rightColumn, y);
@@ -985,120 +981,314 @@ return doc;
 };
 
   // Download PDF
-  const downloadPDFLocally = (userData) => {
-    try {
-      const doc = generatePDF(userData);
+  // const downloadPDFLocally = (userData) => {
+  //   try {
+  //     const doc = generatePDF(userData);
       
-      if (doc) {
-        // Save the policy number to the form data if generated in PDF
-        if (userData.policyNumber && !userForm.policyNumber) {
-          setUserForm(prev => ({
-            ...prev,
-            policyNumber: userData.policyNumber
-          }));
-        }
+  //     if (doc) {
+  //       // Save the policy number to the form data if generated in PDF
+  //       if (userData.policyNumber && !userForm.policyNumber) {
+  //         setUserForm(prev => ({
+  //           ...prev,
+  //           policyNumber: userData.policyNumber
+  //         }));
+  //       }
         
-        doc.save(`${userData.username || 'insurance'}_policy.pdf`);
-        console.log("PDF generated and downloaded successfully");
-        return true;
-      } else {
-        console.error("PDF generation returned null");
-        setErrorMessage("Failed to generate PDF: Document is null");
-        setShowError(true);
-        return false;
-      }
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-      setErrorMessage("Failed to download PDF: " + error.message);
+  //       doc.save(`${userData.username || 'insurance'}_policy.pdf`);
+  //       console.log("PDF generated and downloaded successfully");
+  //       return true;
+  //     } else {
+  //       console.error("PDF generation returned null");
+  //       setErrorMessage("Failed to generate PDF: Document is null");
+  //       setShowError(true);
+  //       return false;
+  //     }
+  //   } catch (error) {
+  //     console.error("Error downloading PDF:", error);
+  //     setErrorMessage("Failed to download PDF: " + error.message);
+  //     setShowError(true);
+  //     return false;
+  //   }
+  // };
+ const downloadPDFLocally = async (userData) => {
+  try {
+    const doc = generatePDF(userData);
+    
+    if (!doc) {
+      console.error("PDF generation returned null");
+      setErrorMessage("Failed to generate PDF: Document is null");
       setShowError(true);
       return false;
     }
-  };
-
-  // Test server connection
-  const testServerConnection = async () => {
-    try {
-      await axios.options(`${API_BASE_URL}/paymentuserdata`, { 
-        timeout: 5000
-      });
+    
+    // Save the policy number to the form data if generated in PDF
+    if (userData.policyNumber && !userForm.policyNumber) {
+      setUserForm(prev => ({
+        ...prev,
+        policyNumber: userData.policyNumber
+      }));
+    }
+    
+    // Save PDF locally
+    const fileName = `${userData.username || 'insurance'}_policy.pdf`;
+    doc.save(fileName);
+    console.log("PDF downloaded successfully");
+    
+    // Get PDF as base64 for database storage
+    let pdfBase64;
+    
+    // Check estimated file size (rough approximation)
+    const pdfOutput = doc.output();
+    const estimatedSizeMB = pdfOutput.length / (1024 * 1024);
+    console.log(`Estimated PDF size: ${estimatedSizeMB.toFixed(2)} MB`);
+    
+    if (estimatedSizeMB > 10) {
+      console.warn("PDF is large, consider implementing compression or chunking for upload");
+      setErrorMessage("PDF file is large, upload may take longer than usual");
+      setShowError(true);
+    }
+    
+    pdfBase64 = doc.output('datauristring');
+    
+    // Send PDF to server for database storage
+    console.log("Uploading PDF to database...");
+    const saveResult = await savePDFToDatabase({
+      pdfBase64,
+      userId: userData.id || generateRandomUserId(), // Use provided ID or generate random one
+      policyNumber: userForm.policyNumber,
+      fileName
+    }, userForm);
+    
+    if (saveResult.success) {
+      console.log("PDF saved to database successfully");
       return true;
-    } catch (error) {
-      console.error("Server connection failed:", error);
+    } else {
+      console.error("Error saving PDF to database:", saveResult.error);
+      setErrorMessage("PDF downloaded but failed to save to database: " + saveResult.error);
+      setShowError(true);
       return false;
     }
-  };
+  } catch (error) {
+    console.error("Error processing PDF:", error);
+    setErrorMessage("Failed to process PDF: " + error.message);
+    setShowError(true);
+    return false;
+  }
+};
 
-  // Form submission handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setShowError(false);
-    
-    // Validate form
+// Generate random user ID if not provided
+const generateRandomUserId = () => {
+  // Generate a random 3-digit number (100-999)
+  const randomPart = Math.floor(100 + Math.random() * 900);
+  
+  // Create the 4-character user ID starting with 1
+  const userId = "1" + randomPart;
+  
+  console.log("Generated user ID:", userId);
+  return userId;
+};
+
+// Client API function to send PDF to server with retry logic
+const savePDFToDatabase = async (pdfData, userForm) => {
+  console.log("user form is>><<<", userForm);
+  const maxRetries = 2;
+  let retryCount = 0;
+  
+  // Validate required data before attempting to send
+  if (!pdfData.pdfBase64) {
+    console.error("Missing required field: pdfBase64");
+    return { success: false, error: "PDF data is missing" };
+  }
+  
+  if (!pdfData.userId) {
+    console.error("Missing required field: userId");
+    return { success: false, error: "User ID is missing" };
+  }
+  
+  const attemptUpload = async () => {
+    try {
+      console.log(`Attempt ${retryCount + 1} to upload PDF...`);
+      
+      // Log the size of the data being sent
+      const dataSize = JSON.stringify(pdfData).length / (1024 * 1024);
+      console.log(`Sending data of size: ${dataSize.toFixed(2)} MB`);
+      console.log("Request payload structure:", {
+        hasPdfBase64: !!pdfData.pdfBase64,
+        pdfBase64Type: typeof pdfData.pdfBase64,
+        pdfBase64Length: pdfData.pdfBase64 ? pdfData.pdfBase64.length : 0,
+        userId: pdfData.userId,
+        userIdType: typeof pdfData.userId,
+        policyNumber: userForm?.policyNumber,
+        fileName: pdfData.fileName
+      });
+
+      // Ensure the URL is correct
+      const apiUrl = 'http://localhost:8080/api/pdf/save';
+      console.log("Sending request to:", apiUrl);
+      
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          pdfBase64: pdfData.pdfBase64,
+          userId: pdfData.userId,
+          policyNumber: userForm?.policyNumber || null,
+          fileName: pdfData.fileName || 'document.pdf'
+        }),
+        // Adding timeout to prevent indefinite waiting
+        signal: AbortSignal.timeout(120000) // 120-second timeout for large files
+      });
+      
+      // Log the entire response for debugging
+      console.log("Response status:", response.status);
+      
+      const responseText = await response.text();
+      console.log("Response text:", responseText);
+      
+      if (!response.ok) {
+        let errorData;
+        try {
+          errorData = JSON.parse(responseText);
+        } catch (e) {
+          errorData = { error: responseText };
+        }
+        
+        if (response.status === 413) {
+          throw new Error(`File too large for upload (413 Payload Too Large). Please reduce document size.`);
+        } else {
+          throw new Error(`Server responded with status: ${response.status}. ${errorData.error || responseText}`);
+        }
+      }
+      
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        throw new Error("Invalid JSON response from server");
+      }
+      
+      return data;
+    } catch (error) {
+      console.error(`Upload attempt ${retryCount + 1} failed:`, error);
+      
+      // Only retry for certain types of errors (not for 413 payload too large)
+      if (retryCount < maxRetries && !error.message.includes('413 Payload Too Large')) {
+        retryCount++;
+        // Exponential backoff: wait longer between retries
+        const delay = retryCount * 2000; // 2s, 4s
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return attemptUpload();
+      }
+      
+      throw error;
+    }
+  };
+  
+  try {
+    const result = await attemptUpload();
+    return { success: true, ...result };
+  } catch (error) {
+    console.error("All upload attempts failed:", error);
+    return { success: false, error: error.message };
+  }
+};
+// Function to retrieve a PDF from the database by document ID
+
+
+  // Initiate payment
+  const handlePayment = async () => {
+    // First validate form before initiating payment
     if (!validateForm()) {
       return;
     }
     
-    // If payment is not successful, initiate payment
+    setIsSubmitting(true);
+    setShowError(false);
+    
+    try {
+      const amount = premiumComponents?.totalPremium || 0;
+      if (amount <= 0) {
+        throw new Error("Invalid premium amount");
+      }
+      
+      // Create a Razorpay order
+      const response = await fetch(`${API_BASE_URL}/payment/createorder`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount }),
+      });
+
+      const data = await response.json();
+
+      if (data.orderId) {
+        // Open Razorpay checkout immediately
+        openRazorpayCheckout(data);
+      } else {
+        throw new Error('Failed to create payment order');
+      }
+    } catch (error) {
+      console.error('Error in payment process:', error);
+      handlePaymentError('Payment failed to initiate: ' + (error.message || 'Unknown error'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Open Razorpay checkout
+  const openRazorpayCheckout = (data) => {
+    const options = {
+      key: 'rzp_live_4GMG4265FQmj65', // Razorpay Key ID
+      amount: data.amount,
+      currency: data.currency || 'INR',
+      name: 'Global Health And Allied Insurance Service',
+      description: 'Premium Payment',
+      order_id: data.orderId,
+      handler: function (response) {
+        handlePaymentSuccess(response);
+      },
+      prefill: {
+        name: userForm.username || '',
+        email: userForm.email || '',
+        contact: userForm.mobile_number || ''
+      },
+      notes: {
+        address: userForm.address || ''
+      },
+      theme: {
+        color: '#3399cc',
+      },
+      modal: {
+        ondismiss: function() {
+          console.log('Payment modal dismissed');
+          setIsSubmitting(false);
+        }
+      }
+    };
+
+    try {
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Failed to open Razorpay:", error);
+      handlePaymentError("Failed to open payment gateway");
+    }
+  };
+
+  // Form submission handler - only used after payment is complete
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // If payment is not already successful, initiate payment flow
     if (paymentStatus !== 'success') {
       handlePayment();
       return;
     }
     
-    setIsSubmitting(true);
-    
+    // If payment is already successful, just handle post-payment actions like PDF generation
     try {
-      // First save data to localStorage as a backup
-      saveUserData();
-      
-      // Check server connection before proceeding
-      const isServerConnected = await testServerConnection();
-      if (!isServerConnected) {
-        throw new Error("Server is not available. Please try again later.");
-      }
-      
-      // Make sure policy number is generated if not present
-      if (!userForm.policyNumber) {
-        const updatedForm = {
-          ...userForm,
-          policyNumber: generatePolicyNumber()
-        };
-        setUserForm(updatedForm);
-        localStorage.setItem('userData', JSON.stringify(updatedForm));
-      }
-      
-      // Prepare data for API
-      const formData = {
-        username: userForm.username || '',
-        email: userForm.email || '',
-        age: userForm.age || '',
-        mobile_number: userForm.mobile_number || '',
-        pan_number: userForm.pan_number || '',
-        aadhar_card: userForm.aadhar_card || '',
-        registration_number: userForm.registrationNumber || '',
-        address: userForm.address || '',
-        policy_number: userForm.policyNumber || '',
-        nominee_name: userForm.nominee_name || '',
-        nominee_relation: userForm.nominee_Relationship || '',
-        nominee_age: userForm.Nominee_Age || '',
-        period_of_insurance: '1 year',
-        payment_id: userForm.payment_id || '',
-        payment_status: userForm.payment_status || 'success'
-      };
-      
-      // Send user data to backend
-      try {
-        const userResponse = await axios.post(`${API_BASE_URL}/paymentuserdata`, formData, {
-          headers: { 'Content-Type': 'application/json' },
-        });
-        console.log('User data API response:', userResponse.data);
-      } catch (error) {
-        console.error('Error saving user data to database:', error);
-        throw new Error('Failed to save user data to database. ' + 
-          (error.response?.data?.message || error.message));
-      }
-      
-      // Generate PDF
-      downloadPDFLocally(userForm);
+      downloadPDFLocally();
       
       // Prepare PDF data for email
       const pdfFormData = new FormData();
@@ -1117,20 +1307,12 @@ return doc;
         setErrorMessage("Registration successful, but we couldn't email your PDF. Please download it using the button below.");
         setShowError(true);
       }
-      
-      // Show success modal if not already shown
-      if (!showSuccessModal) {
-        setShowSuccessModal(true);
-      }
-      
     } catch (error) {
       console.error('API Error:', error);
       const errMsg = error.response?.data?.message || error.message || 
                     "An error occurred connecting to the server. Please try again later.";
       setErrorMessage(errMsg);
       setShowError(true);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -1145,309 +1327,318 @@ return doc;
   };
 
   return (
-<div className="d-flex justify-content-center align-items-center py-5">
-  <Card className="shadow-lg border-0" style={{ width: '100%', maxWidth: '1000px' }}>
-    <Card.Body className="p-4 p-md-5">
-      <h2 className="text-center mb-4 fw-bold">User Registration</h2>
-      
-      {showError && (
-        <Alert variant="danger" onClose={closeErrorAlert} dismissible>
-          {errorMessage}
-        </Alert>
-      )}
-      
-      <Row className="g-4">
-        {/* Premium Details Card - Left Side - IMPROVED STICKY POSITIONING */}
-        <Col md={5}>
-          <div style={{position: 'sticky', top: '40px'}}>
-            <Card className="border-primary h-100 mb-4 mb-md-0">
-              <Card.Header className="bg-primary text-white text-center py-3">
-                <h4 className="mb-0 fw-bold">Premium Details</h4>
-              </Card.Header>
-              <Card.Body className="d-flex flex-column justify-content-between p-4">
-                {premiumComponents && Object.keys(premiumComponents).length > 0 ? (
-                  <>
-                    <div>
-                      <Row className="mb-3">
-                        <Col xs={8} className="text-start">
-                          <strong>Own-Damage-Premium:</strong>
-                        </Col>
-                        <Col xs={4} className="text-end">
-                          ₹{premiumComponents.ownDamagePremium || 0}
-                        </Col>
-                      </Row>
-                      
-                      {premiumComponents.add_ons && (
-                        <Row className="mb-3">
-                          <Col xs={8} className="text-start">
-                            <strong>Add-ons:</strong>
-                          </Col>
-                          <Col xs={4} className="text-end">
-                            ₹{premiumComponents.addOnsPremium || 0}
-                          </Col>
-                        </Row>
+    <>
+    <div className="d-flex justify-content-center align-items-center py-5">
+      <Card className="shadow-lg border-0" style={{ width: '100%', maxWidth: '1000px' }}>
+        <Card.Body className="p-4 p-md-5">
+          <h2 className="text-center mb-4 fw-bold">User Registration</h2>
+          
+          {showError && (
+            <Alert variant="danger" onClose={closeErrorAlert} dismissible>
+              {errorMessage}
+            </Alert>
+          )}
+          
+          <Row className="g-4">
+            {/* Premium Details Card - Left Side */}
+            <Col md={5}>
+              <div style={{position: 'sticky', top: '40px'}}>
+                <Card className="border-primary h-100 mb-4 mb-md-0">
+                  <Card.Header className="bg-primary text-white text-center py-3">
+                    <h4 className="mb-0 fw-bold">Premium Details</h4>
+                  </Card.Header>
+                  <Card.Body className="d-flex flex-column justify-content-between p-4">
+                    {premiumComponents && Object.keys(premiumComponents).length > 0 ? (
+                      <>
+                        <div>
+                          <Row className="mb-3">
+                            <Col xs={8} className="text-start">
+                              <strong>Own-Damage-Premium:</strong>
+                            </Col>
+                            <Col xs={4} className="text-end">
+                              ₹{premiumComponents.ownDamagePremium || 0}
+                            </Col>
+                          </Row>
+                          
+                          {premiumComponents.add_ons && (
+                            <Row className="mb-3">
+                              <Col xs={8} className="text-start">
+                                <strong>Add-ons:</strong>
+                              </Col>
+                              <Col xs={4} className="text-end">
+                                ₹{premiumComponents.addOnsPremium || 0}
+                              </Col>
+                            </Row>
+                          )}
+                          
+                          <Row className="mb-3">
+                            <Col xs={8} className="text-start">
+                              <strong>GST (18%):</strong>
+                            </Col>
+                            <Col xs={4} className="text-end">
+                              ₹{premiumComponents.gst || 0}
+                            </Col>
+                          </Row>
+
+                          <Row className="mb-3">
+                            <Col xs={8} className="text-start">
+                              <strong>NCB:</strong>
+                            </Col>
+                            <Col xs={4} className="text-end">
+                              ₹{premiumComponents.ncbDiscount || 0}
+                            </Col>
+                          </Row>
+                          
+                          <Row className="mb-3">
+                            <Col xs={8} className="text-start">
+                              <strong>Add-Ons Premium:</strong>
+                            </Col>
+                            <Col xs={4} className="text-end">
+                              ₹{premiumComponents.addOnsPremium || 0}
+                            </Col>
+                          </Row>
+                        </div>
+                        
+                        <div className="mt-4">
+                          <hr className="my-3" />
+                          <Row className="mb-0">
+                            <Col xs={7} className="text-start">
+                              <h5 className="fw-bold">Total Premium:</h5>
+                            </Col>
+                            <Col xs={5} className="text-end">
+                              <h5 className="text-success fw-bold">₹{premiumComponents?.totalPremium || 0}</h5>
+                            </Col>
+                          </Row>
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-muted mb-0">Premium details not available</p>
+                    )}
+                  </Card.Body>
+                  <Card.Footer className="bg-white border-top-0 p-4">
+                    <Button 
+                      variant="success" 
+                      type="button" 
+                      size="lg" 
+                      onClick={handlePayment} 
+                      className="w-100 fw-bold py-2"
+                      disabled={isSubmitting || paymentStatus === 'success'}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                          Processing...
+                        </>
+                      ) : paymentStatus === 'success' ? (
+                        'Payment Completed'
+                      ) : (
+                        `Pay Now - ₹${premiumComponents?.totalPremium || 0}`
                       )}
-                      
-                      <Row className="mb-3">
-                        <Col xs={8} className="text-start">
-                          <strong>GST (18%):</strong>
-                        </Col>
-                        <Col xs={4} className="text-end">
-                          ₹{premiumComponents.gst || 0}
-                        </Col>
-                      </Row>
+                    </Button>
+                  </Card.Footer>
+                </Card>
+              </div>
+            </Col>
 
-                      <Row className="mb-3">
-                        <Col xs={8} className="text-start">
-                          <strong>NCB:</strong>
-                        </Col>
-                        <Col xs={4} className="text-end">
-                          ₹{premiumComponents.ncbDiscount || 0}
-                        </Col>
-                      </Row>
-                      
-                      <Row className="mb-3">
-                        <Col xs={8} className="text-start">
-                          <strong>Add-Ons Premium:</strong>
-                        </Col>
-                        <Col xs={4} className="text-end">
-                          ₹{premiumComponents.addOnsPremium || 0}
-                        </Col>
-                      </Row>
-                    </div>
+            {/* Registration Form - Right Side */}
+            <Col md={7}>
+              <Card className="border h-100">
+                <Card.Body className="p-4">
+                  <Form id="registrationForm" onSubmit={handleSubmit}>
+                    {/* Personal Information */}
+                    <h5 className="mb-3">Personal Information</h5>
                     
-                    <div className="mt-4">
-                      <hr className="my-3" />
-                      <Row className="mb-0">
-                        <Col xs={7} className="text-start">
-                          <h5 className="fw-bold">Total Premium:</h5>
-                        </Col>
-                        <Col xs={5} className="text-end">
-                          <h5 className="text-success fw-bold">₹{premiumComponents?.totalPremium || 0}</h5>
-                        </Col>
-                      </Row>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-muted mb-0">Premium details not available</p>
-                )}
-              </Card.Body>
-              <Card.Footer className="bg-white border-top-0 p-4">
-                <Button 
-                  variant="success" 
-                  type="button" 
-                  size="lg" 
-                  disabled={isSubmitting || paymentStatus === 'success'}
-                  onClick={handlePayment}
-                  className="w-100 fw-bold py-2"
-                >
-                  {isSubmitting ? 'Processing...' : 
-                   paymentStatus === 'success' ? 'Payment Completed' : 
-                   `Pay Now - ₹${premiumComponents?.totalPremium || 0}`}
-                </Button>
-              </Card.Footer>
-            </Card>
+                    {/* Name and Email in parallel */}
+                    <Row className="mb-3">
+                      <Col md={6}>
+                        <Form.Group className="mb-3 mb-md-0">
+                          <Form.Control
+                            type="text"
+                            name="username"
+                            placeholder="Enter your name"
+                            onChange={handleChange}
+                            value={userForm?.username || ''}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group className="mb-3 mb-md-0">
+                          <Form.Control
+                            type="email"
+                            name="email"
+                            placeholder="Email address"
+                            onChange={handleChange}
+                            value={userForm?.email || ''}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+      
+                    {/* Age and Mobile in parallel */}
+                    <Row className="mb-3">
+                      <Col md={6}>
+                        <Form.Group className="mb-3 mb-md-0">
+                          <Form.Control
+                            type="number"
+                            name="age"
+                            placeholder="Age"
+                            onChange={handleChange}
+                            value={userForm?.age || ''}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group className="mb-3 mb-md-0">
+                          <Form.Control
+                            type="text"
+                            name="mobile_number"
+                            placeholder="Mobile number"
+                            onChange={handleChange}
+                            value={userForm?.mobile_number || ''}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+      
+                    {/* PAN and Aadhaar in parallel */}
+                    <Row className="mb-4">
+                      <Col md={6}>
+                        <Form.Group className="mb-3 mb-md-0">
+                          <Form.Control
+                            type="text"
+                            name="pan_number"
+                            placeholder="PAN number"
+                            onChange={handleChange}
+                            value={userForm?.pan_number || ''}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group className="mb-3 mb-md-0">
+                          <Form.Control
+                            type="text"
+                            name="aadhar_card"
+                            placeholder="Aadhaar number"
+                            onChange={handleChange}
+                            value={userForm?.aadhar_card || ''}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+
+                    {/* Nominee Information */}
+                    <h5 className="mb-3 mt-4">Nominee Information</h5>
+                    <Row className="mb-3">
+                      <Col md={6}>
+                        <Form.Group className="mb-3 mb-md-0">
+                          <Form.Control
+                            type="text"
+                            name="nominee_name"
+                            placeholder="Nominee Name"
+                            onChange={handleChange}
+                            value={userForm?.nominee_name || ''}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group className="mb-3 mb-md-0">
+                          <Form.Control
+                            type="number"
+                            name="Nominee_Age"
+                            placeholder="Nominee Age"
+                            onChange={handleChange}
+                            value={userForm?.Nominee_Age || ''}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Col md={12}>
+                        <Form.Group>
+                          <Form.Control
+                            type="text"
+                            name="nominee_Relationship"
+                            placeholder="Nominee Relationship"
+                            onChange={handleChange}
+                            value={userForm?.nominee_Relationship || ''}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    
+                    {/* Vehicle & Address Information */}
+                    <h5 className="mb-3 mt-4">Vehicle & Address Information</h5>
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        type="text"
+                        name="registrationNumber"
+                        placeholder="Vehicle registration number"
+                        onChange={handleChange}
+                        value={userForm?.registrationNumber || ''}
+                        required
+                      />
+                    </Form.Group>
+      
+                    <Form.Group className="mb-0">
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="address"
+                        placeholder="Enter your full address"
+                        onChange={handleChange}
+                        value={userForm?.address || ''}
+                        required
+                      />
+                    </Form.Group>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
+
+      {/* Success Modal */}
+      <Modal show={showSuccessModal} onHide={handleCloseSuccessModal} centered>
+        <Modal.Header closeButton className="border-bottom pb-3">
+          <Modal.Title className="fw-bold">Payment Successful!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="py-4">
+          <div className="text-center">
+            <i className="fa fa-check-circle text-success" style={{ fontSize: '54px' }}></i>
+            <h4 className="mt-4 mb-3">Thank you for your payment!</h4>
+            <p>Your registration details have been sent to your email address. Please check your inbox.</p>
+            <p className="mt-2"><strong>Policy Number:</strong> {userForm.policyNumber || 'N/A'}</p>
+            <div className="mt-4">
+              <Button 
+                variant="outline-primary" 
+                onClick={downloadPDFLocally}
+                className="px-4 py-2"
+              >
+                Download PDF Copy
+              </Button>
+            </div>
           </div>
-        </Col>
-
-        {/* Registration Form - Right Side - IMPROVED SPACING AND LAYOUT */}
-        <Col md={7}>
-          <Card className="border h-100">
-            <Card.Body className="p-4">
-              <Form id="registrationForm" onSubmit={handleSubmit}>
-                {/* Personal Information */}
-                <h5 className="mb-3">Personal Information</h5>
-                
-                {/* Name and Email in parallel - CONSISTENT SPACING */}
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group className="mb-3 mb-md-0">
-                      <Form.Control
-                        type="text"
-                        name="username"
-                        placeholder="Enter your name"
-                        onChange={handleChange}
-                        value={userForm?.username || ''}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3 mb-md-0">
-                      <Form.Control
-                        type="email"
-                        name="email"
-                        placeholder="Email address"
-                        onChange={handleChange}
-                        value={userForm?.email || ''}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-  
-                {/* Age and Mobile in parallel */}
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group className="mb-3 mb-md-0">
-                      <Form.Control
-                        type="number"
-                        name="age"
-                        placeholder="Age"
-                        onChange={handleChange}
-                        value={userForm?.age || ''}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3 mb-md-0">
-                      <Form.Control
-                        type="text"
-                        name="mobile_number"
-                        placeholder="Mobile number"
-                        onChange={handleChange}
-                        value={userForm?.mobile_number || ''}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-  
-                {/* PAN and Aadhaar in parallel */}
-                <Row className="mb-4">
-                  <Col md={6}>
-                    <Form.Group className="mb-3 mb-md-0">
-                      <Form.Control
-                        type="text"
-                        name="pan_number"
-                        placeholder="PAN number"
-                        onChange={handleChange}
-                        value={userForm?.pan_number || ''}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3 mb-md-0">
-                      <Form.Control
-                        type="text"
-                        name="aadhar_card"
-                        placeholder="Aadhaar number"
-                        onChange={handleChange}
-                        value={userForm?.aadhar_card || ''}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                {/* Nominee Information - SECTION HEADING ADDED */}
-                <h5 className="mb-3 mt-4">Nominee Information</h5>
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group className="mb-3 mb-md-0">
-                      <Form.Control
-                        type="text"
-                        name="nominee_name"
-                        placeholder="Nominee Name"
-                        onChange={handleChange}
-                        value={userForm?.nominee_name || ''}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3 mb-md-0">
-                      <Form.Control
-                        type="number"
-                        name="Nominee_Age"
-                        placeholder="Nominee Age"
-                        onChange={handleChange}
-                        value={userForm?.Nominee_Age || ''}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <Row className="mb-4">
-                  <Col md={12}>
-                    <Form.Group>
-                      <Form.Control
-                        type="text"
-                        name="nominee_Relationship"
-                        placeholder="Nominee Relationship"
-                        onChange={handleChange}
-                        value={userForm?.nominee_Relationship || ''}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                
-                {/* Vehicle & Address Information - SECTION HEADING ADDED */}
-                <h5 className="mb-3 mt-4">Vehicle & Address Information</h5>
-                <Form.Group className="mb-3">
-                  <Form.Control
-                    type="text"
-                    name="registrationNumber"
-                    placeholder="Vehicle registration number"
-                    onChange={handleChange}
-                    value={userForm?.registrationNumber || ''}
-                    required
-                  />
-                </Form.Group>
-  
-                <Form.Group className="mb-0">
-                  {/* <Form.Label>Home Address <span className="text-danger">*</span></Form.Label> */}
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    name="address"
-                    placeholder="Enter your full address"
-                    onChange={handleChange}
-                    value={userForm?.address || ''}
-                    required
-                  />
-                </Form.Group>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Card.Body>
-  </Card>
-
-  {/* Success Modal */}
-  <Modal show={showSuccessModal} onHide={handleCloseSuccessModal} centered>
-    <Modal.Header closeButton className="border-bottom pb-3">
-      <Modal.Title className="fw-bold">Payment Successful!</Modal.Title>
-    </Modal.Header>
-    <Modal.Body className="py-4">
-      <div className="text-center">
-        <i className="fa fa-check-circle text-success" style={{ fontSize: '54px' }}></i>
-        <h4 className="mt-4 mb-3">Thank you for your payment!</h4>
-        <p>Your registration details have been sent to your email address. Please check your inbox.</p>
-        <div className="mt-4">
-          <Button 
-            variant="outline-primary" 
-            onClick={downloadPDFLocally}
-            className="px-4 py-2"
-          >
-            Download PDF Copy
+        </Modal.Body>
+        <Modal.Footer className="border-top pt-3">
+          <Button variant="success" onClick={handleCloseSuccessModal} className="px-4">
+            Close
           </Button>
-        </div>
-      </div>
-    </Modal.Body>
-    <Modal.Footer className="border-top pt-3">
-      <Button variant="success" onClick={handleCloseSuccessModal} className="px-4">
-        Close
-      </Button>
-    </Modal.Footer>
-  </Modal>
-</div>
+        </Modal.Footer>
+      </Modal>
+    </div>
+    </>
   );
-};
+}
 
 export default FormPage;

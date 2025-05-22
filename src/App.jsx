@@ -1,72 +1,81 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 import Navbar from "./Header/Navbar/Navbar.jsx";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Home from "./Components/Pages/Home/Home.jsx";
-import Login from "./Components/Pages/Authentication/Login/Login.jsx";
 import Footer from "./Header/Footer/Footer.jsx";
+import Chat from "./ChatBot/Chat.jsx";
+
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import Abouts from "./Abouts/Abouts.jsx"; 
-import UserData from "./Features/product/CarInsurance/IDV/UserData.jsx";
-import Intimate from "./Claims/IntimateClaims/Intimate.jsx";
+
+// Pages
+import Home from "./Components/Pages/Home/Home.jsx";
+import Abouts from "./Abouts/Abouts.jsx";
 import Blog from "./Blog/Blog.jsx";
+import Login from "./Components/Pages/Authentication/Login/Login.jsx";
+
+// Insurance
+import Carinsurance from "./Features/product/CarInsurance/CarInsurance.jsx";
+import UserData from "./Features/product/CarInsurance/IDV/UserData.jsx";
+import User from "./Features/product/CarInsurance/User-Data/User.jsx";
 import Bikeinsurance from "./Features/product/Bikeinsurance/Bikeinsurance.jsx";
 import Healthinsurance from "./Features/product/Healthinsurance/Healthinsurance.jsx";
 import Homeinsurance from "./Features/product/Homeinsurance/Homeinsurance.jsx";
+import Autoinsurance from "./Features/product/Autoinsurance/Autoinsurance.jsx";
 
-//footer links
- import Faq from "./Features/product/Faq/Faq.jsx";
- import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx"
-
-
-import  Autoinsurance  from "./Features/product/Autoinsurance/Autoinsurance.jsx";
-import User from "./Features/product/CarInsurance/User-Data/User.jsx";
-import Carinsurance from "./Features/product/CarInsurance/CarInsurance.jsx";
+// Claims
+import Intimate from "./Claims/IntimateClaims/Intimate.jsx";
 import Document from "./Claims/DocumentUpload/Document.jsx";
-import Policy from "./Policy/Policy.jsx";
-import FormPage from "./Form/FormPage.jsx";
-import Chat from "./ChatBot/Chat.jsx";
+
+// Footer Pages
+import Faq from "./Features/product/Faq/Faq.jsx";
+import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx";
 import Termcondition from "./Features/product/Termcondition/Termcondition.jsx";
 import Support from "./Features/product/Support/Support.jsx";
 import { Privacypolicy } from "./Features/product/Privacypolicy/Privacypolicy.jsx";
 
-
+// Others
+import Policy from "./Policy/Policy.jsx";
+import FormPage from "./Form/FormPage.jsx";
+import Googletranslation from "./Goggle/Googletranslation.jsx";
 
 function App() {
+
   return (
     <>
+          <Googletranslation/>
+
       <Navbar />
-      
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/aboutus" element={<Abouts />} />
-        <Route path="/Blog" element={<Blog />} />
-        
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/login" element={<Login />} />
+
         <Route path="/carinsurance" element={<Carinsurance />} />
-        <Route path="/user-data" element={<UserData/>}/>
-        <Route path="/Bikeinsurance" element={<Bikeinsurance />} />
-        <Route path="/Healthinsurance" element={<Healthinsurance />} />
-        <Route path="/Autoinsurance" element={<Autoinsurance />} />
-        <Route path="/Homeinsurance" element={<Homeinsurance />} />
+        <Route path="/user-data" element={<UserData />} />
+        <Route path="/user" element={<User />} />
+        <Route path="/bikeinsurance" element={<Bikeinsurance />} />
+        <Route path="/healthinsurance" element={<Healthinsurance />} />
+        <Route path="/homeinsurance" element={<Homeinsurance />} />
+        <Route path="/autoinsurance" element={<Autoinsurance />} />
 
         <Route path="/faq" element={<Faq />} />
         <Route path="/companyinfo" element={<Companyinfo />} />
-        {/* <Route path="/privacypolicy" element={<Privacypolicy/>} /> */}
-        
-        <Route path="/termcondition" element={<Termcondition/>} />
-        <Route path="/support" element={<Support/>} />
+        <Route path="/termcondition" element={<Termcondition />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/privacypolicy" element={<Privacypolicy />} />
 
-        <Route path="/login" element={<Login />} />
         <Route path="/intimateclaims" element={<Intimate />} />
-        <Route path="/documentupload" element={<Document/>}/>
-        <Route path="/policy" element={<Policy/>}/>
-
-        <Route path="/user" element={<User />} />
-        <Route path="/formpage" element={<FormPage/>}/>
+        <Route path="/documentupload" element={<Document />} />
+        <Route path="/policy" element={<Policy />} />
+        <Route path="/formpage" element={<FormPage />} />
       </Routes>
-      
+
       <Footer />
-      <Chat/>
+      <Chat />
     </>
   );
 }

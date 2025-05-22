@@ -16,6 +16,7 @@ import support from "../../../assets/reuseimage/help-desk.png"
 import policies from "../../../assets/reuseimage/job.png";
 import paperless from "../../../assets/reuseimage/paperless (1).png"
 import secure from "../../../assets/reuseimage/secure-payment.png"
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -40,6 +41,8 @@ import { PenBox } from "lucide-react";
 import Favourite from "./Favourite/Favourite";
 
 const Home = () => {
+    const { t } = useTranslation();
+
   const [selectedCategory, setSelectedCategory] = useState("Car");
   const [focusField, setFocusField] = useState(null);
   const [bikeInsuranceType, setBikeInsuranceType] = useState(null);
@@ -85,7 +88,7 @@ const Home = () => {
             <Col lg={5} md={5} sm={12} className="mb-3 mb-md-0">
               <Form.Group className="position-relative text-center">
                 <Form.Label className="fw-bold text-secondary">
-                  <FaIdCard className="me-2" /> Mobile Number
+                  <FaIdCard className="me-2" /> {t ('Mobile Number')}
                 </Form.Label>
                 <Form.Control
                   type="text"

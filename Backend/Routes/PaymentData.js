@@ -82,16 +82,62 @@ router.post('/paymentuserdata', async (req, res) => {
       nominee_name,
       nominee_age,
       nominee_relation,
-      period_of_insurance
+      period_of_insurance,
     } = req.body;
 
-    // if (!username || !email || !mobile_number || !period_of_insurance?.startDate || !period_of_insurance?.endDate) {
-    //   return res.status(400).json({ message: 'Required fields missing' });
-    // }
-
-    // ✅ Convert to PostgreSQL daterange literal
-    const { startDate, endDate } = period_of_insurance;
-    const periodRange = `[${startDate},${endDate})`; // inclusive start, exclusive end
+    // Enhanced period_of_insurance handling
+    let periodRange = null;
+    
+    if (period_of_insurance) {
+      console.log('Period of insurance type:', typeof period_of_insurance);
+      console.log('Period of insurance value:', period_of_insurance);
+      
+      try {
+        // Case 1: If it's already a properly formatted string
+        if (typeof period_of_insurance === 'string' && 
+            (period_of_insurance.startsWith('[') || period_of_insurance.startsWith('('))) {
+          periodRange = period_of_insurance;
+        }
+        // Case 2: If it's an object with startDate and endDate as Date objects or ISO strings
+        else if (typeof period_of_insurance === 'object') {
+          let startDate, endDate;
+          
+          // Handle different possible formats of the object
+          if (period_of_insurance.startDate && period_of_insurance.endDate) {
+            startDate = period_of_insurance.startDate;
+            endDate = period_of_insurance.endDate;
+          } else if (period_of_insurance.fromFormatted && period_of_insurance.toFormatted) {
+            // Try to parse formatted dates like "20 May 2025"
+            startDate = new Date(period_of_insurance.fromFormatted);
+            endDate = new Date(period_of_insurance.toFormatted);
+          }
+          
+          // Convert to ISO date strings if they're Date objects
+          if (startDate instanceof Date || (typeof startDate === 'string' && startDate.includes('T'))) {
+            startDate = new Date(startDate).toISOString().split('T')[0];
+          }
+          
+          if (endDate instanceof Date || (typeof endDate === 'string' && endDate.includes('T'))) {
+            endDate = new Date(endDate).toISOString().split('T')[0];
+          }
+          
+          // Final validation of the date format
+          const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+          if (dateRegex.test(startDate) && dateRegex.test(endDate)) {
+            periodRange = `[${startDate},${endDate}]`;
+            console.log('Successfully formatted period_of_insurance:', periodRange);
+          } else {
+            console.log('Invalid date format after processing:', { startDate, endDate });
+          }
+        }
+      } catch (error) {
+        console.error('Error processing period_of_insurance:', error);
+      }
+    }
+    
+    if (!periodRange) {
+      console.log('Could not format period_of_insurance, using null');
+    }
 
     // Insert into database
     const result = await db.query(
@@ -101,18 +147,18 @@ router.post('/paymentuserdata', async (req, res) => {
        RETURNING id`,
       [
         username,
-        age,
+        age || null,
         mobile_number,
-        registration_number,
-        aadhar_card,
+        registration_number || null,
+        aadhar_card || null,
         email,
-        address,
-        pan_number,
-        policy_number,
-        nominee_name,
-        nominee_age,
-        nominee_relation,
-        periodRange // ✅ Use the formatted daterange string
+        address || null,
+        pan_number || null,
+        policy_number || null,
+        nominee_name || null,
+        nominee_age || null,
+        nominee_relation || null,
+        periodRange,
       ]
     );
 
@@ -129,7 +175,104 @@ router.post('/paymentuserdata', async (req, res) => {
     });
   }
 });
+// 
+router.get('/policy', async (req, res) => {
+  console.log('Checking policy:', req.query.policyNumber);
 
+  try {
+    const policyNumber = req.query.policyNumber;
+    
+    if (!policyNumber) {
+      return res.status(400).json({ 
+        message: 'Policy number is required',
+        exists: false
+      });
+    }
+
+    // Query database to check if policy exists
+    const policyResult = await db.query(
+      `SELECT 
+        policy_number, 
+        username, 
+        email, 
+        mobile_number, 
+        registration_number,
+        period_of_insurance
+      FROM user_payment_data 
+      WHERE policy_number = $1`,
+      [policyNumber]
+    );
+
+    // If no policy found
+    if (policyResult.rows.length === 0) {
+      return res.status(404).json({
+        message: 'Policy not found',
+        exists: false
+      });
+    }
+
+    const policyData = policyResult.rows[0];
+    
+    // Check if period_of_insurance exists and is valid
+    let isPolicyValid = true;
+    let expiryMessage = null;
+    
+    if (policyData.period_of_insurance) {
+      try {
+        // Extract the date range from PostgreSQL daterange format
+        // Format is typically "[start_date,end_date)" 
+        const rangeStr = policyData.period_of_insurance;
+        const matches = rangeStr.match(/\[(.+),(.+)\)/);
+        
+        if (matches && matches.length === 3) {
+          const startDate = new Date(matches[1]);
+          const endDate = new Date(matches[2]);
+          const currentDate = new Date();
+          
+          // Check if the policy has expired
+          if (currentDate > endDate) {
+            isPolicyValid = false;
+            expiryMessage = 'Your policy has expired. Please renew it to continue.';
+          }
+          
+          // Return extracted dates in the response
+          policyData.periodOfInsurance = {
+            startDate: startDate.toISOString().split('T')[0],
+            endDate: endDate.toISOString().split('T')[0]
+          };
+        }
+      } catch (error) {
+        console.error('Error parsing period_of_insurance:', error);
+      }
+    }
+    
+    // Return policy data
+    return res.status(200).json({
+      message: isPolicyValid ? 'Policy is valid' : expiryMessage,
+      exists: true,
+      isValid: isPolicyValid,
+      policyData: {
+        policyNumber: policyData.policy_number,
+        username: policyData.username,
+        email: policyData.email,
+        mobileNumber: policyData.mobile_number,
+        registrationNumber: policyData.registration_number,
+        periodOfInsurance: policyData.periodOfInsurance
+      }
+    });
+    
+  } catch (err) {
+    console.error('Database error in policy check:', err);
+    res.status(500).json({
+      message: 'Error checking policy information',
+      error: err.message,
+      exists: false
+    });
+  }
+});
+
+
+// 
 
 // Handle PDF email sending with robust error handling for multipart/form-data
 router.post('/send-pdf-email', (req, res) => {
@@ -251,5 +394,3 @@ router.post('/send-pdf-email', (req, res) => {
 });
 
 module.exports = router;
-
-
