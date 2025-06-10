@@ -40,6 +40,7 @@ import travelicon from "../../../../src/assets/Home/travel-icon.png";
 import Products from "./Products/Products";
 import { PenBox } from "lucide-react";
 import Favourite from "./Favourite/Favourite";
+import InsuranceBanner from "./InsuranceBanner/InsuranceBanner.JSX";
 
 const Home = () => {
 
@@ -428,7 +429,10 @@ const Home = () => {
       <div className="py-3">
         <Seprate />
       </div>
-      
+
+
+      {/*  */}
+      <InsuranceBanner/>
      
 
       <div className="py-3">

@@ -198,14 +198,6 @@ const Blog = () => {
 </Card>
 
 
-            {/* Trending Section */}
-            {/* <Card className="mb-4 border-0 shadow-sm">
-              <Card.Header className="bg-white border-bottom">
-                <h5 className="mb-0 text-danger">Trending Now</h5>
-              </Card.Header>
-              <Card.Body className="p-0"></Card.Body>
-            </Card> */}
-
             {/* Latest Post */}
             <Card className="mb-4 border-0 shadow-sm">
               <Card.Header className="bg-white border-bottom">
@@ -236,20 +228,6 @@ const Blog = () => {
                 </ul>
               </Card.Body>
             </Card>
-
-            {/* Tags */}
-            {/* <Card className="mb-4 border-0 shadow-sm">
-              <Card.Header className="bg-white border-bottom">
-                <h5 className="mb-0 text-danger">Latest Tags</h5>
-              </Card.Header>
-              <Card.Body>
-                {tags.map((tag) => (
-                  <Badge key={tag.id} bg="primary" className="me-2 mb-2 p-2">
-                    {tag.name}
-                  </Badge>
-                ))}
-              </Card.Body>
-            </Card> */}
           </Col>
         </Row>
       </Container>

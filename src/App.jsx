@@ -7,6 +7,7 @@ import Chat from "./ChatBot/Chat.jsx";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+// import './i18n';
 
 // Pages
 import Home from "./Components/Pages/Home/Home.jsx";
@@ -26,7 +27,7 @@ import Autoinsurance from "./Features/product/Autoinsurance/Autoinsurance.jsx";
 import Intimate from "./Claims/IntimateClaims/Intimate.jsx";
 // Footer links
 import Faq from "./Features/product/Faq/Faq.jsx";
-import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx"
+import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx";
 import Document from "./Claims/DocumentUpload/Document.jsx";
 
 // Footer Pages
@@ -44,6 +45,10 @@ import Dashboard from "./Admin/Dashboard.jsx";
 import AdminCarinsurance from "./Admin/AdminCarinsurance.jsx";
 import ProtectedRoute from "./ProtectedRoutes/ProtectedRoute.jsx";
 import ScroolTop from "./ScroolToTop/ScroolTop.jsx";
+import Awards from "./Features/product/Award/Awards.jsx";
+// import { Award } from "lucide-react";
+
+// import ScrollToTopButton from "./Reuse/ScrollToTopButton/ScrollToTopButton.jsx";
 
 function App() {
   const location = useLocation();
@@ -57,8 +62,11 @@ function App() {
       <Googletranslation />
       
       {/* Only show Navbar if not on admin/dashboard routes */}
-      {!isAdminRoute && <Navbar />}
+      {/* {!isAdminRoute && <Navbar />} */}
       {/* {!isAdminRoute && <Googletranslation/>} */}
+
+      <Navbar />
+
       <Routes>
         {/* Admin Routes - no navbar/footer */}
         <Route path="/admin/*" element={<Admin />} />
@@ -94,6 +102,11 @@ function App() {
         <Route path="/documentupload" element={<Document />} />
         <Route path="/claimprocess" element={<Claimprocess />} />
 
+
+        {/* Award routes */}
+
+   <Route path="/Award" element={<Awards/>}/>
+      
         {/* Other Routes */}
         <Route path="/policy" element={<Policy />} />
         <Route path="/formpage" element={<FormPage />} />
@@ -101,12 +114,17 @@ function App() {
           <ScroolTop/>
 
       {/* Only show Footer and Chat if not on admin/dashboard routes */}
-      {!isAdminRoute && (
+      {/* {!isAdminRoute && (
         <>
           <Footer />
           <Chat />
         </>
-      )}
+      )} */}
+      {/* <ScrollToTopButton /> */}
+
+      <Footer />
+
+      <Chat />
     </>
   );
 }

@@ -1,9 +1,12 @@
+
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import { UserProvider } from '../src/Context/Usercontext';
-import './i18n.js'; // ✅ Import this!
 
+// Your theme object
+
+// Your other imports for Grafana Faro remain the same
 import { matchRoutes } from 'react-router-dom';
 import { 
   initializeFaro, 
@@ -18,17 +21,11 @@ initializeFaro({
   app: {
     name: 'Global Health',
     version: '1.0.0',
-    environment: 'production'
+    environment: 'production',
   },
-  
   instrumentations: [
-    // Mandatory, omits default instrumentations otherwise.
     ...getWebInstrumentations(),
-
-    // Tracing package to get end-to-end visibility for HTTP requests.
     new TracingInstrumentation(),
-
-    // React integration for React applications.
     new ReactIntegration({
       router: createReactRouterV6DataOptions({
         matchRoutes,
@@ -40,7 +37,7 @@ initializeFaro({
 createRoot(document.getElementById('root')).render(
   <UserProvider>
     <BrowserRouter>
-      <App />
+        <App />
     </BrowserRouter>
   </UserProvider>
 );

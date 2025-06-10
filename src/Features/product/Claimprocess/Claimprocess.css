@@ -1,23 +1,15 @@
-
-.hed1 {
-    text-align: center;
-    font-size: 30px;
-    font-weight: 600;
-    font-style: initial;
-    padding: 10px;
-}
-
 .Claimprocess-section {
   padding: 60px 0;
   background-color: #f8f9fa;
 }
 
 .hed1 {
+  text-align: center;
   font-size: 2.5rem;
   font-weight: 700;
   color: #333;
   margin-bottom: 20px;
-  text-align: center;
+  padding: 10px;
 }
 
 .Claimprocess-section p {
@@ -32,12 +24,16 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: stretch;
-  gap: 20px;
 }
 
 .step-card {
   display: flex;
   margin-bottom: 20px;
+}
+
+/* Center the 4th card when it's alone in the row */
+.step-card:nth-child(4) {
+  margin: 0 auto 20px auto;
 }
 
 .step-card .card {
@@ -55,23 +51,41 @@
 
 .card-body {
   padding: 25px;
+<<<<<<< HEAD
+=======
+  /* display: flex; */
+>>>>>>> b3233833c8f88984e15c9500c15c622bcfaa7a3c
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
   text-align: left;
+  /* background-color:whitesmoke; */
 }
 
-.card-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #007bff;
+.card-title1 {
+  /* font-size: 1.5rem; */
+  font-weight: 400;
+  height: 70px;
+  width: 70px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+
+  /* color: #007bff; */
+  color: rgb(31, 16, 16);
+  font-weight: 700;
   margin-bottom: 15px;
+  border-radius: 50px;
+  background-color: yellowgreen;
 }
 
-.card-text {
+.card-text1 {
   font-size: 1rem;
-  color: #555;
+  /* color: #555; */
+  color: black;
   line-height: 1.6;
+  font-weight: 400;
   margin: 0;
 }
 
@@ -83,6 +97,11 @@
   
   .step-card {
     margin-bottom: 15px;
+  }
+  
+  /* Reset centering on mobile for better layout */
+  .step-card:nth-child(4) {
+    margin: 0 0 15px 0;
   }
   
   .card-body {
