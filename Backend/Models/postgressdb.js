@@ -2,10 +2,10 @@ const { Client } = require('pg');
 require('dotenv').config(); // Optional if using .env file
 
 const global = new Client({
-    host: 'localhost',
-    user: 'postgres',
+    host: '192.168.1.6',
+    user: 'govind',
     port: 5432,
-    password: 'Kunal@1234', // ideally from process.env.PG_PASSWORD
+    password: 'govind8429', // ideally from process.env.PG_PASSWORD
     database: 'global'
 });
 

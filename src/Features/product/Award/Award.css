@@ -1,0 +1,74 @@
+.text{
+    padding: 20px 15% 20px 15% ;
+    position: relative ;
+    background-color:rgb(23, 22, 22);
+    text-align: justify;
+    margin-bottom:2%;
+}
+.text p{
+    color: white;
+    font-size: 15px;
+}
+.text h1{
+    text-align: center;
+    color:goldenrod;
+}
+.second_heading h1{
+    text-align: center;
+    color:goldenrod;
+    margin-bottom: 2%;
+}
+
+
+
+
+
+.award-card {
+  /* background: #ffffff; */
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 25px;
+  height: 300px; /* Fixed card height */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.award-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.award-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 12px;
+  border-bottom: 2px solid blue;
+  padding-bottom: 6px;
+}
+
+.award-list {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding-left: 20px;
+  margin: 0;
+  color: #555;
+}
+
+.award-list li {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+/* Optional Scrollbar Styling */
+.award-list::-webkit-scrollbar {
+  width: 5px;
+}
+.award-list::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+  border-radius: 10px;
+}
