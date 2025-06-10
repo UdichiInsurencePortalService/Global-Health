@@ -1,0 +1,12 @@
+/* Admin.css */
+.admin-bg {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed, #3b82f6);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

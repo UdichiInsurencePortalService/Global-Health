@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
-import logo from "../../assets/Home/global-logo.png";
+import logo from "../../assets/Home/global-main-logo.png";
 import { Drawer, Form, Input, Row, Col, Button, Modal, Select } from "antd";
 import { ToastContainer } from "react-toastify";
 import { handleSuccess } from "../../errortoast";
@@ -193,7 +193,7 @@ const Navbar = ({ icon1, icon2 }) => {
         <div className="container-fluid px-3 px-lg-4">
           <div className="row align-items-center">
             {/* Logo Section */}
-            <div className="col-4 col-sm-3 col-lg-3">
+            <div className="col-6 col-sm-3 col-lg-3">
               <div className="logo">
                 <Link to="/" style={{ display: "flex", alignItems: "center" }}>
                   <img
@@ -201,7 +201,7 @@ const Navbar = ({ icon1, icon2 }) => {
                     alt="Logo"
                     className="img-fluid"
                     style={{
-                      maxWidth: "80px",
+                      maxWidth: "118px",
                       width: "100%",
                       height: "auto",
                       objectFit: "contain",
@@ -284,6 +284,115 @@ const Navbar = ({ icon1, icon2 }) => {
                       </li>
                     </ul>
                   </li>
+                  {/*  */}
+
+  <li className="nav-item dropdown">
+                    <Link to="#">Claims</Link>
+                    <ul
+                      className="dropdown"
+                      style={{
+                        width: "400px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        padding: "15px",
+                        listStyle: "none",
+                        margin: 0,
+                      }}
+                    >
+                         <li>
+                        <Link
+                          to="/Claimprocess"
+                          style={{
+                            textDecoration: "none",
+                            color: "inherit",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            cursor: "pointer",
+                            padding: "8px 12px",
+                            borderRadius: "4px",
+                            transition: "background-color 0.2s",
+                          }}
+                        >
+                          <img
+                            style={{
+                              height: "24px",
+                              width: "24px",
+                              flexShrink: 0,
+                            }}
+                            className="img-fluid"
+                            src={img6}
+                            alt="Document Upload"
+                          />
+                          <span style={{ fontSize: "14px", fontWeight: "500" }}>
+                            Claim Process
+                          </span>
+                        </Link>
+                      </li>
+                      <li style={{ marginBottom: "10px" }}>
+                        <Link
+                          to="/intimateclaims"
+                          style={{
+                            textDecoration: "none",
+                            color: "inherit",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            cursor: "pointer",
+                            padding: "8px 12px",
+                            borderRadius: "4px",
+                            transition: "background-color 0.2s",
+                          }}
+                        >
+                          <img
+                            style={{
+                              height: "24px",
+                              width: "24px",
+                              flexShrink: 0,
+                            }}
+                            className="img-fluid"
+                            src={img4}
+                            alt="Intimate Claims"
+                          />
+                          <span style={{ fontSize: "14px", fontWeight: "500" }}>
+                           Vehicle Intimate Claims
+                          </span>
+                        </Link>
+                      </li>
+                      {/* <li>
+                        <Link
+                          to="/documentupload"
+                          style={{
+                            textDecoration: "none",
+                            color: "inherit",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            cursor: "pointer",
+                            padding: "8px 12px",
+                            borderRadius: "4px",
+                            transition: "background-color 0.2s",
+                          }}
+                        >
+                          <img
+                            style={{
+                              height: "24px",
+                              width: "24px",
+                              flexShrink: 0,
+                            }}
+                            className="img-fluid"
+                            src={img5}
+                            alt="Document Upload"
+                          />
+                          <span style={{ fontSize: "14px", fontWeight: "500" }}>
+                            Document Upload
+                          </span>
+                        </Link>
+                      </li> */}
+                 
+                    </ul>
+                  </li>
+                  {/*  */}
 
                   <li className="nav-item dropdown">
                     <Link to="#">Support</Link>
@@ -372,111 +481,7 @@ const Navbar = ({ icon1, icon2 }) => {
                     </ul>
                   </li>
 
-                  <li className="nav-item dropdown">
-                    <Link to="#">Claims</Link>
-                    <ul
-                      className="dropdown"
-                      style={{
-                        width: "600px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        padding: "15px",
-                        listStyle: "none",
-                        margin: 0,
-                      }}
-                    >
-                      <li style={{ marginBottom: "10px" }}>
-                        <Link
-                          to="/intimateclaims"
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            cursor: "pointer",
-                            padding: "8px 12px",
-                            borderRadius: "4px",
-                            transition: "background-color 0.2s",
-                          }}
-                        >
-                          <img
-                            style={{
-                              height: "24px",
-                              width: "24px",
-                              flexShrink: 0,
-                            }}
-                            className="img-fluid"
-                            src={img4}
-                            alt="Intimate Claims"
-                          />
-                          <span style={{ fontSize: "14px", fontWeight: "500" }}>
-                            Intimate Claims
-                          </span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/documentupload"
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            cursor: "pointer",
-                            padding: "8px 12px",
-                            borderRadius: "4px",
-                            transition: "background-color 0.2s",
-                          }}
-                        >
-                          <img
-                            style={{
-                              height: "24px",
-                              width: "24px",
-                              flexShrink: 0,
-                            }}
-                            className="img-fluid"
-                            src={img5}
-                            alt="Document Upload"
-                          />
-                          <span style={{ fontSize: "14px", fontWeight: "500" }}>
-                            Document Upload
-                          </span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/Claimprocess"
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            cursor: "pointer",
-                            padding: "8px 12px",
-                            borderRadius: "4px",
-                            transition: "background-color 0.2s",
-                          }}
-                        >
-                          <img
-                            style={{
-                              height: "24px",
-                              width: "24px",
-                              flexShrink: 0,
-                            }}
-                            className="img-fluid"
-                            src={img6}
-                            alt="Document Upload"
-                          />
-                          <span style={{ fontSize: "14px", fontWeight: "500" }}>
-                            Claim Process
-                          </span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
+                
 
                   <li>
                     <Link to="#" onClick={showDrawer}>
@@ -488,78 +493,7 @@ const Navbar = ({ icon1, icon2 }) => {
             </div>
 
             {/* Right Section - User Actions & Mobile Menu */}
-            <div className="col-8 col-sm-9 col-lg-3 d-flex justify-content-end align-items-center">
-              {/* Desktop User Section */}
-              <div className="get-quote d-none d-lg-flex align-items-center">
-                {username && (
-                  <span
-                    className="username-display me-2 text-truncate"
-                    style={{ maxWidth: "120px" }}
-                  >
-                    Hello, {username}
-                  </span>
-                )}
-                {username ? (
-                  <button
-                    onClick={handleLogout}
-                    className="logout-btn btn btn-outline-primary btn-sm"
-                  >
-                    Log Out
-                  </button>
-                ) : (
-                  <Link
-                    to="/login"
-                    className="navbar-btn btn btn-primary btn-sm"
-                  >
-                    Login
-                  </Link>
-                )}
-              </div>
-
-              {/* Mobile User Section */}
-              <div className="d-lg-none d-flex align-items-center me-2">
-                {username && (
-                  <span
-                    className="username-display d-none d-sm-inline text-truncate"
-                    style={{
-                      fontSize: "0.85rem",
-                      maxWidth: "100px",
-                    }}
-                  >
-                    {username}
-                  </span>
-                )}
-                {username ? (
-                  <button
-                    onClick={handleLogout}
-                    className="logout-btn btn btn-outline-primary btn-sm d-none d-sm-inline"
-                  >
-                    Log Out
-                  </button>
-                ) : (
-                  <Link
-                    to="/login"
-                    className="navbar-btn btn btn-primary btn-sm d-none d-sm-inline"
-                  >
-                    Login
-                  </Link>
-                )}
-              </div>
-
-              {/* Mobile Menu Toggle */}
-              <button
-                className="mobile-menu-toggle btn d-lg-none"
-                onClick={toggleMobileMenu}
-                style={{
-                  border: "none",
-                  background: "transparent",
-                  fontSize: "1.2rem",
-                  padding: "5px 10px",
-                }}
-              >
-                <MenuOutlined />
-              </button>
-            </div>
+            
           </div>
         </div>
       </header>

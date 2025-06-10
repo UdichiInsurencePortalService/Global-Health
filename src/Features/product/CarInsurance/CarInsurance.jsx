@@ -15,6 +15,7 @@ import dia from "../../../assets/dia.png";
 import acci from "../../../assets/acci.png";
 import third from "../../../assets/third.png";
 import add6 from "../../../assets/add6.png";
+import {motion} from 'motion/react'
 
 // reuseable component require
 import Reusechoose from "../../../Reuse/Reusechoose/Reusechoose";
@@ -607,6 +608,9 @@ const Carinsurance = () => {
           </Row>
         </div>
       </div>
+
+
+      {/*  */}
 
       <div className="car-section-info">
         <div className="container">

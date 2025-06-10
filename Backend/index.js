@@ -16,10 +16,9 @@ const AutoPostgressRoutes = require('./Routes/AutoPostgresRouter')
 const paymentdata = require('./Routes/PaymentData')
 const chat  = require('./Routes/chatRoutes.js')
 const RazorPayment = require('./Routes/RazorPayment.js')
-const Fileuplaod = require('./Routes/UserPolicyFile.js')
 const intailclaim  = require('./Routes/Intailclaim.js')
 const accidentform = require('./Routes/Accidentform.js')
-const submitclaim = require('./Routes/documentupload.js')
+const finaldocument = require('./Routes/Finaldocumentclaim.js')
 
 const app = express();
 
@@ -51,10 +50,9 @@ app.use('/api', AutoPostgressRoutes);
 app.use('/api', paymentdata);
 app.use('/api', chat);
 app.use('/api', RazorPayment);
-app.use('/api', Fileuplaod);
-app.use('/api',intailclaim)
-app.use('/api',accidentform)
-app.use('/api',submitclaim)
+app.use('/api',intailclaim);
+app.use('/api',accidentform);
+app.use('/api',finaldocument);
 
 // Session configuration
 app.use(

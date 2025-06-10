@@ -1,5 +1,6 @@
+
 import React from "react";
-import { Routes, Route,  } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./Header/Navbar/Navbar.jsx";
 import Footer from "./Header/Footer/Footer.jsx";
 import Chat from "./ChatBot/Chat.jsx";
@@ -11,7 +12,6 @@ import "./App.css";
 import Home from "./Components/Pages/Home/Home.jsx";
 import Abouts from "./Abouts/Abouts.jsx";
 import Blog from "./Blog/Blog.jsx";
-import Login from "./Components/Pages/Authentication/Login/Login.jsx";
 
 // Insurance
 import Carinsurance from "./Features/product/CarInsurance/CarInsurance.jsx";
@@ -40,19 +40,38 @@ import Claimprocess from "./Features/product/Claimprocess/Claimprocess.jsx";
 import Policy from "./Policy/Policy.jsx";
 import FormPage from "./Form/FormPage.jsx";
 import Googletranslation from "./Goggle/Googletranslation.jsx";
+import Dashboard from "./Admin/Dashboard.jsx";
+import AdminCarinsurance from "./Admin/AdminCarinsurance.jsx";
+import ProtectedRoute from "./ProtectedRoutes/ProtectedRoute.jsx";
+import ScroolTop from "./ScroolToTop/ScroolTop.jsx";
 
 function App() {
+  const location = useLocation();
+  
+  // Check if current route is admin, dashboard, or any admin sub-routes
+  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dashboard');
+
   return (
     <>
+
       <Googletranslation />
-      <Navbar />
       
+      {/* Only show Navbar if not on admin/dashboard routes */}
+      {!isAdminRoute && <Navbar />}
+      {/* {!isAdminRoute && <Googletranslation/>} */}
       <Routes>
-        <Route path="/admin" element={<Admin />} />
+        {/* Admin Routes - no navbar/footer */}
+        <Route path="/admin/*" element={<Admin />} />
+        <Route path="/dashboard" element= {<ProtectedRoute><Dashboard/></ProtectedRoute>}/>
+         <Route path="/insurance/car" element={<AdminCarinsurance/>} />
+
+
+        
+        {/* Regular Routes - with navbar/footer */}
+
         <Route path="/" element={<Home />} />
         <Route path="/aboutus" element={<Abouts />} />
         <Route path="/blog" element={<Blog />} />
-        <Route path="/login" element={<Login />} />
 
         {/* Insurance Routes */}
         <Route path="/carinsurance" element={<Carinsurance />} />
@@ -79,10 +98,16 @@ function App() {
         <Route path="/policy" element={<Policy />} />
         <Route path="/formpage" element={<FormPage />} />
       </Routes>
+          <ScroolTop/>
 
-      <Footer />
-      <Chat />
-      </>
+      {/* Only show Footer and Chat if not on admin/dashboard routes */}
+      {!isAdminRoute && (
+        <>
+          <Footer />
+          <Chat />
+        </>
+      )}
+    </>
   );
 }
 

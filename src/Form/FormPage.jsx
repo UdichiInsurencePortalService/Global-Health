@@ -230,7 +230,9 @@ const FormPage = () => {
     
     setUserForm(updatedForm);
     
-  const formData = {
+ const currentDate = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
+
+const formData = {
   username: updatedForm.username || '',
   email: updatedForm.email || '',
   age: updatedForm.age || '',
@@ -242,23 +244,25 @@ const FormPage = () => {
   policy_number: policyNumber,
   nominee_name: updatedForm.nominee_name || '',
   nominee_relation: updatedForm.nominee_Relationship || '',
-  nominee_age: updatedForm.nominee_Age || '',
+  nominee_age: updatedForm.nominee_age ||updatedForm?.Nominee_Age || '',
+  period_of_insurance: currentDate, // Use current date directly
+  Own_Damage_Premuin: premiumComponents?.ownDamagePremium || 'N/A',
+  GST: premiumComponents?.gst || 'N/A',
+  NCB: premiumComponents?.ncbDiscount || 'N/A',
+  Adds_ons_Premuin: premiumComponents?.addOnsPremium || 'N/A',
+  total_premiun: premiumComponents?.totalPremium || 'N/A',
+  idv:premiumComponents?.idv || 'N/A',
+  third_party_premuin:premiumComponents?.thirdPartyPremium || 'N/A',
   payment_id: updatedForm.payment_id || paymentResponse.razorpay_payment_id,
-  payment_status: 'success'
+  payment_status: 'success',
+  fuel_type: vehicleDetails?.fuel_type||'N/A',
+  date_of_buy:vehicleDetails?.registration_date || vehicleDetails?.registration_date || 'N/A',
+  maker_model:vehicleDetails?.maker_model ||'N/A',
+  engine_number:vehicleDetails?.engine_number || vehicleDetails?.engine_no || 'N/A',
+  chasis_number:vehicleDetails?.chasis_number || vehicleDetails?.chassis_no || 'N/A',
+  register_at:vehicleDetails?.register_at || vehicleDetails?.registered_at || 'N/A',
+  financer:vehicleDetails?.financer || 'N/A',
 };
-
-// Format the period_of_insurance as a PostgreSQL daterange string
-if (updatedForm?.periodOfInsurance || updatedForm?.period_of_insurance || userForm?.periodOfInsurance || userForm?.period_of_insurance) {
-  const periodObj = updatedForm?.periodOfInsurance || updatedForm?.period_of_insurance || 
-                   userForm?.periodOfInsurance || userForm?.period_of_insurance;
-                   
-  if (periodObj.startDate && periodObj.endDate) {
-    // Format dates as ISO strings without time part
-    const startDate = new Date(periodObj.startDate).toISOString().split('T')[0];
-    const endDate = new Date(periodObj.endDate).toISOString().split('T')[0];
-    formData.period_of_insurance = `[${startDate},${endDate}]`;
-  }
-}
 
 console.log("Saving user form data to PostgreSQL:", formData);
     try {
@@ -1051,23 +1055,9 @@ return doc;
     pdfBase64 = doc.output('datauristring');
     
     // Send PDF to server for database storage
-    console.log("Uploading PDF to database...");
-    const saveResult = await savePDFToDatabase({
-      pdfBase64,
-      userId: userData.id || generateRandomUserId(), // Use provided ID or generate random one
-      policyNumber: userForm.policyNumber,
-      fileName
-    }, userForm);
+   
     
-    if (saveResult.success) {
-      console.log("PDF saved to database successfully");
-      return true;
-    } else {
-      console.error("Error saving PDF to database:", saveResult.error);
-      setErrorMessage("PDF downloaded but failed to save to database: " + saveResult.error);
-      setShowError(true);
-      return false;
-    }
+    
   } catch (error) {
     console.error("Error processing PDF:", error);
     setErrorMessage("Failed to process PDF: " + error.message);
@@ -1089,111 +1079,7 @@ const generateRandomUserId = () => {
 };
 
 // Client API function to send PDF to server with retry logic
-const savePDFToDatabase = async (pdfData, userForm) => {
-  console.log("user form is>><<<", userForm);
-  const maxRetries = 2;
-  let retryCount = 0;
-  
-  // Validate required data before attempting to send
-  if (!pdfData.pdfBase64) {
-    console.error("Missing required field: pdfBase64");
-    return { success: false, error: "PDF data is missing" };
-  }
-  
-  if (!pdfData.userId) {
-    console.error("Missing required field: userId");
-    return { success: false, error: "User ID is missing" };
-  }
-  
-  const attemptUpload = async () => {
-    try {
-      console.log(`Attempt ${retryCount + 1} to upload PDF...`);
-      
-      // Log the size of the data being sent
-      const dataSize = JSON.stringify(pdfData).length / (1024 * 1024);
-      console.log(`Sending data of size: ${dataSize.toFixed(2)} MB`);
-      console.log("Request payload structure:", {
-        hasPdfBase64: !!pdfData.pdfBase64,
-        pdfBase64Type: typeof pdfData.pdfBase64,
-        pdfBase64Length: pdfData.pdfBase64 ? pdfData.pdfBase64.length : 0,
-        userId: pdfData.userId,
-        userIdType: typeof pdfData.userId,
-        policyNumber: userForm?.policyNumber,
-        fileName: pdfData.fileName
-      });
 
-      // Ensure the URL is correct
-      const apiUrl = 'http://localhost:8080/api/pdf/save';
-      console.log("Sending request to:", apiUrl);
-      
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          pdfBase64: pdfData.pdfBase64,
-          userId: pdfData.userId,
-          policyNumber: userForm?.policyNumber || null,
-          fileName: pdfData.fileName || 'document.pdf'
-        }),
-        // Adding timeout to prevent indefinite waiting
-        signal: AbortSignal.timeout(120000) // 120-second timeout for large files
-      });
-      
-      // Log the entire response for debugging
-      console.log("Response status:", response.status);
-      
-      const responseText = await response.text();
-      console.log("Response text:", responseText);
-      
-      if (!response.ok) {
-        let errorData;
-        try {
-          errorData = JSON.parse(responseText);
-        } catch (e) {
-          errorData = { error: responseText };
-        }
-        
-        if (response.status === 413) {
-          throw new Error(`File too large for upload (413 Payload Too Large). Please reduce document size.`);
-        } else {
-          throw new Error(`Server responded with status: ${response.status}. ${errorData.error || responseText}`);
-        }
-      }
-      
-      let data;
-      try {
-        data = JSON.parse(responseText);
-      } catch (e) {
-        throw new Error("Invalid JSON response from server");
-      }
-      
-      return data;
-    } catch (error) {
-      console.error(`Upload attempt ${retryCount + 1} failed:`, error);
-      
-      // Only retry for certain types of errors (not for 413 payload too large)
-      if (retryCount < maxRetries && !error.message.includes('413 Payload Too Large')) {
-        retryCount++;
-        // Exponential backoff: wait longer between retries
-        const delay = retryCount * 2000; // 2s, 4s
-        await new Promise(resolve => setTimeout(resolve, delay));
-        return attemptUpload();
-      }
-      
-      throw error;
-    }
-  };
-  
-  try {
-    const result = await attemptUpload();
-    return { success: true, ...result };
-  } catch (error) {
-    console.error("All upload attempts failed:", error);
-    return { success: false, error: error.message };
-  }
-};
 // Function to retrieve a PDF from the database by document ID
 
 
@@ -1353,10 +1239,26 @@ const savePDFToDatabase = async (pdfData, userForm) => {
                         <div>
                           <Row className="mb-3">
                             <Col xs={8} className="text-start">
+                              <strong>IDV:</strong>
+                            </Col>
+                            <Col xs={4} className="text-end">
+                              ₹{premiumComponents.idv || 0}
+                            </Col>
+                          </Row>
+                          <Row className="mb-3">
+                            <Col xs={8} className="text-start">
                               <strong>Own-Damage-Premium:</strong>
                             </Col>
                             <Col xs={4} className="text-end">
                               ₹{premiumComponents.ownDamagePremium || 0}
+                            </Col>
+                          </Row>
+                          <Row className="mb-3">
+                            <Col xs={8} className="text-start">
+                              <strong>Third-Party-Premuin:</strong>
+                            </Col>
+                            <Col xs={4} className="text-end">
+                              ₹{premiumComponents.thirdPartyPremium || 0}
                             </Col>
                           </Row>
                           

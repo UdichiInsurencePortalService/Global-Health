@@ -4,6 +4,8 @@ import "./Home.css";
 import "swiper/css";
 import "swiper/css/pagination";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from 'react-router-dom';
+
 
 // import Insurance from "./Insurance/Insurance";
 import Choose from "./ChooseUs/Choose";
@@ -16,7 +18,6 @@ import support from "../../../assets/reuseimage/help-desk.png"
 import policies from "../../../assets/reuseimage/job.png";
 import paperless from "../../../assets/reuseimage/paperless (1).png"
 import secure from "../../../assets/reuseimage/secure-payment.png"
-import { useTranslation } from 'react-i18next';
 
 
 
@@ -41,7 +42,28 @@ import { PenBox } from "lucide-react";
 import Favourite from "./Favourite/Favourite";
 
 const Home = () => {
-    const { t } = useTranslation();
+
+  const handleSubmit = () => {
+  switch (selectedCategory) {
+    case "Car":
+      navigate("/carinsurance");
+      break;
+    case "Bike":
+      navigate("/bikeinsurance");
+      break;
+    case "Health":
+      navigate("/healthinsurance");
+      break;
+    case "Home":
+      navigate("/homeinsurance");
+      break;
+    default:
+      break;
+  }
+};
+
+  const navigate = useNavigate();
+
 
   const [selectedCategory, setSelectedCategory] = useState("Car");
   const [focusField, setFocusField] = useState(null);
@@ -74,10 +96,10 @@ const Home = () => {
   ];
 
   const categories = [
-    { name: "Car", icon: caricon },
-    { name: "Bike", icon: bikeicon },
-    { name: "Health", icon: healthicon },
-    { name: "Home", icon: homeicon },
+    { name: "Car", icon: caricon, link:'/carinsurance' },
+    { name: "Bike", icon: bikeicon, link:'/Bikeinsurance' },
+    { name: "Health", icon: healthicon , link:'/Healthinsurance' },
+    { name: "Home", icon: homeicon,link:'/Homeinsurance' },
   ];
 
   const renderFormFields = () => {
@@ -88,7 +110,7 @@ const Home = () => {
             <Col lg={5} md={5} sm={12} className="mb-3 mb-md-0">
               <Form.Group className="position-relative text-center">
                 <Form.Label className="fw-bold text-secondary">
-                  <FaIdCard className="me-2" /> {t ('Mobile Number')}
+                  <FaIdCard className="me-2" /> Mobile Number
                 </Form.Label>
                 <Form.Control
                   type="text"
@@ -369,22 +391,25 @@ const Home = () => {
                             <Form.Label className="fw-bold text-secondary invisible">
                               Button
                             </Form.Label>
-                            <motion.button
-                              className="btn w-100 d-flex align-items-center justify-content-center gap-2 py-2 rounded-lg"
-                              style={{
-                                backgroundColor: "#3498db",
-                                color: "white",
-                                border: "none",
-                                position: "relative",
-                              }}
-                              whileHover={{
-                                scale: 1.05,
-                                backgroundColor: "#2980b9",
-                              }}
-                              whileTap={{ scale: 0.95 }}
-                            >
-                              <span className="fw-bold">View Price</span>
-                            </motion.button>
+                            
+                          <motion.button
+  className="btn w-100 d-flex align-items-center justify-content-center gap-2 py-2 rounded-lg"
+  style={{
+    backgroundColor: "#3498db",
+    color: "white",
+    border: "none",
+    position: "relative",
+  }}
+  whileHover={{
+    scale: 1.05,
+    backgroundColor: "#2980b9",
+  }}
+  whileTap={{ scale: 0.95 }}
+  onClick={handleSubmit} // ✅ Add this
+>
+  <span className="fw-bold">View Price</span>
+</motion.button>
+
                           </div>
                         </Col>
                       </Row>
@@ -396,6 +421,9 @@ const Home = () => {
           </Row>
         </Container>
       </div>
+
+
+{/*  */}
 
       <div className="py-3">
         <Seprate />

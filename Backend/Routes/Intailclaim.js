@@ -59,7 +59,6 @@ router.use(express.json());
 router.post('/claims', async (req, res) => {
   const {
     policy_number,
-    user_id,
     email,
     registration_number,
     engine_number,
@@ -74,12 +73,10 @@ router.post('/claims', async (req, res) => {
     // Note: Fixed typo in column name from 'chasiss_number' to 'chassis_number'
     const result = await db.query(
       `INSERT INTO public.initial_claim
-        (policy_number, email, registration_number, engine_number,     chasiss_number
-, user_id)
-      VALUES ($1, $2, $3, $4, $5, $6)
+        (policy_number, email, registration_number, engine_number,     chasiss_number)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *`,
-      [policy_number, email, registration_number, engine_number,     chasiss_number
-, user_id]
+      [policy_number, email, registration_number, engine_number,     chasiss_number]
     );
 
     // Send confirmation email after successful database insertion
@@ -107,6 +104,27 @@ router.post('/claims', async (req, res) => {
     });
   }
 });
+
+// get api data 
+
+// GET all claims
+router.get('/getclaims', async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM initial_claim '); // Add ORDER BY if you have timestamp
+    return res.status(200).json({
+      success: true,
+      message: 'All claims retrieved successfully',
+      data: result.rows
+    });
+  } catch (error) {
+    console.error('Error retrieving claims:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve claims. Please try again later.'
+    });
+  }
+});
+
 
 /**
  * Send claim confirmation email using nodemailer

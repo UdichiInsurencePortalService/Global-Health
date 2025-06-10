@@ -83,9 +83,39 @@ router.post('/paymentuserdata', async (req, res) => {
       nominee_age,
       nominee_relation,
       period_of_insurance,
+      own_damage_premium,
+      Own_Damage_Premuin, // Alternative spelling from your data
+      gst,
+      GST, // Alternative case from your data
+      add_ons_premuim,
+      Adds_ons_Premuin, // Alternative spelling from your data
+      total_premiun,
+      ncb_discount,
+      NCB, // Alternative case from your data
+      payment_id,
+      payment_status,
+      idv,
+      third_party_premuin,
+       fuel_type,
+  date_of_buy,
+  maker_model,
+  engine_number,
+  chasis_number,
+  register_at,
+  financer,
+
     } = req.body;
 
-    // Enhanced period_of_insurance handling
+    // Use the correct field names based on what's actually being sent and handle data type conversion
+    const ownDamagePremium = parseFloat(own_damage_premium || Own_Damage_Premuin) || null;
+    const gstValue = parseFloat(gst || GST) || null;
+    const addOnsPremium = (add_ons_premuim === 'N/A' || Adds_ons_Premuin === 'N/A') ? null : parseFloat(add_ons_premuim || Adds_ons_Premuin) || null;
+    const ncbValue = parseFloat(ncb_discount || NCB) || null;
+    const totalPremium = parseFloat(total_premiun) || null;
+    const ageValue = parseInt(age) || null;
+    const nomineeAgeValue = parseInt(nominee_age) || null;
+
+    // Simplified period_of_insurance handling - accept current date/time or any format
     let periodRange = null;
     
     if (period_of_insurance) {
@@ -93,12 +123,35 @@ router.post('/paymentuserdata', async (req, res) => {
       console.log('Period of insurance value:', period_of_insurance);
       
       try {
-        // Case 1: If it's already a properly formatted string
+        // Case 1: If it's already a properly formatted PostgreSQL daterange string
         if (typeof period_of_insurance === 'string' && 
             (period_of_insurance.startsWith('[') || period_of_insurance.startsWith('('))) {
           periodRange = period_of_insurance;
         }
-        // Case 2: If it's an object with startDate and endDate as Date objects or ISO strings
+        // Case 2: If it's a simple date string (current date)
+        else if (typeof period_of_insurance === 'string') {
+          // Check if it's a valid date format
+          const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+          const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+          
+          if (dateRegex.test(period_of_insurance) || isoDateRegex.test(period_of_insurance)) {
+            // If it's a single date, use it as is for timestamp or convert to date
+            if (isoDateRegex.test(period_of_insurance)) {
+              // Full ISO timestamp - store as timestamp
+              periodRange = period_of_insurance;
+            } else {
+              // Just date - store as date
+              periodRange = period_of_insurance;
+            }
+          } else {
+            // Try to parse as date
+            const parsedDate = new Date(period_of_insurance);
+            if (!isNaN(parsedDate.getTime())) {
+              periodRange = parsedDate.toISOString().split('T')[0]; // Convert to YYYY-MM-DD
+            }
+          }
+        }
+        // Case 3: If it's an object with startDate and endDate
         else if (typeof period_of_insurance === 'object') {
           let startDate, endDate;
           
@@ -107,9 +160,11 @@ router.post('/paymentuserdata', async (req, res) => {
             startDate = period_of_insurance.startDate;
             endDate = period_of_insurance.endDate;
           } else if (period_of_insurance.fromFormatted && period_of_insurance.toFormatted) {
-            // Try to parse formatted dates like "20 May 2025"
             startDate = new Date(period_of_insurance.fromFormatted);
             endDate = new Date(period_of_insurance.toFormatted);
+          } else if (period_of_insurance.from && period_of_insurance.to) {
+            startDate = period_of_insurance.from;
+            endDate = period_of_insurance.to;
           }
           
           // Convert to ISO date strings if they're Date objects
@@ -125,44 +180,99 @@ router.post('/paymentuserdata', async (req, res) => {
           const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
           if (dateRegex.test(startDate) && dateRegex.test(endDate)) {
             periodRange = `[${startDate},${endDate}]`;
-            console.log('Successfully formatted period_of_insurance:', periodRange);
-          } else {
-            console.log('Invalid date format after processing:', { startDate, endDate });
           }
+        }
+        // Case 4: If it's a number (timestamp)
+        else if (typeof period_of_insurance === 'number') {
+          const date = new Date(period_of_insurance);
+          periodRange = date.toISOString().split('T')[0];
         }
       } catch (error) {
         console.error('Error processing period_of_insurance:', error);
       }
     }
     
+    // If no period provided or parsing failed, use current date as a range
     if (!periodRange) {
-      console.log('Could not format period_of_insurance, using null');
+      console.log('No valid period_of_insurance provided, using current date as range');
+      const currentDate = new Date().toISOString().split('T')[0];
+      const nextYearDate = new Date();
+      nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
+      const endDate = nextYearDate.toISOString().split('T')[0];
+      periodRange = `[${currentDate},${endDate}]`; // Create 1-year range from current date
+    }
+    
+    // Handle single date by converting to range
+    else if (typeof periodRange === 'string' && !periodRange.includes('[') && !periodRange.includes('(')) {
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (dateRegex.test(periodRange)) {
+        const startDate = periodRange;
+        const endDateObj = new Date(startDate);
+        endDateObj.setFullYear(endDateObj.getFullYear() + 1); // Add 1 year
+        const endDate = endDateObj.toISOString().split('T')[0];
+        periodRange = `[${startDate},${endDate}]`;
+        console.log('Converted single date to range:', periodRange);
+      }
     }
 
-    // Insert into database
-    const result = await db.query(
-      `INSERT INTO user_payment_data 
-       (username, age, mobile_number, registration_number, aadhar_card, email, address, pan_number, policy_number, nominee_name, nominee_age, nominee_relation, period_of_insurance)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-       RETURNING id`,
-      [
-        username,
-        age || null,
-        mobile_number,
-        registration_number || null,
-        aadhar_card || null,
-        email,
-        address || null,
-        pan_number || null,
-        policy_number || null,
-        nominee_name || null,
-        nominee_age || null,
-        nominee_relation || null,
-        periodRange,
-      ]
-    );
+    console.log('Final period_of_insurance value:', periodRange);
+
+    // Updated database query to include payment fields
+  
+
+// AFTER (fixed - removed trailing comma):
+const result = await db.query(
+  `INSERT INTO user_payment_data 
+   (username, age, mobile_number, registration_number, aadhar_card, email, address, pan_number, policy_number, nominee_name, nominee_age, nominee_relation, period_of_insurance, own_damage_premium, gst, add_ons_premuim, total_premiun, ncb_discount, payment_id, payment_status, idv, third_party_premuin, fuel_type, date_of_buy, maker_model, engine_number, chasis_number, register_at, financer)
+   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29)
+   RETURNING id`,
+  [
+    username,
+    ageValue,
+    mobile_number,
+    registration_number || null,
+    aadhar_card || null,
+    email,
+    address || null,
+    pan_number || null,
+    policy_number || null,
+    nominee_name || null,
+    nomineeAgeValue,
+    nominee_relation || null,
+    periodRange,
+    ownDamagePremium,
+    gstValue,
+    addOnsPremium,
+    totalPremium,
+    ncbValue,
+    payment_id || null,
+    payment_status || null,
+    idv,
+    third_party_premuin,
+    fuel_type || null,
+    date_of_buy || null,
+    maker_model || null,
+    engine_number || null,
+    chasis_number || null,
+    register_at || null,
+    financer || null
+  ]
+);
 
     console.log("Payment data saved successfully, ID:", result.rows[0].id);
+    console.log("Saved values:", {
+      own_damage_premium: ownDamagePremium,
+      gst: gstValue,
+      add_ons_premuim: addOnsPremium,
+      total_premiun: totalPremium,
+      ncb_discount: ncbValue,
+      age: ageValue,
+      nominee_age: nomineeAgeValue,
+      payment_id,
+      payment_status,
+      period_of_insurance: periodRange
+    });
+
     res.status(201).json({
       message: 'User data saved successfully',
       id: result.rows[0].id
@@ -175,6 +285,25 @@ router.post('/paymentuserdata', async (req, res) => {
     });
   }
 });
+//
+
+router.get('/getpaymentuserdata', async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM user_payment_data ORDER BY id DESC');
+    
+    res.status(200).json({
+      message: 'All user payment data retrieved successfully',
+      data: result.rows
+    });
+  } catch (err) {
+    console.error('Database error while fetching payment data:', err);
+    res.status(500).json({
+      message: 'Database error',
+      error: err.message
+    });
+  }
+});
+
 // 
 router.get('/policy', async (req, res) => {
   console.log('Checking policy:', req.query.policyNumber);
@@ -267,7 +396,7 @@ router.get('/policy', async (req, res) => {
       message: 'Error checking policy information',
       error: err.message,
       exists: false
-    });
+    }); 
   }
 });
 
