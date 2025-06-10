@@ -1,5 +1,6 @@
 import React from "react";
 import "./Claimprocess.css";
+import NeedHelp from "../../../Reuse/NeedHelp/NeedHelp";
 
 const Claimprocess = () => {
   const stepdata = [
@@ -38,11 +39,14 @@ const Claimprocess = () => {
           </div>
           <div className="row steps-container">
             {stepdata.map((item, index) => (
-              <div className="col-lg-12 col-md-6 col-sm-12 step-card" key={index}>
+              <div
+                className="col-lg-4 col-md-6 col-sm-12 step-card"
+                key={index}
+              >
                 <div className="card h-100">
                   <div className="card-body">
-                    <h5 className="card-title">{item.head}</h5>
-                    <p className="card-text">{item.desc}</p>
+                    <h5 className="card-title1">{item.head}</h5>
+                    <p className="card-text1">{item.desc}</p>
                   </div>
                 </div>
               </div>
@@ -50,6 +54,22 @@ const Claimprocess = () => {
           </div>
         </div>
       </div>
+      <NeedHelp
+        heading="Need Help?"
+        paragraph="Have queries related to Digit motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
+        head={["WhatsApp", "Email", "Contact"]}
+        contact={[
+          {
+            cont: "Connect with our self-serve chat bot support - 9818152403",
+          },
+          {
+            conta: "Connect Write to us at globalhealth@235@gmail.com",
+          },
+          {
+            conatac: "Call us on 9818152403",
+          },
+        ]}
+      />
     </>
   );
 };

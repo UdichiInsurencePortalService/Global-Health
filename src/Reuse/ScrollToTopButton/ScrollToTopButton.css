@@ -1,0 +1,55 @@
+/* ScrollToTopButton.css */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: all 0.3s ease-in-out;
+}
+
+.scroll-to-top-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.scroll-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  animation: bounce-up 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes bounce-up {
+  0% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(2px);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .scroll-to-top-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .scroll-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}

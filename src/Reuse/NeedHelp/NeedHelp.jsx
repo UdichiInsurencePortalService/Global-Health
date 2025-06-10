@@ -2,6 +2,7 @@
 
 
 import React from 'react';
+import "./needHelp.css"
 import { Phone, Mail, MapPin } from 'lucide-react'; // Icons (optional)
 
 const NeedHelp = ({ heading, paragraph, contact, head }) => {
@@ -17,7 +18,7 @@ const NeedHelp = ({ heading, paragraph, contact, head }) => {
           {head.map((item, index) => (
             <div className="col-lg-4 col-md-6 mb-4" key={index}>
               <div className="card shadow-lg border-0 h-100">
-                <div className="card-body text-center">
+                <div className="card-bodys text-center p-4">
                   <div className="mb-3 text-primary fs-3">
                     {icons[index] || <Phone />}
                   </div>

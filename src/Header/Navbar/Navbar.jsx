@@ -17,9 +17,24 @@ import img4 from "../../assets/reuseimage/paper.png";
 import img5 from "../../assets/reuseimage/file.png";
 import img6 from "../../assets/reuseimage/motor.png";
 
+// product icone for navbar
+import caricon1 from "../../../src/assets/Home/car-icons.png";
+import bike1 from "../../../src/assets/Home/bike-icon.png";
+import health from "../../../src/assets/Home/health-icon.png";
+import home from "../../../src/assets/Home/home-icon.png";
+import auto from "../../../src/assets/Home/auto.png";
+// import auto from "../../../src/assets/Home/"
+import commercial from "../../../src/assets/Home/commercial-insurance.png";
+import liability from "../../../src/assets/Home/liability-insurance.png"
+import property from "../../../src/assets/Home/property-insurance.png"
+
+// importfrom "../../../../src/assets/Home/car-icons.png";
+// import bikeicon from "../../../../src/assets/Home/bike-icon.png";
+// import healthicon from "../../../../src/assets/Home/health-icon.png";
+// import homeicon from "../../../../src/assets/Home/home-icon.png";
+
 const { Option } = Select;
 
-  
 const Navbar = ({ icon1, icon2 }) => {
   // State for callback modal
   const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
@@ -223,7 +238,7 @@ const Navbar = ({ icon1, icon2 }) => {
                     <ul
                       className="dropdown large-dropdown"
                       style={{
-                        width: "490px",
+                        width: "550px",
                         left: "50%",
                         transform: "translateX(-50%)",
                       }}
@@ -233,19 +248,50 @@ const Navbar = ({ icon1, icon2 }) => {
                           Individual Insurance
                         </h2>
                         <ul className="list-unstyled">
-                          <li>
+                          <li className="d-flex" style={{ padding: "10px" }}>
+                            <img
+                                                            style={{ width: "30px", height: "33px" }}
+
+                              src={caricon1}
+                              alt="Car Insurance"
+                              className="img-fluid"
+                            />
                             <Link to="/carinsurance">Car Insurance</Link>
                           </li>
-                          <li>
+                          <li className="d-flex">
+                            <img
+                              style={{ width: "29px", height: "27px" }}
+                              src={bike1}
+                              alt="Bikeinsurance"
+                              className="img-fluid"
+                            />
                             <Link to="/Bikeinsurance">Bike Insurance</Link>
                           </li>
-                          <li>
+                          <li className="d-flex">
+                            <img
+                              src={health}
+                              style={{ width: "25px", height: "25px" }}
+                              alt="Healthinsurance"
+                              className="img-fluid"
+                            />
                             <Link to="/Healthinsurance">Health Insurance</Link>
                           </li>
-                          <li>
+                          <li className="d-flex">
+                            <img
+                              src={auto}
+                              style={{ width: "26px", height: "25px" }}
+                              className="img-fluid"
+                              alt="Autoinsurance"
+                            />
                             <Link to="/Autoinsurance">Auto Insurance</Link>
                           </li>
-                          <li>
+                          <li className="d-flex" style={{ padding: "10px" }}>
+                            <img
+                              src={home}
+                              alt="Homeinsurance"
+                              style={{ width: "25px", height: "25px" }}
+                              className="img-fluid"
+                            />
                             <Link to="/Homeinsurance">Home Insurance</Link>
                           </li>
                         </ul>
@@ -259,6 +305,15 @@ const Navbar = ({ icon1, icon2 }) => {
                                 handleError("This page is Under-development")
                               }
                             >
+                              <img
+                                // className="img-fluid"
+                                style={{
+                                  height: "32px",
+                                  width: "32px",
+                                }}
+                                src={commercial}
+                                alt=""
+                              />
                               Commercial Insurance
                             </Link>
                           </li>
@@ -268,6 +323,13 @@ const Navbar = ({ icon1, icon2 }) => {
                                 handleError("This page is under Development")
                               }
                             >
+                              <img
+                              className="img-fluid"
+                              style={{
+                                height:"32px",
+                                width:"32px"}} 
+                              src={liability} 
+                              alt="liability-insurance" />
                               Liability Insurance
                             </Link>
                           </li>
@@ -277,6 +339,14 @@ const Navbar = ({ icon1, icon2 }) => {
                                 handleError("This page is under Development")
                               }
                             >
+                              <img 
+                              className="img-fluid"
+                              style={{
+                                height:"32px",
+                                width:"32px",
+                              }}
+                              src={property} 
+                              alt="property-insurance"/>
                               Property Insurance
                             </Link>
                           </li>
