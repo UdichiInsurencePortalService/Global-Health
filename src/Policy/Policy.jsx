@@ -990,8 +990,9 @@ const Policy = () => {
                 <h6 className="card-title">Need Help?</h6>
                 <p className="card-text small">
                   If you're having trouble finding your policy, please contact our customer service at 
-                  <strong> +968-1234-5678</strong> or email <strong>support@globalhealthinsurance.com</strong>
+                  <strong>+968-1234-5678</strong> or email <strong>support@globalhealthinsurance.com</strong>
                 </p>
+                
               </div>
             </div>
           </div>

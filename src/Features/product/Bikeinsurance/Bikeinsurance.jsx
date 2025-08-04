@@ -69,7 +69,7 @@ const Bikeinsurance = () => {
       image: customization, // Add appropriate image
       title: "Set Your Own Vehicle IDV",
       description:
-        "With Digit, you have the freedom to decide your car’s IDV based on your needs.",
+        "With Global Health, you have the freedom to decide your car’s IDV based on your needs.",
     },
   ];
 
@@ -98,7 +98,7 @@ const Bikeinsurance = () => {
     }
     
     if (!mobile || !/^\d{10}$/.test(mobile)) {
-      msgApi.error("Enter a valid 10-digit mobile number.");
+      msgApi.error("Enter a valid 10-Global Health mobile number.");
       return;
     }
   
@@ -418,7 +418,7 @@ const Bikeinsurance = () => {
 
                   <label>Mobile Number</label>
                   <Input
-                    placeholder="Enter 10-digit mobile number"
+                    placeholder="Enter 10-Global Health mobile number"
                     size="large"
                     prefix={<PhoneOutlined />}
                     value={mobileNumber}
@@ -473,13 +473,13 @@ const Bikeinsurance = () => {
           {
             title: "Step 5",
             description:
-              "You’re done! You’ll receive the policy document via email, SMS and WhatsApp. Also, you can access it 24X7 on the Digit App.",
+              "You’re done! You’ll receive the policy document via email, SMS and WhatsApp. Also, you can access it 24X7 on the Global Health App.",
           },
         ]}
       />
       <RequiredDocuments
         heading="Documents Required to Buy Two-Wheeler Insurance Online"
-        description="To buy Digit bike insurance online, a load of paperwork is not required. Furnish only the following documents to buy a new two-wheeler insurance policy within minutes:"
+        description="To buy Global Health bike insurance online, a load of paperwork is not required. Furnish only the following documents to buy a new two-wheeler insurance policy within minutes:"
         list={[
           "Bike Registration Certificate ",
           "Previous year two-wheeler insurance policy, if applicable",
@@ -489,7 +489,7 @@ const Bikeinsurance = () => {
 
       <Insuranceclaim 
         heading="How to File a Two-Wheeler Insurance Claim?"
-        paragraphs="After you buy or renew our two wheeler insurance plan, you live tension free as we have a simple, convenient and completely digital claims process!"
+        paragraphs="After you buy or renew our two wheeler insurance plan, you live tension free as we have a simple, convenient and completely Global Healthal claims process!"
         steps={[
           {
             title: "step1",
@@ -526,7 +526,7 @@ const Bikeinsurance = () => {
           {
             title: "Step 4",
             description:
-              "You’re done! You’ll receive the policy document via email, SMS and WhatsApp. Also, you can access it 24X7 on the Digit App.",
+              "You’re done! You’ll receive the policy document via email, SMS and WhatsApp. Also, you can access it 24X7 on the Global Health App.",
           },
           
         ]}
@@ -536,7 +536,7 @@ const Bikeinsurance = () => {
           heading="How to Download Your Bike Insurance Policy on Global Health App?"
           description="If you already have an active two-wheeler insurance policy which you want to download form the Global Health app, then follow the below steps:"
           list={[
-              "Step 1 - On the Digit app, go to the ‘My Policies’ tab at the bottom. You will see all your policies currently active with Global Health.",
+              "Step 1 - On the Global Health app, go to the ‘My Policies’ tab at the bottom. You will see all your policies currently active with Global Health.",
               "Step 2 – Now select the bike insurance policy that you want to download. Verify all the details and click on ‘Download Policy’. Your two-wheeler insurance policy document will be downloaded.",
           ]}
       />
@@ -724,7 +724,7 @@ const Bikeinsurance = () => {
 
       <NeedHelp
               heading="Need Help?"
-              paragraph="Have queries related to Digit motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
+              paragraph="Have queries related to Global Health motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
               head={["WhatsApp", "Email", "Contact"]}
               contact={[  
                 {

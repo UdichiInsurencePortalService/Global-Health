@@ -349,7 +349,7 @@ const Homeinsurance = () => {
       </div>
       <NeedHelp
         heading="Need Help?"
-        paragraph="Have queries related to Digit motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
+        paragraph="Have queries related to Global Health motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
         head={["WhatsApp", "Email", "Contact"]}
         contact={[
           {
