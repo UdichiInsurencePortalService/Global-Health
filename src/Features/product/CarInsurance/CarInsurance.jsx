@@ -15,7 +15,9 @@ import dia from "../../../assets/dia.png";
 import acci from "../../../assets/acci.png";
 import third from "../../../assets/third.png";
 import add6 from "../../../assets/add6.png";
-import {motion} from 'motion/react'
+// import {motion} from 'motion/react'
+import { motion } from "framer-motion";
+
 
 // reuseable component require
 import Reusechoose from "../../../Reuse/Reusechoose/Reusechoose";
@@ -119,7 +121,7 @@ const Carinsurance = () => {
         id: 5,
         title: "Step 5",
         description:
-          "You're done! The policy will be sent via email, SMS, and WhatsApp, and is available on the Digit app 24x7.",
+          "You're done! The policy will be sent via email, SMS, and WhatsApp, and is available on the Global Health app 24x7.",
       },
     ],
   };
@@ -158,7 +160,7 @@ const Carinsurance = () => {
       image: customization,
       title: "Set Your Own Vehicle IDV",
       description:
-        "With Digit, you have the freedom to decide your car's IDV based on your needs.",
+        "With Global Health, you have the freedom to decide your car's IDV based on your needs.",
     },
   ];
 
@@ -818,7 +820,7 @@ const Carinsurance = () => {
 
 <NeedHelp
         heading="Need Help?"
-        paragraph="Have queries related to Digit motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
+        paragraph="Have queries related to Global Health motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
         head={["WhatsApp", "Email", "Contact"]}
         contact={[  
           {

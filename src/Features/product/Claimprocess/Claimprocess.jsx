@@ -18,7 +18,7 @@ const Claimprocess = () => {
     },
     {
       head: "Step 4",
-      desc: "That's It! Your claim has been registered, it's that simple with the Digit App.",
+      desc: "That's It! Your claim has been registered, it's that simple with the Global Health App.",
     },
   ];
 
@@ -56,7 +56,7 @@ const Claimprocess = () => {
       </div>
       <NeedHelp
         heading="Need Help?"
-        paragraph="Have queries related to Digit motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
+        paragraph="Have queries related to Global Health motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
         head={["WhatsApp", "Email", "Contact"]}
         contact={[
           {

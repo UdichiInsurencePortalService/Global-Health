@@ -17,6 +17,11 @@ const getBase64 = file =>
     reader.onerror = error => reject(error);
   });
 
+  const disableFutureDates = (current) => {
+    return current && current > moment().endOf('day'); // disables dates after today
+  };
+  
+
 const Document = () => {
   const [accidentForm] = Form.useForm();
   const [documentForm] = Form.useForm();
@@ -341,23 +346,28 @@ const onDocumentFormFinish = async (values) => {
           </div>
           
           <div className="col-lg-6 col-md-6 col-sm-12 mb-4">
-            <Form.Item
-              label={<span style={{ fontWeight: '600', fontSize: '16px' }}>📅 Accident Date</span>}
-              name="accidentDate"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select accident date',
-                },
-              ]}
-            >
-              <DatePicker 
-                size="large" 
-                style={{ width: '100%', borderRadius: '8px' }} 
-                placeholder="Select accident date"
-              />
-            </Form.Item>
-          </div>
+      <Form.Item
+        label={
+          <span style={{ fontWeight: '600', fontSize: '16px' }}>
+            📅 Accident Date
+          </span>
+        }
+        name="accidentDate"
+        rules={[
+          {
+            required: true,
+            message: 'Please select accident date',
+          },
+        ]}
+      >
+        <DatePicker
+          size="large"
+          style={{ width: '100%', borderRadius: '8px' }}
+          placeholder="Select accident date"
+          disabledDate={disableFutureDates}
+        />
+      </Form.Item>
+    </div>
         </div>
         
         <div className="row">
