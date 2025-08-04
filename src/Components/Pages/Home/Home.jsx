@@ -4,8 +4,7 @@ import "./Home.css";
 import "swiper/css";
 import "swiper/css/pagination";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 // import Insurance from "./Insurance/Insurance";
 import Choose from "./ChooseUs/Choose";
@@ -14,12 +13,12 @@ import Seprate from "./Seprate Insurance/Seprate";
 import Newsletter from "./Newsletter/Newsletter";
 import Benefit from "../Home/Benifit/Benifit";
 
-import support from "../../../assets/reuseimage/help-desk.png"
+import image1 from "../../../assets/Bikeimages/health.png";
+
+import support from "../../../assets/reuseimage/help-desk.png";
 import policies from "../../../assets/reuseimage/job.png";
-import paperless from "../../../assets/reuseimage/paperless (1).png"
-import secure from "../../../assets/reuseimage/secure-payment.png"
-
-
+import paperless from "../../../assets/reuseimage/paperless (1).png";
+import secure from "../../../assets/reuseimage/secure-payment.png";
 
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
 import {
@@ -30,6 +29,10 @@ import {
   FaUser,
   FaHome,
   FaMapMarkerAlt,
+  FaShieldAlt,
+  FaCheckCircle,
+  FaBolt,
+  FaAward,
 } from "react-icons/fa";
 import caricon from "../../../../src/assets/Home/car-icons.png";
 import bikeicon from "../../../../src/assets/Home/bike-icon.png";
@@ -41,30 +44,29 @@ import Products from "./Products/Products";
 import { PenBox } from "lucide-react";
 import Favourite from "./Favourite/Favourite";
 import InsuranceBanner from "./InsuranceBanner/InsuranceBanner.JSX";
+import { Justify } from "react-bootstrap-icons";
 
 const Home = () => {
-
   const handleSubmit = () => {
-  switch (selectedCategory) {
-    case "Car":
-      navigate("/carinsurance");
-      break;
-    case "Bike":
-      navigate("/bikeinsurance");
-      break;
-    case "Health":
-      navigate("/healthinsurance");
-      break;
-    case "Home":
-      navigate("/homeinsurance");
-      break;
-    default:
-      break;
-  }
-};
+    switch (selectedCategory) {
+      case "Car":
+        navigate("/carinsurance");
+        break;
+      case "Bike":
+        navigate("/bikeinsurance");
+        break;
+      case "Health":
+        navigate("/healthinsurance");
+        break;
+      case "Home":
+        navigate("/homeinsurance");
+        break;
+      default:
+        break;
+    }
+  };
 
   const navigate = useNavigate();
-
 
   const [selectedCategory, setSelectedCategory] = useState("Car");
   const [focusField, setFocusField] = useState(null);
@@ -97,10 +99,17 @@ const Home = () => {
   ];
 
   const categories = [
-    { name: "Car", icon: caricon, link:'/carinsurance' },
-    { name: "Bike", icon: bikeicon, link:'/Bikeinsurance' },
-    { name: "Health", icon: healthicon , link:'/Healthinsurance' },
-    { name: "Home", icon: homeicon,link:'/Homeinsurance' },
+    { name: "Car", icon: caricon, link: "/carinsurance" },
+    { name: "Bike", icon: bikeicon, link: "/Bikeinsurance" },
+    { name: "Health", icon: healthicon, link: "/Healthinsurance" },
+    { name: "Home", icon: homeicon, link: "/Homeinsurance" },
+  ];
+
+  const whyChooseUsFeatures = [
+    { icon: FaShieldAlt, text: "Compare 20+ insurers", color: "#3498db" },
+    { icon: FaBolt, text: "Instant policy issuance", color: "#e74c3c" },
+    { icon: FaCheckCircle, text: "Expert claim assistance", color: "#27ae60" },
+    { icon: FaAward, text: "Lowest premium guarantee", color: "#f39c12" },
   ];
 
   const renderFormFields = () => {
@@ -249,24 +258,232 @@ const Home = () => {
 
   return (
     <>
-      <div className="insurance-finder bg-light" style={{ padding: "3rem 0" }}>
-        <Container className="">
-          <Row className="justify-content-center mb-5">
-            <Col md={8} className="text-center">
-              <h2 className="fw-bold mb-4">
-                One Family, One Policy – For Every Generation.
-              </h2>
-              <p className="text-muted">
-                Compare quotes from top insurers and save up to 85% on premiums
-              </p>
+      <div
+        className="insurance-finder position-relative overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          minHeight: "100vh",
+          padding: "4rem 0",
+        }}
+      >
+        {/* Animated Background Elements */}
+        <div
+          className="position-absolute w-100 h-100"
+          style={{ top: 0, left: 0, zIndex: 1 }}
+        >
+          <motion.div
+            className="position-absolute rounded-circle"
+            style={{
+              width: "200px",
+              height: "200px",
+              background: "rgba(255,255,255,0.1)",
+              top: "10%",
+              right: "10%",
+            }}
+            animate={{
+              y: [0, 30, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="position-absolute rounded-circle"
+            style={{
+              width: "150px",
+              height: "150px",
+              background: "rgba(255,255,255,0.08)",
+              bottom: "20%",
+              left: "5%",
+            }}
+            animate={{
+              y: [0, -25, 0],
+              x: [0, 15, 0],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
+
+        <Container className="position-relative" style={{ zIndex: 2 }}>
+          {/* ======= IMPROVED HEADER SECTION ======= */}
+          <Row className="align-items-center mb-5">
+            {/* Left Side - Main Content */}
+            <Col lg={8} md={7}>
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                className="text-white"
+              >
+                <motion.h1
+                  className="display-4 fw-bold mb-4"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
+                  <motion.span
+                    animate={{
+                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    style={{
+                      background: "linear-gradient(90deg, #fff, #f8f9fa, #fff)",
+                      backgroundSize: "200% 100%",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    Insure with Confidence,
+                  </motion.span>
+                  <br />
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="text-warning"
+                  >
+                    Live Without Worries.
+                  </motion.span>
+                </motion.h1>
+
+                <motion.p
+                  className="lead mb-4 text-light"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  style={{ fontSize: "1.2rem" }}
+                >
+                  Compare quotes from top insurers and save up to{" "}
+                  <motion.span
+                    className="fw-bold text-warning"
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    85%
+                  </motion.span>{" "}
+                  on premiums
+                </motion.p>
+
+                <motion.div
+                  className="d-flex flex-wrap gap-3 mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                >
+                  {["Trusted by 10M+", "5-Star Rated", "Quick Claims"].map(
+                    (badge, index) => (
+                      <motion.div
+                        key={badge}
+                        className="badge bg-light text-primary px-3 py-2 rounded-pill"
+                        whileHover={{ scale: 1.05 }}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.8 + index * 0.1 }}
+                      >
+                        {badge}
+                      </motion.div>
+                    )
+                  )}
+                </motion.div>
+              </motion.div>
+            </Col>
+
+            {/* Right Side - Why Choose Us Card */}
+            <Col lg={4} md={5}>
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                <Card
+                  className="border-0 shadow-lg overflow-hidden"
+                  style={{
+                    background: "rgba(255, 255, 255, 0.95)",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  <Card.Body className="p-3">
+                    <img
+                      src={image1}
+                      alt={"title"}
+                      className="w-100 mb-3 rounded"
+                      style={{
+                        height: "350px",
+                        objectFit: "cover",
+                      }}
+                    />
+
+                    <div className="bg-yellow">
+                      <motion.button
+                        animate={{
+                          scale: [1, 1.02, 1.0215, 1],
+                          y: [0, -0.6, -0.64, 0], // 👈 floating effect
+                        }}
+                        whileHover={{
+                          scale: 1.06, // 👈 hover zoom
+                        }}
+                        whileTap={{
+                          scale: 0.95, // 👈 click shrink
+                        }}
+                        transition={{
+                          duration: 2.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                        style={{
+                          backgroundColor: "#0066cc",
+                          color: "white",
+                          borderRadius: "15px",
+                          padding: "10px 15px",
+                          width: "100%",
+                          border: "none",
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          const awardsPageUrl = "/Award";
+
+                          // Open in same tab
+                          window.location.href = awardsPageUrl;
+                          // 👇 Add your logic here
+                          console.log("Button Clicked");
+                        }}
+                      >
+                        Click Here
+                      </motion.button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </motion.div>
             </Col>
           </Row>
 
+          {/* ======= CATEGORY SELECTOR ======= */}
           <Row className="justify-content-center mb-5">
-            <Col lg={10}>
-              <div className="category-container d-flex flex-wrap justify-content-center gap-4">
-                {categories.map((category) => (
-                  <div key={category.name} className="position-relative">
+            <Col lg={8}>
+              <motion.div
+                className="category-container d-flex flex-wrap justify-content-center gap-4"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+              >
+                {categories.map((category, index) => (
+                  <motion.div
+                    key={category.name}
+                    className="position-relative"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7 + index * 0.1 }}
+                  >
+                    {/* Highlighted animated icon when selected */}
                     {selectedCategory === category.name && (
                       <motion.div
                         className="category-highlight"
@@ -281,23 +498,16 @@ const Home = () => {
                         }}
                       >
                         <motion.div
-                          className=" rounded-circle d-flex align-items-center justify-content-center"
+                          className="rounded-circle d-flex align-items-center justify-content-center bg-warning"
                           style={{ width: 40, height: 40 }}
-                          animate={{
-                            y: [0, -1, 0],
-                            scale: [1, 1.1, 1],
-                          }}
-                          transition={{
-                            repeat: Infinity,
-                            duration: 1.5,
-                          }}
+                          animate={{ y: [0, -3, 0], scale: [1, 1.1, 1] }}
+                          transition={{ repeat: Infinity, duration: 1.5 }}
                         >
-                          {/* <img src={category.icon} alt={category.name} width="24" height="34" /> */}
                           <motion.img
                             src={category.icon}
                             alt={category.name}
-                            width="32"
-                            height="32"
+                            width="24"
+                            height="24"
                             animate={
                               selectedCategory === category.name
                                 ? ["Car", "Bike", "Travel"].includes(
@@ -308,9 +518,7 @@ const Home = () => {
                                       scale: [1, 1.05, 1],
                                       rotate: [0, 1, -1, 0],
                                     }
-                                  : {
-                                      scale: [1, 1.2, 1],
-                                    }
+                                  : { scale: [1, 1.2, 1] }
                                 : {}
                             }
                             transition={
@@ -320,56 +528,62 @@ const Home = () => {
                                     duration: 2,
                                     ease: "easeInOut",
                                   }
-                                : {
-                                    duration: 0.4,
-                                    ease: "easeOut",
-                                  }
+                                : { duration: 0.4, ease: "easeOut" }
                             }
                           />
                         </motion.div>
                       </motion.div>
                     )}
 
+                    {/* Icon button for category */}
                     <motion.div
                       className={`category-item d-flex align-items-center justify-content-center ${
                         selectedCategory === category.name
-                          ? "border-primary"
-                          : "border-secondary"
+                          ? "border-warning bg-white"
+                          : "border-white bg-white"
                       }`}
                       style={{
                         cursor: "pointer",
-                        width: 70,
-                        height: 70,
+                        width: 80,
+                        height: 80,
                         borderRadius: "50%",
-                        border: "2px solid",
-                        background: "#fff",
+                        border: "3px solid",
+                        boxShadow:
+                          selectedCategory === category.name
+                            ? "0 8px 25px rgba(255, 193, 7, 0.3)"
+                            : "0 4px 15px rgba(255,255,255,0.2)",
                       }}
                       whileHover={{
-                        borderColor: "#3498db",
-                        boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                        scale: 1.1,
+                        boxShadow: "0 8px 25px rgba(255,255,255,0.3)",
                       }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setSelectedCategory(category.name)}
                     >
-                      <img
+                      <motion.img
                         src={category.icon}
                         alt={category.name}
-                        width="32"
-                        height="32"
+                        width="36"
+                        height="36"
+                        whileHover={{ rotate: 5 }}
                       />
                     </motion.div>
 
-                    <div className="text-center mt-2">
-                      <small className="fw-bold">{category.name}</small>
+                    {/* Category label below icon */}
+                    <div className="text-center mt-3">
+                      <small className="fw-bold text-white bg-dark bg-opacity-50 px-2 py-1 rounded">
+                        {category.name}
+                      </small>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </Col>
           </Row>
 
+          {/* ======= FORM SECTION ======= */}
           <Row className="justify-content-center">
-            <Col md={10}>
+            <Col lg={8} md={10}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={selectedCategory}
@@ -378,40 +592,46 @@ const Home = () => {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Card className="border-0 shadow-lg rounded-lg overflow-hidden">
+                  <Card
+                    className="border-0 shadow-lg rounded-4 overflow-hidden"
+                    style={{
+                      background: "rgba(255, 255, 255, 0.95)",
+                      backdropFilter: "blur(10px)",
+                    }}
+                  >
                     <Card.Body className="p-5">
                       <Row className="g-4 justify-content-center">
+                        {/* Dynamic form fields */}
                         {renderFormFields()}
-                        <Col
-                          lg={2}
-                          md={2}
-                          sm={12}
-                          className="d-flex align-items-end"
-                        >
-                          <div className="w-100 text-center">
-                            <Form.Label className="fw-bold text-secondary invisible">
-                              Button
-                            </Form.Label>
-                            
-                          <motion.button
-  className="btn w-100 d-flex align-items-center justify-content-center gap-2 py-2 rounded-lg"
-  style={{
-    backgroundColor: "#3498db",
-    color: "white",
-    border: "none",
-    position: "relative",
-  }}
-  whileHover={{
-    scale: 1.05,
-    backgroundColor: "#2980b9",
-  }}
-  whileTap={{ scale: 0.95 }}
-  onClick={handleSubmit} // ✅ Add this
->
-  <span className="fw-bold">View Price</span>
-</motion.button>
 
-                          </div>
+                        {/* Submit Button */}
+                        <Col
+                          lg={12}
+                          className="d-flex align-items-end justify-content-center"
+                        >
+                          <motion.button
+                            className="btn w-100 d-flex align-items-center justify-content-center gap-2 py-3 rounded-3 fw-bold"
+                            style={{
+                              background:
+                                "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                              color: "white",
+                              border: "none",
+                              fontSize: "1.1rem",
+                            }}
+                            whileHover={{
+                              scale: 1.02,
+                              boxShadow: "0 8px 25px rgba(102, 126, 234, 0.3)",
+                            }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={handleSubmit}
+                          >
+                            <motion.span
+                              animate={{ x: [0, 3, 0] }}
+                              transition={{ duration: 1.5, repeat: Infinity }}
+                            >
+                              View Prices & Compare →
+                            </motion.span>
+                          </motion.button>
                         </Col>
                       </Row>
                     </Card.Body>
@@ -423,20 +643,15 @@ const Home = () => {
         </Container>
       </div>
 
-
-{/*  */}
-
+      {/* Rest of the components remain the same */}
       <div className="py-3">
         <Seprate />
       </div>
 
-
-      {/*  */}
-      <InsuranceBanner/>
-     
+      {/* <InsuranceBanner /> */}
 
       <div className="py-3">
-        <Favourite/>
+        <Favourite />
       </div>
 
       <div className="py-3">
@@ -446,10 +661,6 @@ const Home = () => {
       <div className="py-3">
         <Products />
       </div>
-
-      {/* <div className="py-5">
-        <Insurance />
-      </div> */}
 
       <div className="py-3">
         <Choose />

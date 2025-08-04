@@ -477,7 +477,7 @@ const Autoinsurance = () => {
           However, you can buy a comprehensive auto rickshaw policy for enhanced coverage.
         </p>
         <p>
-          Digit Insurance provides auto owners with both such policies at, affordable 
+          Global Health Insurance provides auto owners with both such policies at, affordable 
           and customized premium prices.
         </p>
       </div>
@@ -630,7 +630,7 @@ const Autoinsurance = () => {
             {
               id: 1,
               title: "step1",
-              description: "Inform your insurer as soon as possible by calling Digit on 9205401500 or dropping an email at globalhealth235@gmail.com."
+              description: "Inform your insurer as soon as possible by calling Global Health on 9205401500 or dropping an email at globalhealth235@gmail.com."
             },
             {
               id: 2,
@@ -667,7 +667,7 @@ const Autoinsurance = () => {
               {
                 id: 4,
                 title: "Step4",
-                description: "You’re done! You’ll receive the policy document via email, SMS and WhatsApp. Also, you can access it 24X7 on the Digit App.",
+                description: "You’re done! You’ll receive the policy document via email, SMS and WhatsApp. Also, you can access it 24X7 on the Global Health App.",
               }
             ]}
           />
@@ -722,7 +722,7 @@ const Autoinsurance = () => {
     />
     <NeedHelp
             heading="Need Help?"
-            paragraph="Have queries related to Digit motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
+            paragraph="Have queries related to Global Health motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
             head={["WhatsApp", "Email", "Contact"]}
             contact={[  
               {

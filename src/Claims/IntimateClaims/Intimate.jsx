@@ -341,7 +341,7 @@ const Intimate = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  };  
 
   // Function to submit claim to database
   const submitClaimToDatabase = async (claimData) => {

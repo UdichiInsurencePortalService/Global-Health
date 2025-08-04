@@ -1169,7 +1169,7 @@ const Healthinsurance = () => {
       />
 
       <DepreciationCalculated
-        heading="Key Benefits of Health Insurance by Digit"
+        heading="Key Benefits of Health Insurance by Global Health"
         para="Your health insurance plan with Global Health extends several exclusive benefits that enhance your coverage. Here are the key advantages:"
         tablehead="Benefit"
         tablehead1="Description"
@@ -1201,98 +1201,6 @@ const Healthinsurance = () => {
           },
         ]}
       />
-      {/* <div className="Documentrequire-section">
-      <div className="container">
-        <div className="row">
-          <div className="col-12 d-flex justify-content-center py-3">
-            <h1>Documents Required to Buy a Health Insurance Online</h1>
-          </div>
-          <div className="col-12 d-flex justify-content-center py-3">
-            <p className="text-center">
-              When purchasing a health insurance policy, insurers typically
-              require some basic documents for verification. Below is a list of
-              optional documents that can be needed at the time of purchasing a
-              policy:
-            </p>
-          </div>
-        </div>
-
-        <div className="row">
-          {documentfeatures.map((item, index) => (
-            <div
-              key={index}
-              className="col-lg-3 col-md-6 col-sm-12 py-3"
-              onClick={() => handleShow(item)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="card shadow-lg text-center p-4 h-100 d-flex flex-column justify-content-between">
-                <h4 className="fw-bold">{item.title}</h4>
-                <div className="mt-3">
-                  <FaArrowAltCircleRight size={30} color="#007bff" />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <Modal
-          // title={selectedItem?.title}
-          open={isModalOpen}
-          onCancel={handleCancel}
-          footer={null}
-        >
-          <ul>
-            {selectedItem?.requirement?.map((req, index) => (
-              <li key={index}>{req}</li>
-            ))}
-          </ul>
-        </Modal>
-      </div>
-    </div>
-    <div className="DocumentClaim-section">
-      <div className="container">
-        <div className="row">
-          <div className="col-12 d-flex justify-content-center py-3">
-            <h1>Documents Required to File a Health Insurance Claim</h1>
-          </div>
-          <div className="col-12 d-flex justify-content-center py-3">
-            <p className="text-center">
-            When filing a health insurance claim, you need to submit certain documents to ensure a smooth and hassle-free process. Remember, not all of these documents may be necessary but your insurance provider may require them. Below is a list of essential documents required while filing a health insurance claim at Global Health:
-            </p>
-          </div>
-        </div>
-
-        <div className="row">
-          {documentclaim.map((item, index) => (
-            <div
-              key={index}
-              className="col-lg-4 col-md-6 col-sm-12 py-3"
-              onClick={() => handleShow(item)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="card shadow-lg text-center p-4 h-100 d-flex flex-column justify-content-between">
-                
-                <h4 className="fw-bold">{item.title}</h4>
-                <div className="mt-3">
-                  <FaArrowAltCircleRight size={30} color="#007bff" />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <Modal
-          title={selectedItem?.title}
-          open={isModalOpen}
-          onCancel={handleCancel}
-          footer={null}
-        >
-          <ul>
-            {selectedItem?.REQUIREMENT?.map((req, index) => (
-              <li key={index}>{req}</li>
-            ))}
-          </ul>
-        </Modal>
-      </div>
-    </div> */}
 
       <DocumentSection
         sectionTitle="Documents Required to Buy a Health Insurance Online"
@@ -1334,7 +1242,7 @@ const Healthinsurance = () => {
 
       <NeedHelp
               heading="Need Help?"
-              paragraph="Have queries related to Digit motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
+              paragraph="Have queries related to Global Health motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
               head={["WhatsApp", "Email", "Contact"]}
               contact={[  
                 {
