@@ -8,8 +8,9 @@ import 'jspdf-autotable';
 import logos from '../assets/Home/global-logo.png';
 import qr from '../assets/kunal.jpeg';
 import autoTable from 'jspdf-autotable';
+import NeedHelp from '../Reuse/NeedHelp/NeedHelp';
 
-const Policy = () => {
+const Policy = ({ heading, paragraph, contact, head }) => {
   const [policyNumber, setPolicyNumber] = useState('');
   const [registrationNumber, setRegistrationNumber] = useState('');
   const [loading, setLoading] = useState(false);
@@ -592,27 +593,27 @@ const Policy = () => {
    y += 10;
    
    // Depreciation table
-   autoTable(doc, {
-     startY: y,
-     head: [[
-       "Description", "Discount"
-     ]],
-     body: [
-       ["Not exceeding 6 Months", "5%"],
-       ["Exceeding 6 months but not exceeding 1 year", "15%"],
-       ["Exceeding 1 year but not exceeding 2 years", "20%"],
-       ["Exceeding 2 years but not exceeding 3 years", "30%"],
-       ["Exceeding 3 years but not exceeding 4 years", "40%"],
-       ["Exceeding 4 years but not exceeding 5 years", "50%"]
-     ],
-     theme: 'grid',
-     styles: { fontSize: 8 },
-     columnStyles: {
-       0: { cellWidth: 140 },
-       1: { cellWidth: 40, halign: 'center' }
-     },
-     margin: { left: 15, right: 15 }
-   });
+    autoTable(doc, {
+      startY: y,
+      head: [[
+        "Description", "Discount"
+      ]],
+      body: [
+        ["Not exceeding 6 Months", "5%"],
+        ["Exceeding 6 months but not exceeding 1 year", "15%"],
+        ["Exceeding 1 year but not exceeding 2 years", "20%"],
+        ["Exceeding 2 years but not exceeding 3 years", "30%"],
+        ["Exceeding 3 years but not exceeding 4 years", "40%"],
+        ["Exceeding 4 years but not exceeding 5 years", "50%"]
+      ],
+      theme: 'grid',
+      styles: { fontSize: 8 },
+      columnStyles: {
+        0: { cellWidth: 140 },
+        1: { cellWidth: 40, halign: 'center' }
+      },
+      margin: { left: 15, right: 15 }
+    });
    
    // Add footer to this page
    doc.setFontSize(8);
@@ -738,7 +739,7 @@ const Policy = () => {
     }
   };
 
-  const handlePolicyCheck = async (e) => {
+  const handlePolicyCheck = async (e) =>  {
     e.preventDefault();
 
     // Validate inputs
@@ -842,7 +843,7 @@ const Policy = () => {
   };
 
   return (
-    <section className="policy-section py-5 px-3">
+    <section className="policy-section py-5 px-3 ">
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-12 text-center mb-5">
@@ -894,7 +895,7 @@ const Policy = () => {
           </div>
         )}
         
-        <div className="row align-items-center">
+        <div className="row align-items-center pb-5">
           <div className="col-md-6 text-center mb-4 mb-md-0">
             <img src={logo} alt="Company Logo" className="logo-img img-fluid" style={{maxWidth: '300px'}} />
           </div>
@@ -983,19 +984,22 @@ const Policy = () => {
         </div>
         
         {/* Help section */}
-        <div className="row justify-content-center mt-5">
-          <div className="col-md-8">
-            <div className="card bg-light">
-              <div className="card-body text-center">
-                <h6 className="card-title">Need Help?</h6>
-                <p className="card-text small">
-                  If you're having trouble finding your policy, please contact our customer service at 
-                  <strong> +968-1234-5678</strong> or email <strong>support@globalhealthinsurance.com</strong>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+    <NeedHelp 
+            heading="Need Help?"
+            paragraph="Have queries related to Digit motor insurance policy? You can refer to our Policy Wordings for detailed information or reach out to our support team via WhatsApp self-support, email or phone using the information below:"
+            head={["WhatsApp", "Email", "Contact"]}
+            contact={[  
+              {
+                cont: "Connect with our self-serve chat bot support - 9818152403",
+              },
+              {
+                conta: "Connect Write to us at globalhealth@235@gmail.com",
+              },
+              {
+                conatac: "Call us on 9818152403",
+              },
+            ]}
+          />
       </div>
     </section>
   );

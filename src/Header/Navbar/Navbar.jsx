@@ -4,7 +4,7 @@ import emailjs from "@emailjs/browser";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
 import logo from "../../assets/Home/global-main-logo.png";
-import { Drawer, Form, Input, Row, Col, Button, Modal, Select } from "antd";
+import { Drawer, Form, Input, Row, Col, Button, Modal, Select,message } from "antd";
 import { ToastContainer } from "react-toastify";
 import { handleSuccess } from "../../errortoast";
 import Top from "./TopBar/Top";
@@ -36,6 +36,10 @@ import property from "../../../src/assets/Home/property-insurance.png"
 const { Option } = Select;
 
 const Navbar = ({ icon1, icon2 }) => {
+    const [formRef] = Form.useForm();
+      const [loading, setLoading] = useState(false);
+
+
   // State for callback modal
   const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
   const [callbackForm] = Form.useForm();
@@ -49,7 +53,6 @@ const Navbar = ({ icon1, icon2 }) => {
   );
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const formRef = useRef(null);
   const timeout = 2000;
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -69,7 +72,7 @@ const Navbar = ({ icon1, icon2 }) => {
   useEffect(() => {
     if (redirect) {
       window.location.href =
-        "https://wa.me/919205401500?text=Welcome%20to%20Global%20Health%20and%20Allied%20Insurance.%20How%20can%20I%20assist%20you%3Ftarget_blank";
+        "https://wa.me/08069640455?text=Welcome%20to%20Global%20Health%20and%20Allied%20Insurance.%20How%20can%20I%20assist%20you%3Ftarget_blank";
     }
   }, [redirect]);
 
@@ -198,6 +201,56 @@ const Navbar = ({ icon1, icon2 }) => {
     },
   };
 
+
+  // 
+
+// contact form
+ const handleSubmit = async (values) => {
+    setLoading(true);
+    
+    try {
+      // Prepare data for backend API
+      const formData = {
+        name: values.user_name,
+        email: values.user_email,
+        phone_number: values.user_phone,
+        address: values.user_address,
+        message: values.user_message
+      };
+
+      // Send data to backend
+       const response = await fetch('http://localhost:8080/api/contactform', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Show success message
+        message.success('Thank you for contacting us! Our team will get back to you soon.');
+        
+        // Reset form
+        formRef.resetFields();
+        
+        // Close drawer after a short delay
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+      }
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      message.error('Sorry, there was an error submitting your form. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 
   return (
     <>
       <div className="topbar d-none d-md-block">
@@ -1047,9 +1100,11 @@ const Navbar = ({ icon1, icon2 }) => {
           </p>
 
           <Form
+                    form={formRef}
+
             layout="vertical"
             ref={formRef}
-            onFinish={sendEmail}
+            onFinish={handleSubmit}
             className="space-y-4"
           >
             <Row gutter={16}>

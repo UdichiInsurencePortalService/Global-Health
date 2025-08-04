@@ -254,7 +254,7 @@ const Home = () => {
           <Row className="justify-content-center mb-5">
             <Col md={8} className="text-center">
               <h2 className="fw-bold mb-4">
-                Insure with Confidence, Live Without Worries.
+                One Family, One Policy – For Every Generation.
               </h2>
               <p className="text-muted">
                 Compare quotes from top insurers and save up to 85% on premiums

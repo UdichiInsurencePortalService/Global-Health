@@ -19,6 +19,8 @@ const RazorPayment = require('./Routes/RazorPayment.js')
 const intailclaim  = require('./Routes/Intailclaim.js')
 const accidentform = require('./Routes/Accidentform.js')
 const finaldocument = require('./Routes/Finaldocumentclaim.js')
+const contact = require('./Routes/ContactUs.js')
+const award = require('./Routes/doctorAward.js')
 
 const app = express();
 
@@ -53,6 +55,8 @@ app.use('/api', RazorPayment);
 app.use('/api',intailclaim);
 app.use('/api',accidentform);
 app.use('/api',finaldocument);
+app.use('/api',contact)
+app.use('/api',award)
 
 // Session configuration
 app.use(

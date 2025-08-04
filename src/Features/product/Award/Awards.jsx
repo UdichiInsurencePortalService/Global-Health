@@ -5,6 +5,7 @@ import acci from "../../../assets/AWARD IMAGES/BIDHAN.jpg";
 import third from "../../../assets/third.png";
 import add6 from "../../../assets/add6.png";
 import "bootstrap/dist/css/bootstrap.min.css";
+import download from './Downloads.jsx'
 
 import {
   ShieldCheck,
@@ -37,6 +38,7 @@ import "./Award.css";
 
 // import required modules
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import Download from "./Downloads.jsx";
 
 export default function Awards() {
   const awardCategories = [
@@ -342,6 +344,12 @@ const benefitsList = [
           ))}
         </div>
       </div>
+{/*  */}
+<div>
+  <Download/>
+  </div>
+
+
       <section className="py-5 bg-light">
         <div className="container">
           <h2 className="text-center fw-bold mb-5">Eligibility Criteria</h2>
@@ -472,6 +480,18 @@ const benefitsList = [
               <label htmlFor="fullName" className="form-label">Full Name</label>
               <input type="text" className="form-control" name="fullName" id="fullName" required />
             </div>
+              <div className="mb-3">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input type="email" className="form-control" name="email" id="number" required />
+            </div>
+              <div className="mb-3">
+              <label htmlFor="number" className="form-label">Phone Number</label>
+              <input type="number" className="form-control" name="number" id="number" required />
+            </div>
+             <div className="mb-3">
+              <label htmlFor="address" className="form-label">Address</label>
+              <input type="address" className="form-control" name="address" id="address" required />
+            </div>
             <div className="mb-3">
               <label className="form-label">Gender</label><br />
               {["Male", "Female", "Other", "Prefer not to say"].map((gender) => (
@@ -568,14 +588,8 @@ const benefitsList = [
               <label className="form-label">Medical License Certificate (Upload)</label>
               <input type="file" className="form-control" name="license" />
             </div>
-            <h5>Reference 1</h5>
-            {["ref1_name", "ref1_designation", "ref1_email", "ref1_phone"].map((name, idx) => (
-              <input key={idx} type={name.includes("email") ? "email" : "text"} className="form-control mb-2" name={name} placeholder={name.replace("ref1_", "").replace("_", " ")} />
-            ))}
-            <h5>Reference 2</h5>
-            {["ref2_name", "ref2_designation", "ref2_email", "ref2_phone"].map((name, idx) => (
-              <input key={idx} type={name.includes("email") ? "email" : "text"} className="form-control mb-2" name={name} placeholder={name.replace("ref2_", "").replace("_", " ")} />
-            ))}
+           
+          
           </fieldset>
 
           {/* Section E: Award Category & Declaration */}
@@ -605,14 +619,8 @@ const benefitsList = [
                 </label>
               </div>
             </div>
-            <div className="mb-3">
-              <label className="form-label">Signature</label>
-              <input type="text" className="form-control" name="signature" />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Date</label>
-              <input type="date" className="form-control" name="date" />
-            </div>
+           
+          
           </fieldset>
 
           <div className="text-center">
