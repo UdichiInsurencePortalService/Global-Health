@@ -27,7 +27,7 @@ const Intimate = () => {
   // Updated policy number validation to match GIC/2025-26/01/5244 format
   const validatePolicyNumber = (number) => /^GIC\/202[0-9]-[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(number);
   const validateRegisterNumber = (reg) => /^[A-Z0-9]{6,}$/.test(reg);
-  const validateEngineNumber = (eng) => /^[A-Z0-9]{17}$/.test(eng);
+  // const validateEngineNumber = (eng) => /^[A-Z0-9]{17}$/.test(eng);
   const validateChassisNumber = (chassis) => /^[A-Z0-9]{17}$/.test(chassis);
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -430,10 +430,10 @@ const Intimate = () => {
       handleError('Invalid Register Number! Minimum 6 alphanumeric characters.');
       return;
     }
-    if (!validateEngineNumber(formData.engineNumber)) {
-      handleError('Invalid Engine Number! Must be 17 alphanumeric characters.');
-      return;
-    }
+    // if (!validateEngineNumber(formData.engineNumber)) {
+    //   handleError('Invalid Engine Number! Must be 17 alphanumeric characters.');
+    //   return;
+    // }
     if (!validateChassisNumber(formData.chassisNumber)) {
       handleError('Invalid Chassis Number! Must be 17 alphanumeric characters.');
       return;

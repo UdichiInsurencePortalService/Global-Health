@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-import acci from "../../../assets/AWARD IMAGES/BIDHAN.jpg";
+import acci from "../../../../src/award/03.jpg";
 import third from "../../../assets/third.png";
 import add6 from "../../../assets/add6.png";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -356,27 +356,23 @@ export default function Awards() {
         modules={[Pagination, Navigation, Autoplay]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <img
-            src={acci}
-            alt="Award 1"
-            style={{ width: "100%", height: "auto", borderRadius: "0px" }}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src={acci}
-            alt="Award 1"
-            style={{ width: "100%", height: "auto", borderRadius: "0px" }}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src={acci}
-            alt="Award 1"
-            style={{ width: "100%", height: "auto", borderRadius: "0px" }}
-          />
-        </SwiperSlide>
+       <SwiperSlide>
+  <img
+    src={acci}
+    alt="Award 1"
+    style={{
+      position: "relative",
+      width: "100%",
+      maxHeight: "550px", // restrict max height
+      objectFit: "contain", // crop image if larger
+      borderRadius: "0px"
+    }}
+  />
+</SwiperSlide>
+
+
+
+      
       </Swiper>
 
       <div className="text">

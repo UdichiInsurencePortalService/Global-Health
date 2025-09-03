@@ -3,7 +3,7 @@ require('dotenv').config(); // Optional if using .env file
 
 const global = new Client({
     host: 'localhost',
-    host: '192.168.1.7',
+    host: '192.168.1.5',
     user: 'postgres',
     port: 5432,
     password: 'Kunal@1234', // ideally from process.env.PG_PASSWORD

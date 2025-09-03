@@ -33,7 +33,7 @@ const Top = () => {
               <li style={{ color: "white" }}>
                 <FontAwesomeIcon icon={faEnvelope} />{" "}
                 <a href="mailto:globalhealth235@gmail.com" style={{ color: "white", textDecoration: "none" }}>
-                  globalhealth235@gmail.com
+                  info@globalhealthandalliedservices.com
                 </a>
               </li>
             </ul>

@@ -270,7 +270,7 @@ const Carinsurance = () => {
     try {
       // Variables to store our vehicle data and price
       let vehicleData = null;
-      let exShowroomPrice = "1000000"; // Default price if not found
+      let exShowroomPrice = "10"; // Default price if not found
   
       // STEP 1: Try to get data from PostgreSQL database first
       try {
@@ -510,7 +510,7 @@ const Carinsurance = () => {
         exshowroom: vehicleData?.exshowroom || 
                    vehicleData?.idv_value || 
                    vehicleData?.sale_amount || 
-                   1000000,
+                   10,
         engine_capacity: vehicleData?.cubic_capacity || null,
         registration_date: vehicleData?.registration_date || null,
         // If client_id starts with "rc_" or is non-numeric, use null instead

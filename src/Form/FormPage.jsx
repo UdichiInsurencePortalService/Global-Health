@@ -42,11 +42,11 @@ const FormPage = () => {
   useEffect(() => {
     // Get stored vehicle details
     const storedVehicleDetails = localStorage.getItem('vehicleDetails');
-    console.log("Raw data from localStorage:", storedVehicleDetails);
+    console.log("Raw data from localStorage:>>>>><<<<<<<<<", storedVehicleDetails);
     
     // Get stored premium components data
-    const storedPremiumComponents = localStorage.getItem('premiumComponents');
-    console.log("Raw premium components data from localStorage:", storedPremiumComponents);
+    const storedPremiumComponents = localStorage.getItem('premiumDetails');
+    console.log("Raw premium components data from localStorage:>>>>><<<<<<<<<<", storedPremiumComponents);
     
     // Process vehicle details
     if (storedVehicleDetails) {
@@ -246,13 +246,13 @@ const formData = {
   nominee_relation: updatedForm.nominee_Relationship || '',
   nominee_age: updatedForm.nominee_age ||updatedForm?.Nominee_Age || '',
   period_of_insurance: currentDate, // Use current date directly
-  Own_Damage_Premuin: premiumComponents?.ownDamagePremium || 'N/A',
-  GST: premiumComponents?.gst || 'N/A',
-  NCB: premiumComponents?.ncbDiscount || 'N/A',
-  Adds_ons_Premuin: premiumComponents?.addOnsPremium || 'N/A',
-  total_premiun: premiumComponents?.totalPremium || 'N/A',
-  idv:premiumComponents?.idv || 'N/A',
-  third_party_premuin:premiumComponents?.thirdPartyPremium || 'N/A',
+  Own_Damage_Premuin: premiumComponents?.OWN_DAMAGE || 'N/A',
+  GST: premiumComponents?.GST || 'N/A',
+  NCB: premiumComponents?.NCB || 'N/A',
+  Adds_ons_Premuin: premiumComponents?.ADDONS || 'N/A',
+  total_premiun: premiumComponents?.TOTAL_PREMIUM || 'N/A',
+  idv:premiumComponents?.IDV || 'N/A',
+  third_party_premuin:premiumComponents?.THIRD_PARTY || 'N/A',
   payment_id: updatedForm.payment_id || paymentResponse.razorpay_payment_id,
   payment_status: 'success',
   fuel_type: vehicleDetails?.fuel_type||'N/A',
@@ -288,21 +288,28 @@ console.log("Saving user form data to PostgreSQL:", formData);
 
   // Payment success handler
   const handlePaymentSuccess = async (response) => {
-    setPaymentStatus('success');
-    console.log("Payment successful!", response);
-    
-    try {
-      // Save data to database AFTER payment is successful
-      await saveUserDataToDatabase(response);
-      
-      // Show success modal which will offer PDF download
-      setShowSuccessModal(true);
-    } catch (error) {
-      console.error("Error processing successful payment:", error);
-      setErrorMessage("Payment was successful, but we couldn't save your data. Please try again or contact support.");
-      setShowError(true);
-    }
-  };
+  setPaymentStatus('success');
+  console.log("Payment successful!", response);
+
+  try {
+    // Save data to database AFTER payment is successful
+    await saveUserDataToDatabase(response);
+
+    // Trigger PDF download automatically
+    const link = document.createElement("a");
+    link.href = "/receipt.pdf"; // Path in public folder
+    link.download = "Receipt.pdf"; // Suggested filename
+    link.click();
+
+    // Show success modal
+    setShowSuccessModal(true);
+  } catch (error) {
+    console.error("Error processing successful payment:", error);
+    setErrorMessage("Payment was successful, but we couldn't save your data. Please try again or contact support.");
+    setShowError(true);
+  }
+};
+
 
   // Payment error handler
   const handlePaymentError = (error) => {
@@ -349,7 +356,7 @@ console.log("Saving user form data to PostgreSQL:", formData);
   const generatePDF = (setUserForm,setVehicleDetails, setPremiumComponents,userData,pdf,setUserId) => {
     
     try {
-        console.log("Vehicle details inside generatePDF:>><<<<", setVehicleDetails, "User info:>>>><<<<<", setUserForm, "Premium components:", setPremiumComponents,"userdata components:", userData,"userdatapdf",setUserId);
+        console.log("Vehicle details inside generatePDF:>><<<<", setVehicleDetails, "User info:>>>><<<<<", setUserForm, "Premium components:>>>><<<<<<<<<", setPremiumComponents,"userdata components:", userData,"userdatapdf",setUserId);
     const doc = new jsPDF();
       if (!userForm.policyNumber) {
         throw new Error("Policy number is missing");
@@ -730,13 +737,13 @@ if (userForm.gstin) {
         "Section I", "", "Section II", "", "Section III", ""
       ]],
       body: [
-        ["Basic Own Damage", premiumComponents?.ownDamagePremium|| "N/A", "Basic TP incl. TPPD", premiumComponents?.thirdPartyPremium || "N/A", "", ""],
-        ["Add Covers", premiumComponents?.addOnsPremium || "N/A", "Total Liability", premiumComponents?.thirdPartyPremium || "N/A", "", ""],
-        ["No Claim Bonus", premiumComponents?.ncbDiscount || "N/A", "", "", "", ""],
-        ["No Claim Bonus Percentage %", premiumComponents?.ncbPercentage || "N/A", "", "", "", ""],
-        ["Insured Value (IDV)", premiumComponents?.idv || "N/A", "", "", "", ""],
-        ["IGST @ 18%", "", "", "", "", premiumComponents?.gst || "N/A"],
-        ["Total Premium", "", "", "", "", premiumComponents?.totalPremium || "N/A"]
+        ["Basic Own Damage", premiumComponents?.OWN_DAMAGE|| "N/A", "Basic TP incl. TPPD", premiumComponents?.THIRD_PARTY || "N/A", "", ""],
+        ["Add Covers", premiumComponents?.ADDONS || "N/A", "Total Liability", premiumComponents?.THIRD_PARTY || "N/A", "", ""],
+        ["No Claim Bonus", premiumComponents?.NCB || "N/A", "", "", "", ""],
+        ["No Claim Bonus Percentage %", premiumComponents?.NCB_PERCENTAGE || "N/A", "", "", "", ""],
+        ["Insured Value (IDV)", premiumComponents?.IDV || "N/A", "", "", "", ""],
+        ["IGST @ 18%", "", "", "", "", premiumComponents?.GST || "N/A"],
+        ["Total Premium", "", "", "", "", premiumComponents?.TOTAL_PREMIUM || "N/A"]
       ],
       theme: 'grid',
       styles: { fontSize: 8 },
@@ -984,36 +991,7 @@ return doc;
   }
 };
 
-  // Download PDF
-  // const downloadPDFLocally = (userData) => {
-  //   try {
-  //     const doc = generatePDF(userData);
-      
-  //     if (doc) {
-  //       // Save the policy number to the form data if generated in PDF
-  //       if (userData.policyNumber && !userForm.policyNumber) {
-  //         setUserForm(prev => ({
-  //           ...prev,
-  //           policyNumber: userData.policyNumber
-  //         }));
-  //       }
-        
-  //       doc.save(`${userData.username || 'insurance'}_policy.pdf`);
-  //       console.log("PDF generated and downloaded successfully");
-  //       return true;
-  //     } else {
-  //       console.error("PDF generation returned null");
-  //       setErrorMessage("Failed to generate PDF: Document is null");
-  //       setShowError(true);
-  //       return false;
-  //     }
-  //   } catch (error) {
-  //     console.error("Error downloading PDF:", error);
-  //     setErrorMessage("Failed to download PDF: " + error.message);
-  //     setShowError(true);
-  //     return false;
-  //   }
-  // };
+
  const downloadPDFLocally = async (userData) => {
   try {
     const doc = generatePDF(userData);
@@ -1094,7 +1072,7 @@ const generateRandomUserId = () => {
     setShowError(false);
     
     try {
-      const amount = premiumComponents?.totalPremium || 0;
+      const amount = premiumComponents?.TOTAL_PREMIUM || 0;
       if (amount <= 0) {
         throw new Error("Invalid premium amount");
       }
@@ -1242,7 +1220,7 @@ const generateRandomUserId = () => {
                               <strong>IDV:</strong>
                             </Col>
                             <Col xs={4} className="text-end">
-                              ₹{premiumComponents.idv || 0}
+                              ₹{premiumComponents?.IDV || 0}
                             </Col>
                           </Row>
                           <Row className="mb-3">
@@ -1250,7 +1228,7 @@ const generateRandomUserId = () => {
                               <strong>Own-Damage-Premium:</strong>
                             </Col>
                             <Col xs={4} className="text-end">
-                              ₹{premiumComponents.ownDamagePremium || 0}
+                              ₹{premiumComponents.OWN_DAMAGE || 0}
                             </Col>
                           </Row>
                           <Row className="mb-3">
@@ -1258,7 +1236,7 @@ const generateRandomUserId = () => {
                               <strong>Third-Party-Premuin:</strong>
                             </Col>
                             <Col xs={4} className="text-end">
-                              ₹{premiumComponents.thirdPartyPremium || 0}
+                              ₹{premiumComponents.THIRD_PARTY || 0}
                             </Col>
                           </Row>
                           
@@ -1268,7 +1246,7 @@ const generateRandomUserId = () => {
                                 <strong>Add-ons:</strong>
                               </Col>
                               <Col xs={4} className="text-end">
-                                ₹{premiumComponents.addOnsPremium || 0}
+                                ₹{premiumComponents.ADDONS || 0}
                               </Col>
                             </Row>
                           )}
@@ -1278,16 +1256,16 @@ const generateRandomUserId = () => {
                               <strong>GST (18%):</strong>
                             </Col>
                             <Col xs={4} className="text-end">
-                              ₹{premiumComponents.gst || 0}
+                              ₹{premiumComponents.GST || 0}
                             </Col>
                           </Row>
 
                           <Row className="mb-3">
                             <Col xs={8} className="text-start">
-                              <strong>NCB:</strong>
+                              <strong>NCB Discount:</strong>
                             </Col>
                             <Col xs={4} className="text-end">
-                              ₹{premiumComponents.ncbDiscount || 0}
+                              {premiumComponents.NCB_PERCENTAGE + "%" || 0}
                             </Col>
                           </Row>
                           
@@ -1296,7 +1274,7 @@ const generateRandomUserId = () => {
                               <strong>Add-Ons Premium:</strong>
                             </Col>
                             <Col xs={4} className="text-end">
-                              ₹{premiumComponents.addOnsPremium || 0}
+                              ₹{premiumComponents.ADDONS || 0}
                             </Col>
                           </Row>
                         </div>
@@ -1308,7 +1286,7 @@ const generateRandomUserId = () => {
                               <h5 className="fw-bold">Total Premium:</h5>
                             </Col>
                             <Col xs={5} className="text-end">
-                              <h5 className="text-success fw-bold">₹{premiumComponents?.totalPremium || 0}</h5>
+                              <h5 className="text-success fw-bold">₹{premiumComponents?.TOTAL_PREMIUM || 0}</h5>
                             </Col>
                           </Row>
                         </div>
@@ -1334,7 +1312,7 @@ const generateRandomUserId = () => {
                       ) : paymentStatus === 'success' ? (
                         'Payment Completed'
                       ) : (
-                        `Pay Now - ₹${premiumComponents?.totalPremium || 0}`
+                        `Pay Now - ₹${premiumComponents?.TOTAL_PREMIUM || 0}`
                       )}
                     </Button>
                   </Card.Footer>

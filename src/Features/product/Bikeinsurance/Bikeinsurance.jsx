@@ -98,7 +98,7 @@ const Bikeinsurance = () => {
     }
     
     if (!mobile || !/^\d{10}$/.test(mobile)) {
-      msgApi.error("Enter a valid 10-Global Health mobile number.");
+      msgApi.error("Enter a valid 10-digit mobile number.");
       return;
     }
   
@@ -118,13 +118,15 @@ const Bikeinsurance = () => {
         const dbRes = await fetch(dbUrl);
         const dbResult = await dbRes.json();
         console.log("Database response:>>>>>>", dbResult);
-        if (dbResult?.cubic_capacity>700) {
-          handleError("This is car  number or something else In Our  ....")
+        
+        if (dbResult?.cubic_capacity > 700) {
+          handleError("This is car number or something else In Our ....")
           navigate('/carinsurance')
-        }else if(dbResult?.cubic_capacity<700){
+        } else if (dbResult?.cubic_capacity < 700) {
           handleError("This is bike number go to bike page")
           navigate('/Bikeinsurance')
         }
+        
         // Check if we got data back as an array or single object
         if (dbRes.ok && dbResult) {
           console.log("✅ Vehicle found in database!");
@@ -146,9 +148,12 @@ const Bikeinsurance = () => {
             vehicleData = dbResult;
           }
           
-          // Safely get ex-showroom price
-          exShowroomPrice = vehicleData?.exshowroom?.toString() || vehicleData?.sale_amount || "1000000";
-          console.log("💰 Ex-showroom price from database: " + exShowroomPrice);
+          // Safely get ex-showroom price - check all possible price fields
+          exShowroomPrice = vehicleData?.exshowroom?.toString() || 
+                           vehicleData?.sale_amount?.toString() || 
+                           vehicleData?.idv_value?.toString() || 
+                           "1000000";
+          console.log("💰 Ex-showroom price from database:>>>>>>><<<<<< " + exShowroomPrice);
         } else {
           console.log("❓ Vehicle not found in database.");
           throw new Error("NOT_IN_DB");
@@ -171,6 +176,7 @@ const Bikeinsurance = () => {
             if (priceFromAPI) {
               exShowroomPrice = priceFromAPI;
               vehicleData.exshowroom = priceFromAPI;
+              vehicleData.idv_value = priceFromAPI; // Also set idv_value for consistency
               console.log("💰 Ex-showroom price from Surepass: " + exShowroomPrice);
             }
             
@@ -202,17 +208,19 @@ const Bikeinsurance = () => {
         fuel_type: vehicleData?.fuel_type || "Not Available",
         color: vehicleData?.color || "Not Available",
         insurance_company: vehicleData?.insurance_company || "Not Available",
-        address: vehicleData?.address || vehicleData?.permanent_address|| "Not Available",
+        address: vehicleData?.address || vehicleData?.permanent_address || "Not Available",
         date_of_buy: vehicleData?.purchase_date || vehicleData?.registration_date || "Not Available",
         maker_model: vehicleData?.maker_model || "Not Available",
-        cubic_capacity: vehicleData?.engine_capacity?.toString()  || vehicleData?.cubic_capacity || "Not Available",
-        ex_showroom_price: vehicleData?.exshowroom?.toString() || exShowroomPrice,
-        engine_number:vehicleData?.vehicle_engine_number || vehicleData?.engine_number|| "N/A",
-        chasi_number:vehicleData?.vehicle_chasi_number || vehicleData?.chasi_number || "N/A",
-        register_at:vehicleData?.registered_at || "N/A",
-        financer:vehicleData?.financer || "N/A",
-        mobile_number: mobile, // Add mobile number to summary,
-       
+        cubic_capacity: vehicleData?.engine_capacity?.toString() || vehicleData?.cubic_capacity || "Not Available",
+        ex_showroom_price: vehicleData?.exshowroom?.toString() || 
+                          vehicleData?.idv_value?.toString() || 
+                          vehicleData?.sale_amount?.toString() || 
+                          exShowroomPrice,
+        engine_number: vehicleData?.vehicle_engine_number || vehicleData?.engine_number || "N/A",
+        chasi_number: vehicleData?.vehicle_chasi_number || vehicleData?.chasi_number || "N/A",
+        register_at: vehicleData?.registered_at || "N/A",
+        financer: vehicleData?.financer || "N/A",
+        mobile_number: mobile, // Add mobile number to summary
       };
   
       console.log("✨ Vehicle summary ready:>>>>>>>", summary);
@@ -258,10 +266,10 @@ const Bikeinsurance = () => {
       });
     
       const surepassData = await surepassRes.json();
-      if (surepassData?.cubic_capacity>700) {
-        handleError("This is car  number or something else In Our  ....")
+      if (surepassData?.cubic_capacity > 700) {
+        handleError("This is car number or something else In Our ....")
         navigate('/carinsurance')
-      }else if(surepassData?.cubic_capacity<700){
+      } else if (surepassData?.cubic_capacity < 700) {
         handleError("This is bike number go to bike page")
         navigate('/Bikeinsurance')
       }
@@ -271,7 +279,7 @@ const Bikeinsurance = () => {
         return null;
       }
       
-      console.log("✅ Successfully got vehicle data from Surepass>>>>>>>>>>>",surepassData);
+      console.log("✅ Successfully got vehicle data from Surepass>>>>>>>>>>>", surepassData);
       return surepassData.data;
     } catch (error) {
       console.error("❌ Error calling Surepass API:", error);
@@ -297,14 +305,16 @@ const Bikeinsurance = () => {
       });
     
       const showroomData = await showroomRes.json();
+      console.log("Ex-showroom API response:", showroomData);
       
-      if (!showroomData.success || !showroomData?.data?.sale_amount) {
+      // Fixed condition: Check if API was successful and has idv_value
+      if (!showroomData.success || !showroomData?.data?.idv_value) {
         console.log("⚠️ No ex-showroom price found in Surepass");
         return null;
       }
       
-      console.log("✅ Successfully got ex-showroom price from Surepass");
-      return showroomData.data.sale_amount;
+      console.log("✅ Successfully got ex-showroom price from Surepass:", showroomData.data.idv_value);
+      return showroomData.data.idv_value.toString();
     } catch (error) {
       console.error("❌ Error fetching ex-showroom price:", error);
       return null;
@@ -326,15 +336,18 @@ const Bikeinsurance = () => {
       const payload = {
         // Map fields from vehicleData to match database column names
         owner_name: vehicleData?.owner_name || null,
-        address: vehicleData?.permanent_address || vehicleData?.permanent_address || null,
+        address: vehicleData?.permanent_address || vehicleData?.address || null,
         registration_number: regNum,
         color: vehicleData?.color || null,
         insurance_company: vehicleData?.insurance_company || null,
         // Use registration_date as fallback for purchase_date if it doesn't exist
         purchase_date: vehicleData?.purchase_date || null,
         maker_model: vehicleData?.maker_model || null,
-        // Convert exshowroom to a number if it's a string
-        exshowroom: vehicleData?.exshowroom || vehicleData?.sale_amount || 1000000,
+        // Fixed exshowroom field mapping - check all possible price fields
+        exshowroom: vehicleData?.exshowroom || 
+                   vehicleData?.idv_value || 
+                   vehicleData?.sale_amount || 
+                   1000000,
         engine_capacity: vehicleData?.cubic_capacity || null,
         registration_date: vehicleData?.registration_date || null,
         // If client_id starts with "rc_" or is non-numeric, use null instead
@@ -342,10 +355,10 @@ const Bikeinsurance = () => {
             ? parseInt(vehicleData?.client_id) 
             : null,
         fuel_type: vehicleData?.fuel_type || null,
-        engine_number:vehicleData?.vehicle_engine_number || "N/A",
-        chasi_number:vehicleData?.vehicle_chasi_number || "N/A",
-        register_at:vehicleData?.registered_at || "N/A",
-        financer:vehicleData?.financer || "N/A",
+        engine_number: vehicleData?.vehicle_engine_number || vehicleData?.engine_number || "N/A",
+        chasi_number: vehicleData?.vehicle_chasi_number || vehicleData?.chasi_number || "N/A",
+        register_at: vehicleData?.registered_at || "N/A",
+        financer: vehicleData?.financer || "N/A",
         mobile_number: mobile // Use the input mobile number directly
       };
       

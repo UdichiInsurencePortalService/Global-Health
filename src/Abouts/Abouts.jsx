@@ -1,287 +1,295 @@
 import React from "react";
-import "./Abouts.css";
-import about from "../assets/aboutusimges/about1.png";
-import mission from "../assets/aboutusimges/ourmision1.png";
-import vision from "../assets/aboutusimges/ourvision1.png";
+import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Abouts = () => {
-  const data = [
+  const services = [
     {
       category: "Health Insurance",
+      icon: "💊",
+      color: "primary",
       plans: [
         "Individual Health Plans",
-        "Family Health Plans",
+        "Family Health Plans", 
         "Corporate Health Plans",
-        "International Health Insurance for expatriates",
-        "Low-Cost Preventative Care Plans",
-        "Affordable Maternity and Childcare Coverage",
+        "International Health Insurance"
       ],
     },
     {
       category: "Travel Insurance",
+      icon: "✈️",
+      color: "success",
       plans: [
-        "Economical Travel Medical Insurance",
+        "Travel Medical Insurance",
         "Trip Cancellation Insurance",
-        "Emergency Medical Evacuation Insurance",
+        "Emergency Medical Evacuation"
       ],
     },
     {
-      category: "Accident and Disability Insurance",
+      category: "Property Insurance",
+      icon: "🏠",
+      color: "warning",
       plans: [
-        "Personal Accident Coverage",
-        "Income Protection Plans",
-        "Affordable Disability Insurance",
+        "Homeowners Insurance",
+        "Commercial Property Insurance",
+        "Natural Disaster Protection"
       ],
     },
     {
-      category: "Home and Property Insurance",
+      category: "Auto Insurance",
+      icon: "🚗",
+      color: "danger",
       plans: [
-        "Homeowners and Renters Insurance",
-        "Affordable Commercial Property Insurance",
-        "Natural Disaster Protection",
-      ],
-    },
-    {
-      category: "Automobile Insurance",
-      plans: [
-        "Budget Car Insurance Plans",
+        "Personal Car Insurance",
         "Commercial Vehicle Coverage",
-        "Third-Party Liability Insurance",
+        "Third-Party Liability"
       ],
     },
     {
-      category: "Liability and Legal Protection",
+      category: "Business Insurance",
+      icon: "🛡️",
+      color: "info",
       plans: [
         "General Liability Insurance",
-        "Professional Liability Insurance",
-        "Cybersecurity and Data Protection Insurance",
+        "Professional Liability",
+        "Cybersecurity Protection"
       ],
     },
     {
-      category: "Specialty Insurance",
+      category: "Specialty Coverage",
+      icon: "🌟",
+      color: "secondary",
       plans: [
         "Pet Insurance",
-        "Business Interruption Insurance",
-        "Environmental and Marine Insurance",
+        "Business Interruption",
+        "Environmental Protection"
       ],
     },
   ];
 
+  const locations = [
+    { city: "Muscat, Oman", role: "Headquarters", color: "primary" },
+    { city: "Mauritius", role: "African & Asian Hub", color: "success" },
+    { city: "Toronto, Canada", role: "North American Operations", color: "info" },
+    { city: "Texas, USA", role: "US Market Leader", color: "warning" },
+    { city: "London, UK", role: "European Gateway", color: "danger" },
+    { city: "Paris, France", role: "Continental Europe", color: "secondary" },
+    { city: "Mumbai, India", role: "South Asian Market", color: "dark" }
+  ];
+
+  const features = [
+    {
+      title: "Affordable Premiums",
+      description: "Competitive rates without compromising coverage quality",
+      icon: "💰",
+      color: "success"
+    },
+    {
+      title: "Global Coverage",
+      description: "Insurance solutions available worldwide through our network",
+      icon: "🌍",
+      color: "primary"
+    },
+    {
+      title: "Quick Claims",
+      description: "Fast and efficient claims processing when you need it most",
+      icon: "⚡",
+      color: "warning"
+    },
+    {
+      title: "24/7 Support",
+      description: "Round-the-clock customer service across all time zones",
+      icon: "🎧",
+      color: "info"
+    }
+  ];
+
   return (
-    <div className="about-section">
-      <div className="container">
-        {/* About Us Section */}
-        <div className="row align-items-center my-5">
-          <div className="col-md-6 p-4 text-center d-flex flex-column align-items-center">
-            <h1>About Us</h1>
-            <p className="para">
-              Global Health and Allied Non-Life Insurance Services is a global
-              leader in providing affordable and comprehensive health and
-              non-life insurance solutions. With offices strategically located
-              acrose the world’s
-              we are dedicated to offering the most competitive premiums in the
-              market.
-            </p>
-            <p className="para">
-              We specialize in delivering high-quality insurance coverage in
-              health, travel, home, auto, and business sectors, all at the
-              lowest possible premiums globally.
-            </p>
-          </div>
-          <div className="col-md-6 text-center">
-            <img src={about} alt="About Us" className="img-fluid" />
-          </div>
-        </div>
-
-        {/* Vision Section */}
-        <div className="row align-items-center my-5">
-          <div className="col-md-6 text-center">
-            <img src={vision} alt="Our Vision" className="img-fluid" />
-          </div>
-          <div className="col-md-6 p-2 d-flex flex-column align-items-center text-center">
-            <h1>Our Vision</h1>
-            <p className="para">
-              To become the world’s most trusted and affordable provider of
-              health and non-life insurance, offering the most competitive
-              premiums worldwide while ensuring optimal coverage for all
-              clients.
-            </p>
-          </div>
-        </div>
-
-        {/* Mission Section */}
-        <div className="row align-items-center my-5">
-          <div className="col-md-6 p-2 d-flex flex-column align-items-center text-center">
-            <h1>Our Mission</h1>
-            <p className="para">
-              To provide cost-effective and comprehensive insurance solutions
-              globally by offering the most affordable premiums without
-              compromising on the quality of service and protection. We aim to
-              make insurance easy to access for people and businesses, no matter
-              their size or location, helping them secure a better future.
-            </p>
-          </div>
-          <div className="col-md-6 text-center">
-            <img src={mission} alt="Our Mission" className="img-fluid" />
-          </div>
-        </div>
+    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
+      {/* Hero Section */}
+      <div className="bg-primary text-white py-5">
+        <Container>
+          <Row className="justify-content-center text-center">
+            <Col lg={8}>
+              <h1 className="display-4 fw-bold mb-3">About Our Company</h1>
+              <p className="lead mb-4">
+                Global leader in affordable health and non-life insurance solutions
+              </p>
+              <hr className="bg-white mx-auto" style={{ width: '100px', height: '3px' }} />
+            </Col>
+          </Row>
+        </Container>
       </div>
-      <div className="container-2">
-        <h1 className="title">Our Services</h1>
-        <p className="description">
-          Global Health and Allied Non-Life Insurance Services offers a diverse
-          range of affordable products, including:
-        </p>
-        <div className="cards-wrapper">
-          {data.map((item, index) => (
-            <div key={index} className="card card21">
-              <h2 className="card-title2">{item.category}</h2>
-              <ul className="card-list">
-                {item.plans.map((plan, planIndex) => (
-                  <li key={planIndex} className="card-item">
-                    {plan}
-                  </li>
-                ))}
-              </ul>
-            </div>
+
+      {/* Company Overview */}
+      <Container className="py-5">
+        <Row className="align-items-center mb-5">
+          <Col lg={6} className="mb-4 mb-lg-0">
+            <h2 className="h1 fw-bold text-primary mb-4">Who We Are</h2>
+            <p className="lead text-muted mb-4">
+              Global Health and Allied Non-Life Insurance Services is a worldwide leader 
+              in providing comprehensive and affordable insurance solutions.
+            </p>
+            <p className="text-muted mb-4">
+              With strategically located offices across multiple continents, we specialize 
+              in delivering high-quality coverage in health, travel, property, auto, and 
+              business sectors at the most competitive rates globally.
+            </p>
+            <Button variant="primary" size="lg">Learn More</Button>
+          </Col>
+          <Col lg={6}>
+            <Card className="border-0 shadow-lg">
+              <Card.Body className="p-5 text-center bg-light">
+                <div className="display-1 text-primary mb-3">🏢</div>
+                <h4 className="fw-bold text-dark">Trusted Worldwide</h4>
+                <p className="text-muted mb-0">Serving customers across 7 countries</p>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        {/* Vision & Mission */}
+        <Row className="mb-5">
+          <Col md={6} className="mb-4 mb-md-0">
+            <Card className="h-100 border-0 shadow">
+              <Card.Body className="p-4 p-lg-5 text-center">
+                <div className="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                     style={{ width: '80px', height: '80px', fontSize: '2rem' }}>
+                  👁️
+                </div>
+                <h3 className="fw-bold text-primary mb-3">Our Vision</h3>
+                <p className="text-muted">
+                  To become the world's most trusted and affordable provider of health and 
+                  non-life insurance, offering competitive premiums while ensuring optimal 
+                  coverage for all clients globally.
+                </p>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={6}>
+            <Card className="h-100 border-0 shadow">
+              <Card.Body className="p-4 p-lg-5 text-center">
+                <div className="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                     style={{ width: '80px', height: '80px', fontSize: '2rem' }}>
+                  🎯
+                </div>
+                <h3 className="fw-bold text-success mb-3">Our Mission</h3>
+                <p className="text-muted">
+                  To provide cost-effective and comprehensive insurance solutions globally, 
+                  making insurance accessible for individuals and businesses of all sizes 
+                  while maintaining exceptional service quality.
+                </p>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+
+      {/* Services Section */}
+      <div className="bg-light py-5">
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold text-primary mb-3">Our Services</h2>
+            <p className="lead text-muted">Comprehensive insurance solutions for every need</p>
+          </div>
+
+          <Row className="g-4">
+            {services.map((service, index) => (
+              <Col key={index} sm={6} lg={4}>
+                <Card className="h-100 border-0 shadow-sm">
+                  <Card.Body className="p-4">
+                    <div className="d-flex align-items-center mb-3">
+                      <span className="me-3" style={{ fontSize: '2rem' }}>{service.icon}</span>
+                      <h4 className={`fw-bold text-${service.color} mb-0`}>{service.category}</h4>
+                    </div>
+                    <ul className="list-unstyled mb-0">
+                      {service.plans.map((plan, planIndex) => (
+                        <li key={planIndex} className="mb-2 text-muted">
+                          <i className={`bi bi-check-circle-fill text-${service.color} me-2`}></i>
+                          {plan}
+                        </li>
+                      ))}
+                    </ul>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </div>
+
+      {/* Global Presence */}
+      <Container className="py-5">
+        <div className="text-center mb-5">
+          <h2 className="display-5 fw-bold text-primary mb-3">Global Presence</h2>
+          <p className="lead text-muted">Serving customers across 7 strategic locations worldwide</p>
+        </div>
+
+        <Row className="g-3">
+          {locations.map((location, index) => (
+            <Col key={index} sm={6} lg={4} xl={3} className="mb-3">
+              <Card className="border-0 shadow-sm h-100">
+                <Card.Body className="p-4 text-center">
+                  <h5 className="fw-bold text-dark mb-2">{location.city}</h5>
+                  <Badge bg={location.color} className="mb-3">{location.role}</Badge>
+                  <div className={`bg-${location.color}`} 
+                       style={{ height: '4px', borderRadius: '2px', opacity: 0.3 }}></div>
+                </Card.Body>
+              </Card>
+            </Col>
           ))}
-        </div>
-      </div>
-      <div className="global-presence">
-        <div className="container">
-          <h2 className="section-title">Global Presence</h2>
-          <p className="section-description">
-            Global Health and Allied Non-Life Insurance Services operates from
-            strategic global locations to offer affordable insurance coverage
-            tailored to regional needs:
-          </p>
+        </Row>
+      </Container>
 
-          <div className="locations">
-            <div className="location">
-              <h3>Muscat, Oman (Headquarters)</h3>
-              <p>
-                Our main operational base in the Middle East, offering
-                affordable health and non-life insurance solutions across the
-                region and beyond.
-              </p>
-            </div>
-
-            <div className="location">
-              <h3>Mauritius</h3>
-              <p>
-                Serving the African and Asian markets, we provide affordable,
-                customized insurance plans for individuals and businesses at
-                competitive rates.
-              </p>
-            </div>
-
-            <div className="location">
-              <h3>Toronto, Canada</h3>
-              <p>
-                Providing budget-friendly health and property insurance services
-                to individuals and businesses across North America.
-              </p>
-            </div>
-
-            <div className="location">
-              <h3>Texas, USA</h3>
-              <p>
-                Offering some of the cheapest premiums for car, health, home,
-                and liability insurance plans, catering to both individuals and
-                commercial clients in the U.S.
-              </p>
-            </div>
-
-            <div className="location">
-              <h3>London, United Kingdom</h3>
-              <p>
-                Offering affordable business, health, and property insurance
-                services to clients across Europe and beyond, with a focus on
-                low-cost options for businesses of all sizes.
-              </p>
-            </div>
-
-            <div className="location">
-              <h3>Paris, France</h3>
-              <p>
-                Delivering comprehensive and budget-friendly insurance solutions
-                in France and across Europe, with services tailored to
-                individual and corporate clients.
-              </p>
-            </div>
-
-            <div className="location">
-              <h3>Mumbai, India</h3>
-              <p>
-                Focused on offering the lowest-cost insurance options for
-                individuals and businesses in the South Asian market, ensuring
-                broad coverage with minimal premiums.
-              </p>
-            </div>
+      {/* Why Choose Us */}
+      <div className="bg-primary text-white py-5">
+        <Container>
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3">Why Choose Us</h2>
+            <p className="lead opacity-75">What makes us different from the rest</p>
           </div>
-        </div>
 
-        <div className="why-choose-us">
-          <div className="container">
-            <h2 className="section-title">Why Choose Us</h2>
-            <div className="reasons">
-              <div className="reason">
-                <h3>1. Unmatched Affordability</h3>
-                <p>
-                  Our global presence allows us to provide the most competitive
-                  premiums in the industry, ensuring you get the best value for
-                  your money without compromising on the quality of your
-                  insurance coverage.
-                </p>
-              </div>
-              <div className="reason">
-                <h3>2. Comprehensive Coverage</h3>
-                <p>
-                  Despite offering the lowest premiums, our plans are designed
-                  to provide maximum coverage, ensuring that your health,
-                  assets, and business are protected in case of any unforeseen
-                  event.
-                </p>
-              </div>
-              <div className="reason">
-                <h3>3. Tailored Solutions</h3>
-                <p>
-                  We understand that every client has different needs. Whether
-                  you are an individual, a family, or a business, we offer
-                  customized insurance solutions that fit your unique
-                  requirements.
-                </p>
-              </div>
-              <div className="reason">
-                <h3>4. Fast and Easy Claims</h3>
-                <p>
-                  Our efficient claims process ensures that you can quickly
-                  access support and financial assistance when you need it most.
-                  Our dedicated team is here to guide you through every step of
-                  the process.
-                </p>
-              </div>
-              <div className="reason">
-                <h3>5. Global Accessibility</h3>
-                <p>
-                  With offices in key international locations, we provide global
-                  coverage that ensures you can access reliable and affordable
-                  insurance services no matter where you are.
-                </p>
-              </div>
-              <div className="reason">
-                <h3>6. Customer-Centric Service</h3>
-                <p>
-                  Our commitment to customer satisfaction means we are always
-                  available to answer questions, provide support, and help you
-                  understand your options, ensuring you have complete peace of
-                  mind.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+          <Row className="g-4">
+            {features.map((feature, index) => (
+              <Col key={index} sm={6} lg={3}>
+                <div className="text-center">
+                  <div className="bg-white text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                       style={{ width: '80px', height: '80px', fontSize: '2rem' }}>
+                    {feature.icon}
+                  </div>
+                  <h4 className="fw-bold mb-3">{feature.title}</h4>
+                  <p className="opacity-75">{feature.description}</p>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        </Container>
       </div>
+
+      {/* CTA Section */}
+      <Container className="py-5">
+        <Row className="justify-content-center">
+          <Col lg={8}>
+            <Card className="border-0 shadow-lg">
+              <Card.Body className="p-5 text-center">
+                <h3 className="display-6 fw-bold text-primary mb-4">
+                  Ready to Get Protected?
+                </h3>
+                <p className="lead text-muted mb-4">
+                  Join thousands of satisfied customers worldwide and get your personalized quote today.
+                </p>
+                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                  <Button variant="primary" size="lg">Get Quote Now</Button>
+                  <Button variant="outline-primary" size="lg">Contact Us</Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+
+      {/* Footer spacing */}
+      <div className="py-3"></div>
     </div>
   );
 };
