@@ -37,14 +37,9 @@ import {
 import caricon from "../../../../src/assets/Home/car-icons.png";
 import bikeicon from "../../../../src/assets/Home/bike-icon.png";
 import healthicon from "../../../../src/assets/Home/health-icon.png";
-import lifeicon from "../../../../src/assets/Home/life-icon.png";
 import homeicon from "../../../../src/assets/Home/home-icon.png";
-import travelicon from "../../../../src/assets/Home/travel-icon.png";
 import Products from "./Products/Products";
-import { PenBox } from "lucide-react";
 import Favourite from "./Favourite/Favourite";
-import InsuranceBanner from "./InsuranceBanner/InsuranceBanner.JSX";
-import { Justify } from "react-bootstrap-icons";
 
 const Home = () => {
   const handleSubmit = () => {
