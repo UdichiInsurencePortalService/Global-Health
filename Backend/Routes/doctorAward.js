@@ -49,7 +49,7 @@ const uploadFields = upload.fields([
 ]);
 
 // POST route to handle form submission
-router.post('/api/submit-nomination', (req, res) => {
+router.post('/submit-nomination', (req, res) => {
   uploadFields(req, res, async (err) => {
     if (err) {
       if (err instanceof multer.MulterError) {
