@@ -1,287 +1,254 @@
-const express = require('express');
-const multer = require('multer');
-const db = require("../Models/postgressdb");
+const express = require("express");
 const router = express.Router();
+const cors = require("cors");
+const nodemailer = require("nodemailer");
+const db = require("../Models/postgressdb");
 
-const cors = require('cors');
-const path = require('path');
+router.use(cors());
+router.use(express.json());
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-
-// Test database connection
-
-
-// Configure multer for file upload with size limit (1MB)
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1024 * 1024 // 1MB limit
-  },
-  fileFilter: (req, file, cb) => {
-    // Allow only specific file types
-    const allowedTypes = {
-      'official_photograph': ['image/jpeg', 'image/jpg', 'image/png'],
-      'medical_license': ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png']
-    };
-
-    const fieldAllowedTypes = allowedTypes[file.fieldname] || [];
-    
-    if (fieldAllowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error(`Invalid file type for ${file.fieldname}. Allowed types: ${fieldAllowedTypes.join(', ')}`), false);
+// Configure nodemailer with better error handling
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER || 'globalhealth235@gmail.com', // Make sure this is set in your .env file
+        pass: process.env.EMAIL_PASS || 'ubxw sbty yxkt pcgo' // Use App Password, not regular password
     }
-  }
 });
 
-// Handle file upload fields
-const uploadFields = upload.fields([
-  { name: 'photo', maxCount: 1 },
-  { name: 'license', maxCount: 1 }
-]);
-
-// POST route to handle form submission
-router.post('/submit-nomination', (req, res) => {
-  uploadFields(req, res, async (err) => {
-    if (err) {
-      if (err instanceof multer.MulterError) {
-        if (err.code === 'LIMIT_FILE_SIZE') {
-          return res.status(400).json({ 
-            error: 'File size too large. Maximum allowed size is 1MB.' 
-          });
-        }
-      }
-      return res.status(400).json({ error: err.message });
+// Test email configuration on startup
+transporter.verify((error, success) => {
+    if (error) {
+    } else {
+        console.log('Email server is ready to send messages');
     }
+});
 
+// POST API to save medical registration data
+router.post('/medical-registration', async (req, res) => {
     try {
-      const {
-        fullName,
-        email,
-        number,
-        address,
-        gender,
-        dob,
-        nationality,
-        country,
-        specialty,
-        designation,
-        registration,
-        experience,
-        qualifications,
-        languages,
-        achievements,
-        awards,
-        research,
-        community,
-        mentored,
-        mentoringDetails,
-        category
-      } = req.body;
+        const {
+            fullname,
+            gender,
+            dob,
+            nationality,
+            country_pride,
+            medical_specialty,
+            current_designation_institution,
+            medical_registration_number,
+            issuing_authority,
+            years_of_practice,
+            languages_spoken,
+            key_achievements,
+            signature,
+            email,
+            phone_number
+        } = req.body;
 
-      // Validate required fields
-      if (!fullName || !email || !number) {
-        return res.status(400).json({ 
-          error: 'Missing required fields: fullName, email, and phone number are required.' 
-        });
-      }
+        // Validate required fields
+        const requiredFields = [
+            'fullname', 'gender', 'dob', 'nationality', 'medical_specialty',
+            'current_designation_institution', 'medical_registration_number',
+            'issuing_authority', 'years_of_practice', 'email', 'phone_number'
+        ];
 
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return res.status(400).json({ error: 'Invalid email format.' });
-      }
-
-      // Process uploaded files
-      let officialPhotograph = null;
-      let medicalLicense = null;
-
-      if (req.files) {
-        if (req.files.photo && req.files.photo[0]) {
-          officialPhotograph = req.files.photo[0].buffer;
+        for (let field of requiredFields) {
+            if (!req.body[field]) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Please provide ${field.replace(/_/g, ' ')}`
+                });
+            }
         }
-        if (req.files.license && req.files.license[0]) {
-          medicalLicense = req.files.license[0].buffer;
+
+        // Check if email already exists
+        const emailCheckQuery = 'SELECT id FROM medical_registration WHERE email = $1';
+        const existingEmail = await db.query(emailCheckQuery, [email]);
+        
+        if (existingEmail.rows.length > 0) {
+            return res.status(409).json({
+                success: false,
+                message: "This email address is already registered. Please use a different email or contact support if you need to update your registration."
+            });
         }
-      }
 
-      // Convert category array to string if it's an array
-      const awardCategory = Array.isArray(category) ? category.join(', ') : category;
+        // Check if medical registration number already exists
+        const regNumCheckQuery = 'SELECT id FROM medical_registration WHERE medical_registration_number = $1';
+        const existingRegNum = await db.query(regNumCheckQuery, [medical_registration_number]);
+        
+        if (existingRegNum.rows.length > 0) {
+            return res.status(409).json({
+                success: false,
+                message: "This medical registration number is already registered. Please verify your registration number."
+            });
+        }
 
-      // Insert data into PostgreSQL
-      const insertQuery = `
-        INSERT INTO doctor_award (
-          full_name, email, phone_number, address, gender, date_of_birth, 
-          nationality, country_of_practice, official_photograph, medical_specialty, 
-          current_designation, medical_registration, year_of_medical_practice, 
-          academic_qualification, languages_spoken, key_achievements, 
-          award_received, notable_research, community_health, mentored_professionals, 
-          medical_license, award_category
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22
-        ) RETURNING id
-      `;
+        // Get current date
+        const current_date = new Date();
 
-      const values = [
-        fullName,
-        email,
-        number,
-        address,
-        gender || null,
-        dob || null,
-        nationality || null,
-        country || null,
-        officialPhotograph,
-        specialty || null,
-        designation || null,
-        registration || null,
-        experience ? parseInt(experience) : null,
-        qualifications || null,
-        languages || null,
-        achievements || null,
-        awards || null,
-        research || null,
-        community || null,
-        mentored === 'Yes' ? `${mentored}. ${mentoringDetails || ''}`.trim() : mentored || null,
-        medicalLicense,
-        awardCategory || null
-      ];
+        // Insert data into medical_registration table
+        const query = `
+            INSERT INTO medical_registration (
+                fullname, gender, dob, nationality, country_pride, 
+                medical_specialty, current_designation_institution, 
+                medical_registration_number, issuing_authority, 
+                years_of_practice, languages_spoken, key_achievements, 
+                signature, email, phone_number, registration_date
+            ) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+            RETURNING *
+        `;
 
-      const result = await pool.query(insertQuery, values);
-      const newId = result.rows[0].id;
+        const result = await db.query(query, [
+            fullname, gender, dob, nationality, country_pride,
+            medical_specialty, current_designation_institution,
+            medical_registration_number, issuing_authority,
+            years_of_practice,
+            languages_spoken, key_achievements,
+            signature, email, phone_number, current_date
+        ]);
 
-      res.status(201).json({
-        message: 'Nomination submitted successfully!',
-        id: newId,
-        success: true
-      });
+        // Send confirmation email
+        try {
+            const mailOptions = {
+                from: `"Medical Registration Team" <${process.env.EMAIL_USER}>`,
+                to: email,
+                subject: 'Medical Registration - Next Steps Required',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                        <h2 style="color: #2c5aa0;">Medical Registration Confirmation</h2>
+                        <p>Dear Dr. ${fullname},</p>
+                        
+                        <p>Thank you for submitting your medical registration form. We have successfully received your initial application.</p>
+                        
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
+                            <h3 style="color: #dc3545;">Next Steps Required:</h3>
+                            <p>To complete your registration, please submit the following documents:</p>
+                            <ul>
+                                <li><strong>Medical License</strong> - Scanned copy of your current medical license</li>
+                                <li><strong>Official Photograph</strong> - Recent professional photograph</li>
+                            </ul>
+                        </div>
+                        
+                        <p>Please reply to this email with the required documents attached, or upload them through our secure portal.</p>
+                        
+                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                            <p><strong>Registration Details:</strong></p>
+                            <p>Registration ID: ${result.rows[0].id}</p>
+                            <p>Submitted on: ${current_date.toDateString()}</p>
+                            <p>Medical Specialty: ${medical_specialty}</p>
+                            <p>Years of Practice: ${years_of_practice}</p>
+                        </div>
+                        
+                        <p>If you have any questions, please don't hesitate to contact our support team.</p>
+                        
+                        <p>Best regards,<br>
+                        Medical Registration Team</p>
+                    </div>
+                `
+            };
+
+            await transporter.sendMail(mailOptions);
+            console.log('Confirmation email sent successfully to:', email);
+
+            res.status(201).json({
+                success: true,
+                message: "Registration submitted successfully. Confirmation email sent.",
+                data: result.rows[0]
+            });
+
+        } catch (emailError) {
+            console.error("Email sending error:", emailError);
+            
+            // Still return success for database insertion, but mention email issue
+            res.status(201).json({
+                success: true,
+                message: "Registration submitted successfully. However, there was an issue sending the confirmation email. Please contact support.",
+                data: result.rows[0],
+                emailError: "Failed to send confirmation email"
+            });
+        }
 
     } catch (error) {
-      console.error('Database error:', error);
-      
-      // Handle specific PostgreSQL errors
-      if (error.code === '23505') { // Unique violation
-        return res.status(400).json({ 
-          error: 'Email already exists. Please use a different email address.' 
+        console.error("Error inserting medical registration:", error.message);
+
+        // Handle specific database errors
+        if (error.code === '23505') { // Unique constraint violation
+            if (error.constraint === 'medical_registration_email_key') {
+                return res.status(409).json({
+                    success: false,
+                    message: "This email address is already registered."
+                });
+            }
+            if (error.constraint === 'medical_registration_medical_registration_number_key') {
+                return res.status(409).json({
+                    success: false,
+                    message: "This medical registration number is already registered."
+                });
+            }
+        }
+
+        res.status(500).json({
+            success: false,
+            message: "Error saving registration details",
+            error: error.message,
         });
-      }
-      
-      res.status(500).json({ 
-        error: 'Internal server error. Please try again later.',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
-      });
     }
-  });
 });
 
-// GET route to retrieve all nominations (optional)
-router.get('/api/nominations', async (req, res) => {
-  try {
-    const query = `
-      SELECT 
-        id, full_name, email, phone_number, address, gender, 
-        date_of_birth, nationality, country_of_practice, medical_specialty,
-        current_designation, medical_registration, year_of_medical_practice,
-        academic_qualification, languages_spoken, key_achievements,
-        award_received, notable_research, community_health, 
-        mentored_professionals, award_category, created_at
-      FROM doctor_award 
-      ORDER BY created_at DESC
-    `;
-    
-    const result = await pool.query(query);
-    res.json({
-      nominations: result.rows,
-      total: result.rows.length
-    });
-  } catch (error) {
-    console.error('Database error:', error);
-    res.status(500).json({ error: 'Failed to retrieve nominations' });
-  }
-});
+// GET API to retrieve medical registration data
+router.get('/medical-registration', async (req, res) => {
+    try {
+        const query = 'SELECT * FROM medical_registration ORDER BY registration_date DESC';
+        const result = await db.query(query);
 
-// GET route to retrieve a specific nomination by ID
-app.get('/api/nominations/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const query = 'SELECT * FROM doctor_award WHERE id = $1';
-    const result = await pool.query(query, [id]);
-    
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Nomination not found' });
+        res.status(200).json({
+            success: true,
+            message: "Registration details retrieved successfully",
+            data: result.rows,
+            count: result.rows.length
+        });
+
+    } catch (error) {
+        console.error("Error retrieving registration details:", error.message);
+
+        res.status(500).json({
+            success: false,
+            message: "Error retrieving registration details",
+            error: error.message,
+        });
     }
-    
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Database error:', error);
-    res.status(500).json({ error: 'Failed to retrieve nomination' });
-  }
 });
 
-// GET route to retrieve image/document by ID and type
-app.get('/api/file/:id/:type', async (req, res) => {
-  try {
-    const { id, type } = req.params;
-    
-    let column;
-    let contentType;
-    
-    switch (type) {
-      case 'photo':
-        column = 'official_photograph';
-        contentType = 'image/jpeg';
-        break;
-      case 'license':
-        column = 'medical_license';
-        contentType = 'application/pdf';
-        break;
-      default:
-        return res.status(400).json({ error: 'Invalid file type' });
+// GET API to retrieve single registration by ID
+router.get('/medical-registration/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const query = 'SELECT * FROM medical_registration WHERE id = $1';
+        const result = await db.query(query, [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Registration not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Registration details retrieved successfully",
+            data: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error("Error retrieving registration details:", error.message);
+
+        res.status(500).json({
+            success: false,
+            message: "Error retrieving registration details",
+            error: error.message,
+        });
     }
-    
-    const query = `SELECT ${column} FROM doctor_award WHERE id = $1`;
-    const result = await pool.query(query, [id]);
-    
-    if (result.rows.length === 0 || !result.rows[0][column]) {
-      return res.status(404).json({ error: 'File not found' });
-    }
-    
-    const fileBuffer = result.rows[0][column];
-    res.setHeader('Content-Type', contentType);
-    res.send(fileBuffer);
-    
-  } catch (error) {
-    console.error('Database error:', error);
-    res.status(500).json({ error: 'Failed to retrieve file' });
-  }
-});
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    message: 'Doctor Award API is running',
-    timestamp: new Date().toISOString()
-  });
-});
-
-// Error handling middleware
-app.use((error, req, res, next) => {
-  console.error(error);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
-
-// Handle 404
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Route not found' });
 });
 
 module.exports = router;
