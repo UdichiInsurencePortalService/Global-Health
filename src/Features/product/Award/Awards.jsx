@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
+import acci from "../../../../src/award/03.jpg";
 import third from "../../../assets/third.png";
 import add6 from "../../../assets/add6.png";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -39,6 +40,128 @@ import "./Award.css";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
 export default function Awards() {
+   const [formData, setFormData] = useState({
+    fullname: '',
+    gender: '',
+    dob: '',
+    nationality: '',
+    country_pride: '',
+    medical_specialty: '',
+    current_designation_institution: '',
+    medical_registration_number: '',
+    issuing_authority: '',
+    years_of_practice: '',
+    languages_spoken: '',
+    key_achievements: '',
+    signature: '',
+    email: '',
+    phone_number: ''
+  });
+
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [registrationId, setRegistrationId] = useState(null);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const validateForm = () => {
+    const requiredFields = [
+      'fullname', 'gender', 'dob', 'nationality', 'medical_specialty',
+      'current_designation_institution', 'medical_registration_number',
+      'issuing_authority', 'years_of_practice', 'email', 'phone_number'
+    ];
+
+    for (let field of requiredFields) {
+      if (!formData[field]) {
+        setError(`Please fill in the ${field.replace(/_/g, ' ')} field`);
+        return false;
+      }
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+
+    // Years of practice validation
+    if (isNaN(formData.years_of_practice) || formData.years_of_practice < 0) {
+      setError('Please enter a valid number for years of practice');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:8080/api/medical-registration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setRegistrationId(result.data.id);
+        setSuccess(result.message);
+        setShowModal(true); // Show modal immediately on success
+        
+        // Reset form
+        setFormData({
+          fullname: '',
+          gender: '',
+          dob: '',
+          nationality: '',
+          country_pride: '',
+          medical_specialty: '',
+          current_designation_institution: '',
+          medical_registration_number: '',
+          issuing_authority: '',
+          years_of_practice: '',
+          languages_spoken: '',
+          key_achievements: '',
+          signature: '',
+          email: '',
+          phone_number: ''
+        });
+      } else {
+        setError(result.message || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      setError('Network error. Please check your connection and try again.');
+      console.error('Registration error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSuccess('');
+  };
   const data = [
     {
       category: "Health Insurance",
@@ -525,6 +648,9 @@ export default function Awards() {
           </ul>
         </div>
       </section>
+
+
+      {/*  */}
       <div className="bg-light py-5">
         <div className="container">
           <h2 className="text-center mb-4">
@@ -542,214 +668,596 @@ export default function Awards() {
             doctors across medical specialties and countries.
           </p>
 
-        <form method="post" encType="multipart/form-data" className="needs-validation" noValidate>
-          {/* Section A: Personal Details */}
-          <fieldset className="border p-4 mb-4">
-            <legend className="w-auto px-2">SECTION A: PERSONAL DETAILS</legend>
-            <div className="mb-3">
-              <label htmlFor="fullName" className="form-label">Full Name</label>
-              <input type="text" className="form-control" name="fullName" id="fullName" required />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Gender</label><br />
-              {["Male", "Female", "Other", "Prefer not to say"].map((gender) => (
-                <div className="form-check form-check-inline" key={gender}>
-                  <input className="form-check-input" type="radio" name="gender" value={gender} id={`gender-${gender}`} />
-                  <label className="form-check-label" htmlFor={`gender-${gender}`}>{gender}</label>
-                </div>
-              ))}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="dob" className="form-label">Date of Birth</label>
-              <input type="date" className="form-control" name="dob" id="dob" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="nationality" className="form-label">Nationality</label>
-              <input type="text" className="form-control" name="nationality" id="nationality" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="country" className="form-label">Country of Practice</label>
-              <input type="text" className="form-control" name="country" id="country" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="photo" className="form-label">Official Photograph</label>
-              <input type="file" className="form-control" name="photo" id="photo" />
-            </div>
-          </fieldset>
+      
+    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', padding: '20px 0' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 20px' }}>
+        <div style={{ 
+          backgroundColor: 'white', 
+          borderRadius: '10px', 
+          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+          overflow: 'hidden'
+        }}>
+          {/* Header */}
+          <div style={{ 
+            backgroundColor: '#007bff', 
+            color: 'white', 
+            padding: '20px', 
+            textAlign: 'center' 
+          }}>
+            <h3 style={{ margin: 0 }}>Medical Professional Registration</h3>
+          </div>
 
-            {/* Section B: Professional Information */}
-            <fieldset className="border p-4 mb-4">
-              <legend className="w-auto px-2">
-                SECTION B: PROFESSIONAL INFORMATION
-              </legend>
-              <div className="mb-3">
-                <label className="form-label">Medical Specialty</label>
-                <input type="text" className="form-control" name="specialty" />
+          {/* Body */}
+          <div style={{ padding: '30px' }}>
+            {/* Error Alert */}
+            {error && (
+              <div style={{ 
+                backgroundColor: '#f8d7da', 
+                color: '#721c24', 
+                padding: '12px 16px', 
+                border: '1px solid #f5c6cb', 
+                borderRadius: '4px', 
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}>
+                <span>{error}</span>
+                <button 
+                  onClick={() => setError('')}
+                  style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    color: '#721c24', 
+                    fontSize: '18px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  ×
+                </button>
               </div>
-              <div className="mb-3">
-                <label className="form-label">
-                  Current Designation & Institution
+            )}
+
+            <form onSubmit={handleSubmit}>
+              {/* Row 1: Full Name & Gender */}
+              <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Full Name <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="fullname"
+                    value={formData.fullname}
+                    onChange={handleInputChange}
+                    placeholder="Dr. John Smith"
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  />
+                </div>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Gender <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Row 2: DOB & Nationality */}
+              <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Date of Birth <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  />
+                </div>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Nationality <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="nationality"
+                    value={formData.nationality}
+                    onChange={handleInputChange}
+                    placeholder="e.g., American, Indian, British"
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Country of Pride */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                  Country of Pride
                 </label>
                 <input
                   type="text"
-                  className="form-control"
-                  name="designation"
+                  name="country_pride"
+                  value={formData.country_pride}
+                  onChange={handleInputChange}
+                  placeholder="Country you're proud to represent"
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid #ced4da',
+                    borderRadius: '4px',
+                    fontSize: '16px'
+                  }}
                 />
               </div>
-              <div className="mb-3">
-                <label className="form-label">
-                  Medical Registration Number & Issuing Authority
+
+              {/* Row 3: Medical Specialty & Years of Practice */}
+              <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Medical Specialty <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <select
+                    name="medical_specialty"
+                    value={formData.medical_specialty}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  >
+                    <option value="">Select Specialty</option>
+                    <option value="Cardiology">Cardiology</option>
+                    <option value="Neurology">Neurology</option>
+                    <option value="Orthopedics">Orthopedics</option>
+                    <option value="Pediatrics">Pediatrics</option>
+                    <option value="Internal Medicine">Internal Medicine</option>
+                    <option value="Surgery">Surgery</option>
+                    <option value="Dermatology">Dermatology</option>
+                    <option value="Psychiatry">Psychiatry</option>
+                    <option value="Radiology">Radiology</option>
+                    <option value="Anesthesiology">Anesthesiology</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Years of Practice <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="years_of_practice"
+                    value={formData.years_of_practice}
+                    onChange={handleInputChange}
+                    placeholder="e.g., 5"
+                    min="0"
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Current Designation & Institution */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                  Current Designation & Institution <span style={{ color: '#dc3545' }}>*</span>
+                </label>
+                <textarea
+                  rows={2}
+                  name="current_designation_institution"
+                  value={formData.current_designation_institution}
+                  onChange={handleInputChange}
+                  placeholder="e.g., Senior Cardiologist at City General Hospital"
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid #ced4da',
+                    borderRadius: '4px',
+                    fontSize: '16px',
+                    resize: 'vertical'
+                  }}
+                  required
+                />
+              </div>
+
+              {/* Row 4: Registration Number & Issuing Authority */}
+              <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Medical Registration Number <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="medical_registration_number"
+                    value={formData.medical_registration_number}
+                    onChange={handleInputChange}
+                    placeholder="e.g., MD12345"
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  />
+                </div>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Issuing Authority <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="issuing_authority"
+                    value={formData.issuing_authority}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Medical Board of California"
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Languages Spoken */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                  Languages Spoken
                 </label>
                 <input
                   type="text"
-                  className="form-control"
-                  name="registration"
+                  name="languages_spoken"
+                  value={formData.languages_spoken}
+                  onChange={handleInputChange}
+                  placeholder="e.g., English, Spanish, French"
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid #ced4da',
+                    borderRadius: '4px',
+                    fontSize: '16px'
+                  }}
                 />
               </div>
-              <div className="mb-3">
-                <label className="form-label">Years of Medical Practice</label>
+
+              {/* Key Achievements */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                  Key Achievements
+                </label>
+                <textarea
+                  rows={3}
+                  name="key_achievements"
+                  value={formData.key_achievements}
+                  onChange={handleInputChange}
+                  placeholder="List your notable achievements, awards, publications, etc."
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid #ced4da',
+                    borderRadius: '4px',
+                    fontSize: '16px',
+                    resize: 'vertical'
+                  }}
+                />
+              </div>
+
+              {/* Digital Signature */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                  Digital Signature
+                </label>
                 <input
-                  type="number"
-                  className="form-control"
-                  name="experience"
+                  type="text"
+                  name="signature"
+                  value={formData.signature}
+                  onChange={handleInputChange}
+                  placeholder="Type your full name as digital signature"
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid #ced4da',
+                    borderRadius: '4px',
+                    fontSize: '16px'
+                  }}
                 />
               </div>
-              <div className="mb-3">
-                <label className="form-label">Academic Qualifications</label>
-                <textarea
-                  className="form-control"
-                  name="qualifications"
-                ></textarea>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Languages Spoken</label>
-                <input type="text" className="form-control" name="languages" />
-              </div>
-            </fieldset>
 
-            {/* Section C: Contributions & Recognition */}
-            <fieldset className="border p-4 mb-4">
-              <legend className="w-auto px-2">
-                SECTION C: CONTRIBUTIONS & RECOGNITION
-              </legend>
-              <div className="mb-3">
-                <label className="form-label">
-                  Key Achievements (up to 300 words)
-                </label>
-                <textarea
-                  className="form-control"
-                  name="achievements"
-                  rows="4"
-                ></textarea>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">
-                  Awards/Recognitions Received
-                </label>
-                <textarea className="form-control" name="awards"></textarea>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">
-                  Notable Research / Publications
-                </label>
-                <textarea className="form-control" name="research"></textarea>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">
-                  Community Health Contributions
-                </label>
-                <textarea className="form-control" name="community"></textarea>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Mentored Professionals?</label>
-                <br />
-                {["Yes", "No"].map((option) => (
-                  <div className="form-check form-check-inline" key={option}>
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="mentored"
-                      value={option}
-                      id={`mentored-${option}`}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor={`mentored-${option}`}
-                    >
-                      {option}
-                    </label>
-                  </div>
-                ))}
-                <div className="mt-2">
-                  <textarea
-                    className="form-control"
-                    name="mentoringDetails"
-                    placeholder="If yes, provide a brief description (max 100 words)"
-                  ></textarea>
+              {/* Row 5: Email & Phone */}
+              <div style={{ display: 'flex', gap: '20px', marginBottom: '30px', flexWrap: 'wrap' }}>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Email Address <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="doctor@example.com"
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  />
+                </div>
+                <div style={{ flex: '1', minWidth: '250px' }}>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Phone Number <span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone_number"
+                    value={formData.phone_number}
+                    onChange={handleInputChange}
+                    placeholder="+1 (555) 123-4567"
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      border: '1px solid #ced4da',
+                      borderRadius: '4px',
+                      fontSize: '16px'
+                    }}
+                    required
+                  />
                 </div>
               </div>
-            </fieldset>
 
-          {/* Section D: Verification & References */}
-          <fieldset className="border p-4 mb-4">
-            <legend className="w-auto px-2">SECTION D: VERIFICATION & REFERENCES</legend>
-            <div className="mb-3">
-              <label className="form-label">Medical License Certificate (Upload)</label>
-              <input type="file" className="form-control" name="license" />
-            </div>
-            <h5>Reference 1</h5>
-            {["ref1_name", "ref1_designation", "ref1_email", "ref1_phone"].map((name, idx) => (
-              <input key={idx} type={name.includes("email") ? "email" : "text"} className="form-control mb-2" name={name} placeholder={name.replace("ref1_", "").replace("_", " ")} />
-            ))}
-            <h5>Reference 2</h5>
-            {["ref2_name", "ref2_designation", "ref2_email", "ref2_phone"].map((name, idx) => (
-              <input key={idx} type={name.includes("email") ? "email" : "text"} className="form-control mb-2" name={name} placeholder={name.replace("ref2_", "").replace("_", " ")} />
-            ))}
-          </fieldset>
-
-          {/* Section E: Award Category & Declaration */}
-          <fieldset className="border p-4 mb-4">
-            <legend className="w-auto px-2">SECTION E: AWARD CATEGORY & DECLARATION</legend>
-            <div className="mb-3">
-              <label className="form-label">Nominated Category</label><br />
-              {[
-                "Country’s Best Doctor in Specialty",
-                "Lifetime Achievement in Medicine",
-                "Excellence in Medical Innovation",
-                "Community Health Impact",
-                "Outstanding Research Contribution",
-                "Young Medical Achiever (Under 40)"
-              ].map((cat) => (
-                <div className="form-check" key={cat}>
-                  <input className="form-check-input" type="radio" name="category[]" value={cat} id={cat} />
-                  <label className="form-check-label" htmlFor={cat}>{cat}</label>
-                </div>
-              ))}
-            </div>
-            <div className="mb-3">
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" required id="declaration" />
-                <label className="form-check-label" htmlFor="declaration">
-                  I hereby declare that all the information provided is true. I agree to submit verification documents if required.
-                </label>
+              {/* Submit Button */}
+              <div style={{ textAlign: 'center' }}>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  style={{
+                    backgroundColor: loading ? '#6c757d' : '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    padding: '12px 40px',
+                    fontSize: '18px',
+                    borderRadius: '6px',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    transition: 'background-color 0.2s'
+                  }}
+                >
+                  {loading ? (
+                    <>
+                      <div style={{
+                        width: '16px',
+                        height: '16px',
+                        border: '2px solid transparent',
+                        borderTop: '2px solid white',
+                        borderRadius: '50%',
+                        animation: 'spin 1s linear infinite'
+                      }}></div>
+                      Submitting...
+                    </>
+                  ) : (
+                    'Submit Registration'
+                  )}
+                </button>
               </div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Signature</label>
-              <input type="text" className="form-control" name="signature" />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Date</label>
-              <input type="date" className="form-control" name="date" />
-            </div>
-          </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
 
-            <div className="text-center">
-              <button type="submit" className="btn btn-primary">
-                Submit Nomination
+      {/* Success Modal */}
+      {showModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1050
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            maxWidth: '500px',
+            width: '90%',
+            maxHeight: '90vh',
+            overflow: 'hidden',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              backgroundColor: '#28a745',
+              color: 'white',
+              padding: '20px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <h4 style={{ margin: 0 }}>Registration Successful!</h4>
+              <button
+                onClick={handleCloseModal}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'white',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  padding: '0',
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.2)'}
+                onMouseOut={(e) => e.target.style.backgroundColor = 'transparent'}
+              >
+                ×
               </button>
             </div>
-          </form>
+
+            {/* Modal Body */}
+            <div style={{ padding: '30px', textAlign: 'center' }}>
+              <div style={{ marginBottom: '20px' }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  backgroundColor: '#28a745',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  fontSize: '40px',
+                  color: 'white'
+                }}>
+                  ✓
+                </div>
+              </div>
+              
+              <h5 style={{ marginBottom: '15px', color: '#333' }}>
+                Thank you for your registration!
+              </h5>
+              
+              <p style={{ marginBottom: '20px', color: '#666', lineHeight: '1.5' }}>
+                Your medical registration has been submitted successfully. 
+                A confirmation email with further instructions has been sent to your email address.
+              </p>
+              
+              {registrationId && (
+                <div style={{ marginBottom: '20px' }}>
+                  <span style={{
+                    backgroundColor: '#17a2b8',
+                    color: 'white',
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                  }}>
+                    Registration ID: {registrationId}
+                  </span>
+                </div>
+              )}
+              
+              <div style={{
+                backgroundColor: '#fff3cd',
+                border: '1px solid #ffeaa7',
+                borderRadius: '4px',
+                padding: '15px',
+                marginBottom: '20px',
+                textAlign: 'left'
+              }}>
+                <strong style={{ color: '#856404' }}>Next Steps:</strong>
+                <ul style={{ 
+                  marginBottom: 0, 
+                  marginTop: '10px', 
+                  color: '#856404',
+                  paddingLeft: '20px'
+                }}>
+                  <li>Check your email for confirmation details</li>
+                  <li>Submit your medical license (scanned copy)</li>
+                  <li>Provide a recent professional photograph</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div style={{
+              padding: '15px 30px',
+              borderTop: '1px solid #dee2e6',
+              textAlign: 'right'
+            }}>
+              <button
+                onClick={handleCloseModal}
+                style={{
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '16px'
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+                onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CSS Animation for Spinner */}
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
         </div>
       </div>
       

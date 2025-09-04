@@ -141,7 +141,7 @@ const Footer = () => {
                   <FaPhone className="me-2" />08069640455
                 </li>
                 <li className="d-flex align-items-center">
-                  <FaEnvelope className="me-2" /> globalhealth235@gmail.com
+                  <FaEnvelope className="me-2" /> info@globalhealthandalliedservices.com
                 </li>
               </ul>
             </div>

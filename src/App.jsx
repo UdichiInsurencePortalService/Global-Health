@@ -3,7 +3,7 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./Header/Navbar/Navbar.jsx";
 import Footer from "./Header/Footer/Footer.jsx";
-import Chat from "./ChatBot/Chat.jsx";
+// import Chat from "./ChatBot/Chat.jsx";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -124,7 +124,7 @@ function App() {
 
       <Footer />
 
-      <Chat />
+      {/* <Chat /> */}
     </>
   );
 }

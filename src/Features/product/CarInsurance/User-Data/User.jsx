@@ -131,7 +131,7 @@ const User = () => {
                       <Descriptions.Item label="Maker/Model" span={1}>
                         {vehicleDetails.maker_model || "N/A"}
                       </Descriptions.Item>
-                      <Descriptions.Item label="Ex-Showroom Price" span={1}>
+                      <Descriptions.Item label="Idv (Insured Declared Value)" span={1}>
                         {vehicleDetails.ex_showroom_price || "1000000"}
                       </Descriptions.Item>
                       <Descriptions.Item label="Financer" span={1}>
