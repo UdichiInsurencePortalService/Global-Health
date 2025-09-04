@@ -578,11 +578,7 @@ const Bikeinsurance = () => {
       </div>
     </section>
 
-      <Reusechoose 
-        heading="What Not covers in Bike Insurance?"
-        subheading="Bike insurance is a type of motor insurance that provides financial protection against physical damage or bodily injury resulting from traffic collisions and against liability that could also arise from incidents in a vehicle. It may also offer financial protection against theft of the vehicle, and against damage to the vehicle sustained from events other than traffic collisions, such as keying, weather or natural disasters, and damage sustained by colliding with stationary objects."
-        features={Notcover}
-      />
+     
       <Reusechoose
         heading="Why Should You Buy Global Health & Allied Insurance Service Bike Insurance?"
         subheading="We treat our customers like VIPs, know how…"
