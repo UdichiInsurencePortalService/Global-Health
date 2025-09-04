@@ -8,6 +8,14 @@ import {
   Button,
   message
 } from "antd";
+
+
+// import { 
+//   FaTools, FaCarCrash, FaIdCard, FaWineBottle, FaWater,
+//   FaBomb, FaBan, FaGlobe, FaDotCircle, FaBoxOpen,
+//   FaUsers, FaExchangeAlt, FaHardHat
+// } from "react-icons/fa";
+
 import { CarOutlined, PhoneOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Bikeinsurance.css";
@@ -29,12 +37,113 @@ import NeedHelp from "../../../Reuse/NeedHelp/NeedHelp";
 import { handleError } from "../../../errortoast";
 
 
+// import wearTear from "../../../assets/Notcoverimage/warning.png";
+// import drunk from "../../../assets/Notcoverimage/disruption.png"
 
 
-
+// import React from "react";
+import {
+  FaTools,
+  FaCogs,
+  FaIdCard,
+  FaWineBottle,
+  FaExchangeAlt,
+  FaBomb,
+  FaBan,
+  FaGlobe,
+  FaDotCircle,
+  FaBoxOpen,
+  FaUsers,
+  FaTimesCircle,
+  FaHardHat,
+} from "react-icons/fa";
 
 
 const Bikeinsurance = () => {
+
+ const Notcover = [
+  {
+    id: 1,
+    title: "Normal Wear & Tear",
+    description: "Depreciation of parts and aging of the vehicle are not covered.",
+    icon: <FaTools size={40} color="#f39c12" />
+  },
+  {
+    id: 2,
+    title: "Mechanical or Electrical Breakdowns",
+    description: "Engine failure, clutch plate issues, and wiring faults are excluded.",
+    icon: <FaCogs size={40} color="#2980b9" />
+  },
+  {
+    id: 3,
+    title: "Riding Without a Valid License",
+    description: "Accidents while riding without a valid driving license are not covered.",
+    icon: <FaIdCard size={40} color="#8e44ad" />
+  },
+  {
+    id: 4,
+    title: "Drunk Driving / Drugs",
+    description: "Accidents caused under the influence of alcohol or drugs are not covered.",
+    icon: <FaWineBottle size={40} color="#c0392b" />
+  },
+  {
+    id: 5,
+    title: "Consequential Loss",
+    description: "Damage caused indirectly, such as engine damage after riding in water.",
+    icon: <FaExchangeAlt size={40} color="#27ae60" />
+  },
+  {
+    id: 6,
+    title: "War, Nuclear Risks, or Riots",
+    description: "Losses due to war, nuclear risks, or riots are not covered unless specified.",
+    icon: <FaBomb size={40} color="#e74c3c" />
+  },
+  {
+    id: 7,
+    title: "Illegal Usage",
+    description: "Racing, speed testing, or using the bike for commercial purposes when insured for private use.",
+    icon: <FaBan size={40} color="#d35400" />
+  },
+  {
+    id: 8,
+    title: "Outside Geographical Area",
+    description: "Accidents outside India are not covered unless specifically included.",
+    icon: <FaGlobe size={40} color="#16a085" />
+  },
+  {
+    id: 9,
+    title: "Tyre/Tubes Damage",
+    description: "Tyres and tubes are not covered unless the bike is also damaged.",
+    icon: <FaDotCircle size={40} color="#3498db" />
+  },
+  {
+    id: 10,
+    title: "Personal Belongings",
+    description: "Items like mobile phones, laptops, or luggage stolen from the bike are not covered.",
+    icon: <FaBoxOpen size={40} color="#f1c40f" />
+  },
+  {
+    id: 11,
+    title: "Third-Party Only Policy",
+    description: "Own bike damage is not covered under a third-party only policy.",
+    icon: <FaUsers size={40} color="#9b59b6" />
+  },
+  {
+    id: 12,
+    title: "Wrong-Side Driving",
+    description: "Accidents due to wrong-side driving are not covered.",
+    icon: <FaTimesCircle size={40} color="#2ecc71" />
+  },
+  {
+    id: 13,
+    title: "Without Helmet",
+    description: "Accidents where the rider is not wearing a helmet are excluded from coverage.",
+    icon: <FaHardHat size={40} color="#e67e22" />
+  }
+];
+
+
+
   const carFeatures = [
     {
       id: 1,
@@ -455,6 +564,25 @@ const Bikeinsurance = () => {
           </Row>
         </div>
       </div>
+
+      <section className="insurance-section">
+      <h2 className="insurance-heading">What's Not Covered in Bike Insurance?</h2>
+      <div className="insurance-grid">
+        {Notcover.map((item) => (
+          <div key={item.id} className="insurance-card">
+            <div className="icon">{item.icon}</div>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+      <Reusechoose 
+        heading="What Not covers in Bike Insurance?"
+        subheading="Bike insurance is a type of motor insurance that provides financial protection against physical damage or bodily injury resulting from traffic collisions and against liability that could also arise from incidents in a vehicle. It may also offer financial protection against theft of the vehicle, and against damage to the vehicle sustained from events other than traffic collisions, such as keying, weather or natural disasters, and damage sustained by colliding with stationary objects."
+        features={Notcover}
+      />
       <Reusechoose
         heading="Why Should You Buy Global Health & Allied Insurance Service Bike Insurance?"
         subheading="We treat our customers like VIPs, know how…"
@@ -506,7 +634,7 @@ const Bikeinsurance = () => {
         steps={[
           {
             title: "step1",
-            description: "Just call on 9818152403. No forms to be filled.",
+            description: "Just call on 08069640455",
           },
           {
             title: "step2",
