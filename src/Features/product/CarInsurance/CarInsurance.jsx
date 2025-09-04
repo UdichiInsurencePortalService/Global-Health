@@ -62,7 +62,7 @@ const Carinsurance = () => {
       {
         id: 1,
         title: "Step 1",
-        description: "Just call on 1800-258-5956. No forms to be filled.",
+        description: "Just call on 8069640455. No forms to be filled.",
       },
       {
         id: 2,

@@ -504,37 +504,7 @@ const Autoinsurance = () => {
         features={features}
       />
 
-      <div className="what-cover-section py-5">
-      <div className="container">
-        <div className="row justify-content-center text-center mb-4">
-          <div className="col-12">
-            <h1 className="fw-bold">Why Should You Get Auto Insurance?</h1>
-          </div>
-        </div>
-
-                  <label>Mobile Number</label>
-                  <Input
-                    placeholder="Enter 10-digit mobile number"
-                    size="large"
-                    prefix={<PhoneOutlined />}
-                    value={mobileNumber}
-                    onChange={(e) => setMobileNumber(e.target.value)}
-                    maxLength={10}
-                    className="mb-3"
-                  />
-
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    size="large"
-                    loading={loading}
-                    block
-                  >
-                    {loading ? "Fetching Vehicle Data..." : "Get Vehicle Details"}
-                  </Button>
-             
-        </div>
-      </div>
+    
     </div>
 
     <DepreciationCalculated 
