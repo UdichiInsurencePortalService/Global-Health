@@ -43,7 +43,6 @@ const Products = () => {
   const carouselStyles = `
     .products-swiper {
       width: 100%;
-      padding: 20px 0;
     }
     
     .products-swiper-slide {

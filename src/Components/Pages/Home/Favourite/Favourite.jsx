@@ -30,7 +30,7 @@ const features = [
 
 const Favourite = () => {
   return (
-    <Container className="my-5 py-5">
+    <Container className="my-5 ">
       <Row className="align-items-center">
         {/* Left Section - Text */}
         <Col md={5}>

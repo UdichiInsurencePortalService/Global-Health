@@ -451,15 +451,13 @@ const Home = () => {
                     lineHeight: "1.6"
                   }}
                 >
-                  Compare quotes from top insurers and save up to{" "}
+                 Compare top insurers. Get your best deal—fast
                   <motion.span
                     className="fw-bold text-warning"
                     animate={{ scale: [1, 1.1, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   >
-                    85%
                   </motion.span>{" "}
-                  on premiums
                 </motion.p>
 
                 <motion.div
@@ -754,7 +752,7 @@ const Home = () => {
         <Seprate />
       </div>
 
-      <div className="py-3">
+      <div className="">
         <Favourite />
       </div>
 
@@ -762,7 +760,7 @@ const Home = () => {
         <Benefit />
       </div>
 
-      <div className="py-3">
+      <div className="">
         <Products />
       </div>
 
