@@ -158,7 +158,8 @@ const Navbar = ({ icon1, icon2 }) => {
         mobileMenuOpen &&
         mobileNav &&
         !mobileNav.contains(event.target) &&
-        !event.target.classList.contains("mobile-menu-toggle")
+        !event.target.classList.contains("mobile-menu-toggle") &&
+        !event.target.closest('.mobile-menu-toggle')
       ) {
         setMobileMenuOpen(false);
       }
@@ -201,6 +202,38 @@ const Navbar = ({ icon1, icon2 }) => {
       backdropFilter: "blur(10px)",
       boxShadow: isScrolled ? "0 2px 10px rgba(0, 0, 0, 0.1)" : "none",
       padding: "10px 0",
+    },
+  };
+
+  // Hamburger menu styles
+  const hamburgerStyles = {
+    container: {
+      width: "30px",
+      height: "24px",
+      position: "relative",
+      cursor: "pointer",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      padding: "2px 0",
+    },
+    line: {
+      width: "100%",
+      height: "3px",
+      backgroundColor: isScrolled ? "white" : "#333",
+      borderRadius: "2px",
+      transition: "all 0.3s ease-in-out",
+      transformOrigin: "center",
+    },
+    lineTop: {
+      transform: mobileMenuOpen ? "translateY(9px) rotate(45deg)" : "translateY(0) rotate(0deg)",
+    },
+    lineMiddle: {
+      opacity: mobileMenuOpen ? 0 : 1,
+      transform: mobileMenuOpen ? "scale(0)" : "scale(1)",
+    },
+    lineBottom: {
+      transform: mobileMenuOpen ? "translateY(-9px) rotate(-45deg)" : "translateY(0) rotate(0deg)",
     },
   };
 
@@ -584,23 +617,40 @@ const Navbar = ({ icon1, icon2 }) => {
             {/* Right Section - User Actions & Mobile Menu Button */}
             <div className="col-6 col-sm-9 col-lg-3">
               <div className="d-flex align-items-center justify-content-end">
-                {/* Desktop Login/Logout */}
-               
-
-                {/* Mobile Menu Button */}
+                {/* Mobile Menu Button with Animated Hamburger */}
                 <button
-                  className="mobile-menu-toggle d-lg-none btn"
+                  className="mobile-menu-toggle d-lg-none btn p-0"
                   onClick={toggleMobileMenu}
                   aria-label="Toggle mobile menu"
                   style={{
                     border: "none",
                     background: "transparent",
-                    fontSize: "1.5rem",
-                    padding: "8px",
-                    color: isScrolled ? "white" : "#333",
+                    padding: "12px",
+                    borderRadius: "8px",
+                    transition: "all 0.3s ease",
+                    transform: mobileMenuOpen ? "scale(1.1)" : "scale(1)",
                   }}
                 >
-                  <MenuOutlined />
+                  <div style={hamburgerStyles.container}>
+                    <div 
+                      style={{
+                        ...hamburgerStyles.line,
+                        ...hamburgerStyles.lineTop,
+                      }}
+                    ></div>
+                    <div 
+                      style={{
+                        ...hamburgerStyles.line,
+                        ...hamburgerStyles.lineMiddle,
+                      }}
+                    ></div>
+                    <div 
+                      style={{
+                        ...hamburgerStyles.line,
+                        ...hamburgerStyles.lineBottom,
+                      }}
+                    ></div>
+                  </div>
                 </button>
               </div>
             </div>
@@ -741,11 +791,12 @@ const Navbar = ({ icon1, icon2 }) => {
           left: 0,
           width: "100%",
           height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
           zIndex: 1001,
           opacity: mobileMenuOpen ? 1 : 0,
           visibility: mobileMenuOpen ? "visible" : "hidden",
-          transition: "all 0.3s ease",
+          transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+          backdropFilter: mobileMenuOpen ? "blur(4px)" : "blur(0px)",
         }}
       ></div>
 
@@ -755,49 +806,101 @@ const Navbar = ({ icon1, icon2 }) => {
         style={{
           position: "fixed",
           top: 0,
-          right: mobileMenuOpen ? 0 : "-100%",
-          width: "280px",
+          right: mobileMenuOpen ? 0 : "-320px",
+          width: "320px",
           maxWidth: "85vw",
           height: "100%",
-          backgroundColor: "white",
+          backgroundColor: "#ffffff",
           zIndex: 1002,
-          transition: "right 0.3s ease",
+          transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
           overflowY: "auto",
-          boxShadow: "-2px 0 10px rgba(0, 0, 0, 0.1)",
+          boxShadow: mobileMenuOpen 
+            ? "-8px 0 32px rgba(0, 0, 0, 0.15)" 
+            : "none",
+          fontFamily: "'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif",
         }}
       >
-        <div className="mobile-nav-header p-3 border-bottom">
+        <div className="mobile-nav-header p-4" style={{
+          borderBottom: "2px solid #f0f2f5",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          color: "white",
+        }}>
           <div className="d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">Menu</h5>
+            <h4 className="mb-0" style={{ 
+              fontWeight: "700", 
+              fontSize: "1.25rem",
+              letterSpacing: "0.5px",
+            }}>
+              Menu
+            </h4>
             <button
               className="mobile-nav-close btn btn-sm"
               onClick={toggleMobileMenu}
-              style={{ border: "none", background: "transparent" }}
+              style={{ 
+                border: "none", 
+                background: "rgba(255, 255, 255, 0.2)",
+                color: "white",
+                borderRadius: "50%",
+                width: "36px",
+                height: "36px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.3s ease",
+              }}
             >
-              <CloseOutlined />
+              <CloseOutlined style={{ fontSize: "16px" }} />
             </button>
           </div>
         </div>
 
         <ul className="mobile-nav-menu list-unstyled p-0 m-0">
-          <li className="border-bottom">
+          <li style={{ borderBottom: "1px solid #e8eaed" }}>
             <Link
               to="/"
               onClick={toggleMobileMenu}
-              className="d-block p-3 text-decoration-none"
+              className="d-block p-4 text-decoration-none"
+              style={{
+                color: "#1a1a1a",
+                fontSize: "16px",
+                fontWeight: "600",
+                fontFamily: "inherit",
+                transition: "all 0.3s ease",
+                backgroundColor: "transparent",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = "#f8f9ff";
+                e.target.style.paddingLeft = "24px";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "transparent";
+                e.target.style.paddingLeft = "16px";
+              }}
             >
-              Home
+              🏠 Home
             </Link>
           </li>
 
-          <li className="border-bottom">
+          <li style={{ borderBottom: "1px solid #e8eaed" }}>
             <button
               onClick={() => toggleDropdown("products")}
-              className="mobile-dropdown-toggle w-100 text-start p-3 border-0 bg-transparent d-flex justify-content-between align-items-center"
+              className="mobile-dropdown-toggle w-100 text-start p-4 border-0 bg-transparent d-flex justify-content-between align-items-center"
+              style={{
+                color: "#1a1a1a",
+                fontSize: "16px",
+                fontWeight: "600",
+                fontFamily: "inherit",
+                transition: "all 0.3s ease",
+              }}
             >
-              Products
-              <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                {activeDropdown === "products" ? "−" : "+"}
+              <span>🛡️ Products</span>
+              <span style={{ 
+                fontSize: "18px", 
+                fontWeight: "bold",
+                transform: activeDropdown === "products" ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "transform 0.3s ease",
+              }}>
+                ▼
               </span>
             </button>
             <div
@@ -805,13 +908,21 @@ const Navbar = ({ icon1, icon2 }) => {
                 activeDropdown === "products" ? "active" : ""
               }`}
               style={{
-                maxHeight: activeDropdown === "products" ? "500px" : "0",
+                maxHeight: activeDropdown === "products" ? "600px" : "0",
                 overflow: "hidden",
-                transition: "max-height 0.3s ease",
-                backgroundColor: "#f8f9fa",
+                transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                backgroundColor: "#f8f9ff",
               }}
             >
-              <div className="mobile-dropdown-header p-2 px-4 fw-bold text-muted">
+              <div className="mobile-dropdown-header p-3 px-4" style={{
+                fontWeight: "700",
+                color: "#4338ca",
+                fontSize: "14px",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                borderBottom: "1px solid #e5e7eb",
+                backgroundColor: "#ede9fe",
+              }}>
                 Individual Insurance
               </div>
               <ul className="list-unstyled m-0">
@@ -819,50 +930,148 @@ const Navbar = ({ icon1, icon2 }) => {
                   <Link
                     to="/carinsurance"
                     onClick={toggleMobileMenu}
-                    className="d-block p-2 px-4 text-decoration-none"
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
                   >
-                    Car Insurance
+                    🚗 Car Insurance
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/Bikeinsurance"
                     onClick={toggleMobileMenu}
-                    className="d-block p-2 px-4 text-decoration-none"
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
                   >
-                    Bike Insurance
+                    🏍️ Bike Insurance
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/Healthinsurance"
                     onClick={toggleMobileMenu}
-                    className="d-block p-2 px-4 text-decoration-none"
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
                   >
-                    Health Insurance
+                    🏥 Health Insurance
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/Autoinsurance"
                     onClick={toggleMobileMenu}
-                    className="d-block p-2 px-4 text-decoration-none"
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
                   >
-                    Auto Insurance
+                    🚙 Auto Insurance
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/Homeinsurance"
                     onClick={toggleMobileMenu}
-                    className="d-block p-2 px-4 text-decoration-none"
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
                   >
-                    Home Insurance
+                    🏠 Home Insurance
                   </Link>
                 </li>
               </ul>
 
-              <div className="mobile-dropdown-header p-2 px-4 fw-bold text-muted">
+              <div className="mobile-dropdown-header p-3 px-4" style={{
+                fontWeight: "700",
+                color: "#4338ca",
+                fontSize: "14px",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                borderBottom: "1px solid #e5e7eb",
+                backgroundColor: "#ede9fe",
+              }}>
                 Business Insurance
               </div>
               <ul className="list-unstyled m-0">
@@ -873,9 +1082,27 @@ const Navbar = ({ icon1, icon2 }) => {
                       toggleMobileMenu();
                       handleError("This page is Under-development");
                     }}
-                    className="d-block p-2 px-4 text-decoration-none"
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
                   >
-                    Commercial Insurance
+                    🏢 Commercial Insurance
                   </Link>
                 </li>
                 <li>
@@ -885,9 +1112,27 @@ const Navbar = ({ icon1, icon2 }) => {
                       toggleMobileMenu();
                       handleError("This page is under Development");
                     }}
-                    className="d-block p-2 px-4 text-decoration-none"
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
                   >
-                    Liability Insurance
+                    ⚖️ Liability Insurance
                   </Link>
                 </li>
                 <li>
@@ -897,23 +1142,145 @@ const Navbar = ({ icon1, icon2 }) => {
                       toggleMobileMenu();
                       handleError("This page is under Development");
                     }}
-                    className="d-block p-2 px-4 text-decoration-none"
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
                   >
-                    Property Insurance
+                    🏘️ Property Insurance
                   </Link>
                 </li>
               </ul>
             </div>
           </li>
 
-          <li className="border-bottom">
+          <li style={{ borderBottom: "1px solid #e8eaed" }}>
+            <button
+              onClick={() => toggleDropdown("claims")}
+              className="mobile-dropdown-toggle w-100 text-start p-4 border-0 bg-transparent d-flex justify-content-between align-items-center"
+              style={{
+                color: "#1a1a1a",
+                fontSize: "16px",
+                fontWeight: "600",
+                fontFamily: "inherit",
+                transition: "all 0.3s ease",
+              }}
+            >
+              <span>📋 Claims</span>
+              <span style={{ 
+                fontSize: "18px", 
+                fontWeight: "bold",
+                transform: activeDropdown === "claims" ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "transform 0.3s ease",
+              }}>
+                ▼
+              </span>
+            </button>
+            <div
+              className={`mobile-dropdown-content ${
+                activeDropdown === "claims" ? "active" : ""
+              }`}
+              style={{
+                maxHeight: activeDropdown === "claims" ? "300px" : "0",
+                overflow: "hidden",
+                transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                backgroundColor: "#f8f9ff",
+              }}
+            >
+              <ul className="list-unstyled m-0">
+                <li>
+                  <Link
+                    to="/Claimprocess"
+                    onClick={toggleMobileMenu}
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
+                  >
+                    ⚙️ Claim Process
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/intimateclaims"
+                    onClick={toggleMobileMenu}
+                    className="d-block p-3 px-4 text-decoration-none"
+                    style={{
+                      color: "#374151",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "inherit",
+                      transition: "all 0.3s ease",
+                      borderLeft: "3px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ffffff";
+                      e.target.style.borderLeft = "3px solid #667eea";
+                      e.target.style.paddingLeft = "20px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderLeft = "3px solid transparent";
+                      e.target.style.paddingLeft = "16px";
+                    }}
+                  >
+                    🚗 Vehicle Intimate Claims
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li style={{ borderBottom: "1px solid #e8eaed" }}>
             <button
               onClick={() => toggleDropdown("support")}
-              className="mobile-dropdown-toggle w-100 text-start p-3 border-0 bg-transparent d-flex justify-content-between align-items-center"
+              className="mobile-dropdown-toggle w-100 text-start p-4 border-0 bg-transparent d-flex justify-content-between align-items-center"
+              style={{
+                color: "#1a1a1a",
+                fontSize: "16px",
+                fontWeight: "600",
+                fontFamily: "inherit",
+                transition: "all 0.3s ease",
+              }}
             >
-              Support
-              <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                {activeDropdown === "support" ? "−" : "+"}
+              <span>🆘 Support</span>
+              <span style={{ 
+                fontSize: "18px", 
+                fontWeight: "bold",
+                transform: activeDropdown === "support" ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "transform 0.3s ease",
+              }}>
+                ▼
               </span>
             </button>
             <div
@@ -921,25 +1288,38 @@ const Navbar = ({ icon1, icon2 }) => {
                 activeDropdown === "support" ? "active" : ""
               }`}
               style={{
-                maxHeight: activeDropdown === "support" ? "300px" : "0",
+                maxHeight: activeDropdown === "support" ? "400px" : "0",
                 overflow: "hidden",
-                transition: "max-height 0.3s ease",
-                backgroundColor: "#f8f9fa",
+                transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                backgroundColor: "#f8f9ff",
               }}
             >
               <div className="p-3">
                 <Link
                   to="/policy"
                   onClick={toggleMobileMenu}
-                  className="d-flex align-items-center gap-2 p-2 text-decoration-none mb-2"
+                  className="d-flex align-items-center gap-3 p-3 text-decoration-none mb-2"
+                  style={{
+                    color: "#374151",
+                    fontSize: "15px",
+                    fontWeight: "500",
+                    fontFamily: "inherit",
+                    transition: "all 0.3s ease",
+                    borderRadius: "8px",
+                    border: "1px solid #e5e7eb",
+                    backgroundColor: "#ffffff",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = "#f3f4f6";
+                    e.target.style.transform = "translateX(4px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = "#ffffff";
+                    e.target.style.transform = "translateX(0px)";
+                  }}
                 >
-                  <img
-                    src={img3}
-                    alt="Download"
-                    style={{ width: "20px", height: "20px" }}
-                    className="img-fluid"
-                  />
-                  <span>Download policy pdf</span>
+                  <span>📄</span>
+                  <span>Download Policy PDF</span>
                 </Link>
 
                 <a
@@ -947,15 +1327,30 @@ const Navbar = ({ icon1, icon2 }) => {
                     toggleMobileMenu();
                     handleClick();
                   }}
-                  className="d-flex align-items-center gap-2 p-2 text-decoration-none mb-2"
-                  style={{ cursor: "pointer" }}
+                  className="d-flex align-items-center gap-3 p-3 text-decoration-none mb-2"
+                  style={{ 
+                    cursor: "pointer",
+                    color: "#374151",
+                    fontSize: "15px",
+                    fontWeight: "500",
+                    fontFamily: "inherit",
+                    transition: "all 0.3s ease",
+                    borderRadius: "8px",
+                    border: "1px solid #e5e7eb",
+                    backgroundColor: "#ffffff",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = "#f0fdf4";
+                    e.target.style.transform = "translateX(4px)";
+                    e.target.style.borderColor = "#22c55e";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = "#ffffff";
+                    e.target.style.transform = "translateX(0px)";
+                    e.target.style.borderColor = "#e5e7eb";
+                  }}
                 >
-                  <img
-                    style={{ width: "20px", height: "20px" }}
-                    className="img-fluid"
-                    src={img1}
-                    alt="WhatsApp"
-                  />
+                  <span>💬</span>
                   <span>Connect on WhatsApp</span>
                 </a>
 
@@ -964,81 +1359,65 @@ const Navbar = ({ icon1, icon2 }) => {
                     toggleMobileMenu();
                     showCallbackModal();
                   }}
-                  className="d-flex align-items-center gap-2 p-2 text-decoration-none"
-                  style={{ cursor: "pointer" }}
+                  className="d-flex align-items-center gap-3 p-3 text-decoration-none"
+                  style={{ 
+                    cursor: "pointer",
+                    color: "#374151",
+                    fontSize: "15px",
+                    fontWeight: "500",
+                    fontFamily: "inherit",
+                    transition: "all 0.3s ease",
+                    borderRadius: "8px",
+                    border: "1px solid #e5e7eb",
+                    backgroundColor: "#ffffff",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = "#fef3c7";
+                    e.target.style.transform = "translateX(4px)";
+                    e.target.style.borderColor = "#f59e0b";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = "#ffffff";
+                    e.target.style.transform = "translateX(0px)";
+                    e.target.style.borderColor = "#e5e7eb";
+                  }}
                 >
-                  <img
-                    style={{ width: "20px", height: "20px" }}
-                    className="img-fluid"
-                    src={img2}
-                    alt="Callback"
-                  />
+                  <span>📞</span>
                   <span>Request a Callback</span>
                 </a>
               </div>
             </div>
           </li>
 
-          <li className="border-bottom">
-            <button
-              onClick={() => toggleDropdown("claims")}
-              className="mobile-dropdown-toggle w-100 text-start p-3 border-0 bg-transparent d-flex justify-content-between align-items-center"
-            >
-              Claims
-              <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                {activeDropdown === "claims" ? "−" : "+"}
-              </span>
-            </button>
-            <div
-              className={`mobile-dropdown-content ${
-                activeDropdown === "claims" ? "active" : ""
-              }`}
-              style={{
-                maxHeight: activeDropdown === "claims" ? "200px" : "0",
-                overflow: "hidden",
-                transition: "max-height 0.3s ease",
-                backgroundColor: "#f8f9fa",
-              }}
-            >
-              <ul className="list-unstyled m-0">
-                <li>
-                  <Link
-                    to="/Claimprocess"
-                    onClick={toggleMobileMenu}
-                    className="d-block p-2 px-4 text-decoration-none"
-                  >
-                    Claim Process
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/intimateclaims"
-                    onClick={toggleMobileMenu}
-                    className="d-block p-2 px-4 text-decoration-none"
-                  >
-                    Vehicle Intimate Claims
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </li>
-
-          <li className="border-bottom">
+          <li style={{ borderBottom: "1px solid #e8eaed" }}>
             <Link
               to="#"
               onClick={() => {
                 toggleMobileMenu();
                 showDrawer();
               }}
-              className="d-block p-3 text-decoration-none"
+              className="d-block p-4 text-decoration-none"
+              style={{
+                color: "#1a1a1a",
+                fontSize: "16px",
+                fontWeight: "600",
+                fontFamily: "inherit",
+                transition: "all 0.3s ease",
+                backgroundColor: "transparent",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = "#f8f9ff";
+                e.target.style.paddingLeft = "24px";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "transparent";
+                e.target.style.paddingLeft = "16px";
+              }}
             >
-              Contact Us
+              📧 Contact Us
             </Link>
           </li>
         </ul>
-
-        {/* Mobile User Section */}
-        
       </div>
 
       {/* Contact Drawer */}
