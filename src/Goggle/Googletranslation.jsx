@@ -28,7 +28,7 @@ const Googletranslation = () => {
   }, []);
 
   return (
-    <div id="google_translate_element" style={{ position: "fixed", top: 18, right: 23, zIndex: 1000 }}></div>
+    <div id="google_translate_element" style={{ position: "absolute", top: 58, right: 23, }}></div>
   );
 };
 

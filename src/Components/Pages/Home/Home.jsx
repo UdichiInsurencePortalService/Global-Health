@@ -112,29 +112,33 @@ const Home = () => {
       case "Car":
         return (
           <>
-            <Col lg={5} md={5} sm={12} className="mb-3 mb-md-0">
+            <Col xl={5} lg={5} md={6} sm={12} className="mb-3 mb-md-0">
               <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaIdCard className="me-2" /> Mobile Number
+                <Form.Label className="fw-bold text-secondary d-flex align-items-center justify-content-center gap-2">
+                  <FaIdCard className="d-none d-sm-inline" />
+                  <span className="fs-6 fs-sm-5">Mobile Number</span>
                 </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter Mobile No."
-                  className="py-2 rounded-lg text-center"
+                  className="py-2 py-md-3 rounded-lg text-center fs-6"
+                  style={{ fontSize: "14px" }}
                   onFocus={() => setFocusField("mobile")}
                   onBlur={() => setFocusField(null)}
                 />
               </Form.Group>
             </Col>
-            <Col lg={5} md={5} sm={12}>
+            <Col xl={5} lg={5} md={6} sm={12}>
               <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaCar className="me-2" /> Car Registration
+                <Form.Label className="fw-bold text-secondary d-flex align-items-center justify-content-center gap-2">
+                  <FaCar className="d-none d-sm-inline" />
+                  <span className="fs-6 fs-sm-5">Car Registration</span>
                 </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Eg. TN10AB1234"
-                  className="py-2 rounded-lg text-center"
+                  className="py-2 py-md-3 rounded-lg text-center fs-6"
+                  style={{ fontSize: "14px" }}
                   onFocus={() => setFocusField("registration")}
                   onBlur={() => setFocusField(null)}
                 />
@@ -145,29 +149,33 @@ const Home = () => {
       case "Bike":
         return (
           <>
-            <Col lg={5} md={5} sm={12} className="mb-3 mb-md-0">
+            <Col xl={5} lg={5} md={6} sm={12} className="mb-3 mb-md-0">
               <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaMotorcycle className="me-2" /> Bike Model
+                <Form.Label className="fw-bold text-secondary d-flex align-items-center justify-content-center gap-2">
+                  <FaMotorcycle className="d-none d-sm-inline" />
+                  <span className="fs-6 fs-sm-5">Bike Model</span>
                 </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter Bike Model"
-                  className="py-2 rounded-lg text-center"
+                  className="py-2 py-md-3 rounded-lg text-center fs-6"
+                  style={{ fontSize: "14px" }}
                   onFocus={() => setFocusField("bikeModel")}
                   onBlur={() => setFocusField(null)}
                 />
               </Form.Group>
             </Col>
-            <Col lg={5} md={5} sm={12}>
+            <Col xl={5} lg={5} md={6} sm={12}>
               <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaCalendarAlt className="me-2" /> Year of Manufacture
+                <Form.Label className="fw-bold text-secondary d-flex align-items-center justify-content-center gap-2">
+                  <FaCalendarAlt className="d-none d-sm-inline" />
+                  <span className="fs-6 fs-sm-5">Year of Manufacture</span>
                 </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter Year"
-                  className="py-2 rounded-lg text-center"
+                  className="py-2 py-md-3 rounded-lg text-center fs-6"
+                  style={{ fontSize: "14px" }}
                   onFocus={() => setFocusField("bikeYear")}
                   onBlur={() => setFocusField(null)}
                 />
@@ -178,29 +186,33 @@ const Home = () => {
       case "Health":
         return (
           <>
-            <Col lg={5} md={5} sm={12} className="mb-3 mb-md-0">
+            <Col xl={5} lg={5} md={6} sm={12} className="mb-3 mb-md-0">
               <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaUser className="me-2" /> Your Age
+                <Form.Label className="fw-bold text-secondary d-flex align-items-center justify-content-center gap-2">
+                  <FaUser className="d-none d-sm-inline" />
+                  <span className="fs-6 fs-sm-5">Your Age</span>
                 </Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Enter Your Age"
-                  className="py-2 rounded-lg text-center"
+                  className="py-2 py-md-3 rounded-lg text-center fs-6"
+                  style={{ fontSize: "14px" }}
                   onFocus={() => setFocusField("healthAge")}
                   onBlur={() => setFocusField(null)}
                 />
               </Form.Group>
             </Col>
-            <Col lg={5} md={5} sm={12}>
+            <Col xl={5} lg={5} md={6} sm={12}>
               <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaIdCard className="me-2" /> Mobile Number
+                <Form.Label className="fw-bold text-secondary d-flex align-items-center justify-content-center gap-2">
+                  <FaIdCard className="d-none d-sm-inline" />
+                  <span className="fs-6 fs-sm-5">Mobile Number</span>
                 </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Your Contact Number"
-                  className="py-2 rounded-lg text-center"
+                  className="py-2 py-md-3 rounded-lg text-center fs-6"
+                  style={{ fontSize: "14px" }}
                   onFocus={() => setFocusField("healthMobile")}
                   onBlur={() => setFocusField(null)}
                 />
@@ -212,13 +224,15 @@ const Home = () => {
       case "Home":
         return (
           <>
-            <Col lg={5} md={5} sm={12} className="mb-3 mb-md-0">
+            <Col xl={5} lg={5} md={6} sm={12} className="mb-3 mb-md-0">
               <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaHome className="me-2" /> Property Type
+                <Form.Label className="fw-bold text-secondary d-flex align-items-center justify-content-center gap-2">
+                  <FaHome className="d-none d-sm-inline" />
+                  <span className="fs-6 fs-sm-5">Property Type</span>
                 </Form.Label>
                 <Form.Select
-                  className="py-2 rounded-lg text-center"
+                  className="py-2 py-md-3 rounded-lg text-center fs-6"
+                  style={{ fontSize: "14px" }}
                   onFocus={() => setFocusField("homeType")}
                   onBlur={() => setFocusField(null)}
                 >
@@ -229,15 +243,17 @@ const Home = () => {
                 </Form.Select>
               </Form.Group>
             </Col>
-            <Col lg={5} md={5} sm={12}>
+            <Col xl={5} lg={5} md={6} sm={12}>
               <Form.Group className="position-relative text-center">
-                <Form.Label className="fw-bold text-secondary">
-                  <FaMapMarkerAlt className="me-2" /> Property Value
+                <Form.Label className="fw-bold text-secondary d-flex align-items-center justify-content-center gap-2">
+                  <FaMapMarkerAlt className="d-none d-sm-inline" />
+                  <span className="fs-6 fs-sm-5">Property Value</span>
                 </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Approximate Value (₹)"
-                  className="py-2 rounded-lg text-center"
+                  className="py-2 py-md-3 rounded-lg text-center fs-6"
+                  style={{ fontSize: "14px" }}
                   onFocus={() => setFocusField("homeValue")}
                   onBlur={() => setFocusField(null)}
                 />
@@ -253,12 +269,63 @@ const Home = () => {
 
   return (
     <>
+      <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+          font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+        
+        .insurance-finder {
+          font-family: 'Inter', sans-serif;
+        }
+        
+        .display-4 {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 800;
+        }
+        
+        .lead {
+          font-family: 'Inter', sans-serif;
+          font-weight: 400;
+          line-height: 1.6;
+        }
+        
+        @media (max-width: 576px) {
+          .display-4 {
+            font-size: 2rem !important;
+            line-height: 1.2;
+          }
+          
+          .lead {
+            font-size: 1rem !important;
+            line-height: 1.5;
+          }
+          
+          .badge {
+            font-size: 0.75rem !important;
+            padding: 0.4rem 0.8rem !important;
+          }
+        }
+        
+        @media (min-width: 577px) and (max-width: 768px) {
+          .display-4 {
+            font-size: 2.5rem !important;
+            line-height: 1.3;
+          }
+          
+          .lead {
+            font-size: 1.1rem !important;
+          }
+        }
+      `}</style>
+
       <div
         className="insurance-finder position-relative overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
           minHeight: "100vh",
-          padding: "4rem 0",
+          padding: "2rem 0",
         }}
       >
         {/* Animated Background Elements */}
@@ -267,7 +334,7 @@ const Home = () => {
           style={{ top: 0, left: 0, zIndex: 1 }}
         >
           <motion.div
-            className="position-absolute rounded-circle"
+            className="position-absolute rounded-circle d-none d-md-block"
             style={{
               width: "200px",
               height: "200px",
@@ -286,7 +353,7 @@ const Home = () => {
             }}
           />
           <motion.div
-            className="position-absolute rounded-circle"
+            className="position-absolute rounded-circle d-none d-lg-block"
             style={{
               width: "150px",
               height: "150px",
@@ -304,13 +371,34 @@ const Home = () => {
               ease: "easeInOut",
             }}
           />
+          
+          {/* Mobile background elements */}
+          <motion.div
+            className="position-absolute rounded-circle d-block d-md-none"
+            style={{
+              width: "80px",
+              height: "80px",
+              background: "rgba(255,255,255,0.1)",
+              top: "15%",
+              right: "5%",
+            }}
+            animate={{
+              y: [0, 15, 0],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
         </div>
 
-        <Container className="position-relative" style={{ zIndex: 2 }}>
+        <Container className="position-relative px-3 px-md-4" style={{ zIndex: 2 }}>
           {/* ======= IMPROVED HEADER SECTION ======= */}
-          <Row className="align-items-center mb-5">
+          <Row className="align-items-center mb-4 mb-lg-5">
             {/* Left Side - Main Content */}
-            <Col lg={8} md={7}>
+            <Col lg={8} md={7} className="mb-4 mb-md-0">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -318,10 +406,14 @@ const Home = () => {
                 className="text-white"
               >
                 <motion.h1
-                  className="display-4 fw-bold mb-4"
+                  className="display-4 fw-bold mb-3 mb-md-4"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
+                  style={{
+                    fontSize: "clamp(1.8rem, 4vw, 3.5rem)",
+                    lineHeight: "1.2",
+                  }}
                 >
                   <motion.span
                     animate={{
@@ -350,11 +442,14 @@ const Home = () => {
                 </motion.h1>
 
                 <motion.p
-                  className="lead mb-4 text-light"
+                  className="lead mb-3 mb-md-4 text-light"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  style={{ fontSize: "1.2rem" }}
+                  style={{ 
+                    fontSize: "clamp(0.9rem, 2.5vw, 1.2rem)",
+                    lineHeight: "1.6"
+                  }}
                 >
                   Compare quotes from top insurers and save up to{" "}
                   <motion.span
@@ -368,7 +463,7 @@ const Home = () => {
                 </motion.p>
 
                 <motion.div
-                  className="d-flex flex-wrap gap-3 mb-4"
+                  className="d-flex flex-wrap gap-2 gap-md-3 mb-3 mb-md-4 justify-content-center justify-content-md-start"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
@@ -377,7 +472,12 @@ const Home = () => {
                     (badge, index) => (
                       <motion.div
                         key={badge}
-                        className="badge bg-light text-primary px-3 py-2 rounded-pill"
+                        className="badge bg-light text-primary rounded-pill"
+                        style={{
+                          fontSize: "clamp(0.7rem, 1.5vw, 0.85rem)",
+                          padding: "0.4rem 0.8rem",
+                          fontWeight: "600"
+                        }}
                         whileHover={{ scale: 1.05 }}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -399,10 +499,11 @@ const Home = () => {
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
                 <Card
-                  className="border-0 shadow-lg overflow-hidden"
+                  className="border-0 shadow-lg overflow-hidden mx-auto"
                   style={{
                     background: "rgba(255, 255, 255, 0.95)",
                     backdropFilter: "blur(10px)",
+                    maxWidth: "350px",
                   }}
                 >
                   <Card.Body className="p-3">
@@ -411,7 +512,7 @@ const Home = () => {
                       alt={"title"}
                       className="w-100 mb-3 rounded"
                       style={{
-                        height: "350px",
+                        height: "clamp(200px, 30vw, 350px)",
                         objectFit: "cover",
                       }}
                     />
@@ -420,13 +521,13 @@ const Home = () => {
                       <motion.button
                         animate={{
                           scale: [1, 1.02, 1.0215, 1],
-                          y: [0, -0.6, -0.64, 0], // 👈 floating effect
+                          y: [0, -0.6, -0.64, 0],
                         }}
                         whileHover={{
-                          scale: 1.06, // 👈 hover zoom
+                          scale: 1.06,
                         }}
                         whileTap={{
-                          scale: 0.95, // 👈 click shrink
+                          scale: 0.95,
                         }}
                         transition={{
                           duration: 2.5,
@@ -437,18 +538,17 @@ const Home = () => {
                           backgroundColor: "#0066cc",
                           color: "white",
                           borderRadius: "15px",
-                          padding: "10px 15px",
+                          padding: "12px 20px",
                           width: "100%",
                           border: "none",
                           fontWeight: "bold",
                           cursor: "pointer",
+                          fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                          fontFamily: "'Inter', sans-serif"
                         }}
                         onClick={() => {
                           const awardsPageUrl = "/Award";
-
-                          // Open in same tab
                           window.location.href = awardsPageUrl;
-                          // 👇 Add your logic here
                           console.log("Button Clicked");
                         }}
                       >
@@ -462,10 +562,10 @@ const Home = () => {
           </Row>
 
           {/* ======= CATEGORY SELECTOR ======= */}
-          <Row className="justify-content-center mb-5">
-            <Col lg={8}>
+          <Row className="justify-content-center mb-4 mb-lg-5">
+            <Col lg={10} xl={8}>
               <motion.div
-                className="category-container d-flex flex-wrap justify-content-center gap-4"
+                className="category-container d-flex flex-wrap justify-content-center gap-3 gap-md-4"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
@@ -481,7 +581,7 @@ const Home = () => {
                     {/* Highlighted animated icon when selected */}
                     {selectedCategory === category.name && (
                       <motion.div
-                        className="category-highlight"
+                        className="category-highlight d-none d-sm-block"
                         initial={{ y: 0, opacity: 0 }}
                         animate={{ y: -30, opacity: 1 }}
                         style={{
@@ -539,8 +639,8 @@ const Home = () => {
                       }`}
                       style={{
                         cursor: "pointer",
-                        width: 80,
-                        height: 80,
+                        width: "clamp(60px, 12vw, 80px)",
+                        height: "clamp(60px, 12vw, 80px)",
                         borderRadius: "50%",
                         border: "3px solid",
                         boxShadow:
@@ -558,15 +658,23 @@ const Home = () => {
                       <motion.img
                         src={category.icon}
                         alt={category.name}
-                        width="36"
-                        height="36"
+                        style={{
+                          width: "clamp(24px, 5vw, 36px)",
+                          height: "clamp(24px, 5vw, 36px)",
+                        }}
                         whileHover={{ rotate: 5 }}
                       />
                     </motion.div>
 
                     {/* Category label below icon */}
-                    <div className="text-center mt-3">
-                      <small className="fw-bold text-white bg-dark bg-opacity-50 px-2 py-1 rounded">
+                    <div className="text-center mt-2 mt-md-3">
+                      <small 
+                        className="fw-bold text-white bg-dark bg-opacity-50 px-2 py-1 rounded"
+                        style={{
+                          fontSize: "clamp(0.7rem, 1.8vw, 0.85rem)",
+                          fontFamily: "'Inter', sans-serif"
+                        }}
+                      >
                         {category.name}
                       </small>
                     </div>
@@ -578,7 +686,7 @@ const Home = () => {
 
           {/* ======= FORM SECTION ======= */}
           <Row className="justify-content-center">
-            <Col lg={8} md={10}>
+            <Col lg={10} xl={8}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={selectedCategory}
@@ -594,15 +702,15 @@ const Home = () => {
                       backdropFilter: "blur(10px)",
                     }}
                   >
-                    <Card.Body className="p-5">
-                      <Row className="g-4 justify-content-center">
+                    <Card.Body className="p-3 p-md-4 p-lg-5">
+                      <Row className="g-3 g-md-4 justify-content-center">
                         {/* Dynamic form fields */}
                         {renderFormFields()}
 
                         {/* Submit Button */}
                         <Col
                           lg={12}
-                          className="d-flex align-items-end justify-content-center"
+                          className="d-flex align-items-end justify-content-center mt-3 mt-md-4"
                         >
                           <motion.button
                             className="btn w-100 d-flex align-items-center justify-content-center gap-2 py-3 rounded-3 fw-bold"
@@ -611,7 +719,10 @@ const Home = () => {
                                 "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                               color: "white",
                               border: "none",
-                              fontSize: "1.1rem",
+                              fontSize: "clamp(0.9rem, 2.5vw, 1.1rem)",
+                              fontFamily: "'Inter', sans-serif",
+                              maxWidth: "500px",
+                              margin: "0 auto"
                             }}
                             whileHover={{
                               scale: 1.02,
@@ -642,8 +753,6 @@ const Home = () => {
       <div className="py-3">
         <Seprate />
       </div>
-
-      {/* <InsuranceBanner /> */}
 
       <div className="py-3">
         <Favourite />

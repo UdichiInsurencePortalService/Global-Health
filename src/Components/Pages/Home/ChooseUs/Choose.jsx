@@ -43,58 +43,76 @@ const Choose = () => {
   return (
     <div className="choose-section py-5">
       <div className="container">
-        <div className="row justify-content-center text-center mb-4">
-          <div className="col-md-8">
-            <h1 className="fw-bold text-black">
+        <div className="row justify-content-center text-center mb-5">
+          <div className="col-lg-8 col-md-10 col-12">
+            <h1 className="fw-bold text-black mb-3 choose-title">
               Why Global Health & Allied Insurance
             </h1>
           </div>
         </div>
 
-        {/* Swiper for Mobile & Tablet */}
-        <div className="d-md-none">
+        {/* Swiper for Mobile (up to md breakpoint) */}
+        <div className="d-lg-none">
           <Swiper
             slidesPerView={1}
             spaceBetween={20}
-            pagination={{ clickable: true }}
+            pagination={{ 
+              clickable: true,
+              dynamicBullets: true 
+            }}
             autoplay={{
-              delay: 2500,
+              delay: 3000,
               disableOnInteraction: false,
             }}
             loop={true}
             modules={[Pagination, Autoplay]}
+            breakpoints={{
+              576: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+              },
+            }}
+            className="features-swiper"
           >
             {features.map((feature) => (
               <SwiperSlide key={feature.id}>
-                <div className="feature-card text-center d-flex flex-column p-4">
-                  <img
-                    src={feature.img}
-                    alt={feature.title}
-                    className="feature-icon mx-auto mb-3"
-                  />
-                  <h4 className="fw-bold">{feature.title}</h4>
-                  <p className="flex-grow-1">{feature.text}</p>
+                <div className="feature-card text-center d-flex flex-column p-4 h-100">
+                  <div className="feature-icon-wrapper mb-3">
+                    <img
+                      src={feature.img}
+                      alt={feature.title}
+                      className="feature-icon mx-auto"
+                    />
+                  </div>
+                  <h4 className="fw-bold mb-3 feature-title">{feature.title}</h4>
+                  <p className="flex-grow-1 feature-text">{feature.text}</p>
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
 
-        {/* Grid for Desktop */}
-        <div className="row justify-content-center d-none d-md-flex">
+        {/* Grid for Desktop (lg and above) */}
+        <div className="row justify-content-center d-none d-lg-flex">
           {features.map((feature) => (
             <div
               key={feature.id}
-              className="col-lg-3 col-md-6 mb-4 d-flex align-items-stretch"
+              className="col-xl-3 col-lg-6 mb-4 d-flex align-items-stretch"
             >
-              <div className="feature-card text-center d-flex flex-column p-4">
-                <img
-                  src={feature.img}
-                  alt={feature.title}
-                  className="feature-icon mx-auto mb-3"
-                />
-                <h4 className="fw-bold">{feature.title}</h4>
-                <p className="flex-grow-1">{feature.text}</p>
+              <div className="feature-card text-center d-flex flex-column p-4 w-100">
+                <div className="feature-icon-wrapper mb-3">
+                  <img
+                    src={feature.img}
+                    alt={feature.title}
+                    className="feature-icon mx-auto"
+                  />
+                </div>
+                <h4 className="fw-bold mb-3 feature-title">{feature.title}</h4>
+                <p className="flex-grow-1 feature-text">{feature.text}</p>
               </div>
             </div>
           ))}

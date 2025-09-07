@@ -46,6 +46,7 @@ import AdminCarinsurance from "./Admin/AdminCarinsurance.jsx";
 import ProtectedRoute from "./ProtectedRoutes/ProtectedRoute.jsx";
 import ScroolTop from "./ScroolToTop/ScroolTop.jsx";
 import Awards from "./Features/product/Award/Awards.jsx";
+import Currentpening from "./Header/Footer/Currentpening.jsx";
 // import { Award } from "lucide-react";
 
 // import ScrollToTopButton from "./Reuse/ScrollToTopButton/ScrollToTopButton.jsx";
@@ -101,6 +102,7 @@ function App() {
         <Route path="/intimateclaims" element={<Intimate />} />
         <Route path="/documentupload" element={<Document />} />
         <Route path="/claimprocess" element={<Claimprocess />} />
+        <Route path="/Currentpening" element={<Currentpening/>} />
 
 
         {/* Award routes */}

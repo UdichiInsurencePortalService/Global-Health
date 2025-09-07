@@ -506,7 +506,7 @@ const Blog = () => {
               <div style={styles.sidebarCardBody}>
                 <div style={styles.profileAvatar}>GM</div>
                 <h5 style={{ fontWeight: '700', marginBottom: '0.5rem', textAlign: 'center' }}>
-                  Govind <span style={{ color: '#dc3545' }}>Mishra</span>
+                  Our  <span style={{ color: '#dc3545' }}>Adivisor</span>
                 </h5>
                 <p style={{ color: '#6c757d', fontSize: '0.9rem', textAlign: 'center', marginBottom: '1rem' }}>
                   Insurance Expert & Financial Advisor

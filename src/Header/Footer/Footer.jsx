@@ -11,15 +11,28 @@ import { AiFillCaretRight } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import "./Footer.css";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Drawer, Form, Input, Row, Col, Button } from "antd";
 import emailjs from "@emailjs/browser";
 import { ToastContainer } from "react-toastify";
-import { handleSuccess } from "../../errortoast"; // You'll need to adjust this import path
+import { handleSuccess } from "../../errortoast";
 
 const Footer = () => {
   const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const formRef = useRef(null);
+
+  // Check screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   // Drawer functions
   const showDrawer = () => setOpen(true);
@@ -32,6 +45,9 @@ const Footer = () => {
       .then(() => {
         handleSuccess("Message sent successfully!");
         onClose();
+        if (formRef.current) {
+          formRef.current.resetFields();
+        }
       })
       .catch((error) => console.error("Failed to send email:", error));
   };
@@ -48,127 +64,177 @@ const Footer = () => {
     { label: "FAQ", path: "/faq" },
     { label: "Company Information", path: "/companyinfo" },
     { label: "Terms & Conditions", path: "/termcondition" },
-    { label: "Customer Support", action: "drawer" }, // Changed to action instead of path
+    { label: "Customer Support", action: "drawer" },
+    { label: "Career", path: "/Currentpening" },
   ];
 
   return (
     <div className="container-fluid p-0 bg-primary text-white">
-      <footer className="text-white text-center text-lg-start p-4">
-        <div className="container py-4">
-          <div className="row gy-4">
+      <footer className="text-white">
+        <div className="container-fluid px-3 px-sm-4">
+          <div className="row py-4 py-md-5">
             {/* Logo Section */}
-            <div className="col-lg-3 col-md-6 text-center">
-              <div
-                className="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto shadow"
-                style={{ width: "130px", height: "130px" }}
-              >
-                <img
-                  src={logo}
-                  width={100}
-                  alt="Global Health & Allied Insurances"
-                />
-              </div>
-              <p className="mt-3 mb-1">Protect What Matters Most</p>
-              <div className="d-flex justify-content-center gap-3 mt-2">
-                <a href="#" className="text-white fs-4">
-                  <FaFacebookSquare />
-                </a>
-                <a href="#" className="text-white fs-4">
-                  <FaInstagram />
-                </a>
-                <a href="#" className="text-white fs-4">
-                  <FaYoutube />
-                </a>
+            <div className="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
+              <div className="text-center text-md-start">
+                <div
+                  className="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto mx-md-0 shadow mb-3"
+                  style={{ 
+                    width: isMobile ? "100px" : "130px", 
+                    height: isMobile ? "100px" : "130px" 
+                  }}
+                >
+                  <img
+                    src={logo}
+                    width={isMobile ? 70 : 100}
+                    alt="Global Health & Allied Insurances"
+                    className="img-fluid"
+                  />
+                </div>
+                <p className="mb-3 fs-6 fs-md-5">Protect What Matters Most</p>
+                <div className="d-flex justify-content-center justify-content-md-start gap-2 gap-sm-3">
+                  <a href="#" className="text-white" style={{ fontSize: isMobile ? '1.5rem' : '1.8rem' }}>
+                    <FaFacebookSquare />
+                  </a>
+                  <a href="#" className="text-white" style={{ fontSize: isMobile ? '1.5rem' : '1.8rem' }}>
+                    <FaInstagram />
+                  </a>
+                  <a href="#" className="text-white" style={{ fontSize: isMobile ? '1.5rem' : '1.8rem' }}>
+                    <FaYoutube />
+                  </a>
+                </div>
               </div>
             </div>
 
             {/* Products Section */}
-            <div className="col-lg-3 col-md-6">
-              <h5 className="text-uppercase mb-3">Products</h5>
-              <ul className="list-unstyled">
-                {Links1.map(({ label, path }) => (
-                  <li key={label}>
-                    <Link
-                      to={path}
-                      className="text-white text-decoration-none d-flex align-items-center mb-2"
-                    >
-                      <AiFillCaretRight className="me-2" /> {label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+            <div className="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
+              <div className="text-center text-md-start">
+                <h5 className="text-uppercase mb-3 fs-5 fw-bold">Products</h5>
+                <ul className="list-unstyled mb-0">
+                  {Links1.map(({ label, path }) => (
+                    <li key={label} className="mb-2">
+                      <Link
+                        to={path}
+                        className="text-white text-decoration-none d-flex align-items-center justify-content-center justify-content-md-start hover-link"
+                        style={{ fontSize: isMobile ? '0.9rem' : '1rem' }}
+                      >
+                        <AiFillCaretRight className="me-2 flex-shrink-0" /> 
+                        <span>{label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             {/* Useful Links Section */}
-            <div className="col-lg-3 col-md-6">
-              <h5 className="text-uppercase mb-3">Useful Links</h5>
-              <ul className="list-unstyled">
-                {Links.map(({ label, path, action }) => (
-                  <li key={label}>
-                    {action === "drawer" ? (
-                      <button
-                        onClick={showDrawer}
-                        className="text-white text-decoration-none d-flex align-items-center mb-2 bg-transparent border-0 p-0"
-                        style={{ cursor: "pointer" }}
-                      >
-                        <AiFillCaretRight className="me-2" /> {label}
-                      </button>
-                    ) : (
-                      <Link
-                        to={path}
-                        className="text-white text-decoration-none d-flex align-items-center mb-2"
-                      >
-                        <AiFillCaretRight className="me-2" /> {label}
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
+            <div className="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
+              <div className="text-center text-md-start">
+                <h5 className="text-uppercase mb-3 fs-5 fw-bold">Useful Links</h5>
+                <ul className="list-unstyled mb-0">
+                  {Links.map(({ label, path, action }) => (
+                    <li key={label} className="mb-2">
+                      {action === "drawer" ? (
+                        <button
+                          onClick={showDrawer}
+                          className="text-white text-decoration-none d-flex align-items-center justify-content-center justify-content-md-start bg-transparent border-0 p-0 w-100 hover-link"
+                          style={{ 
+                            cursor: "pointer",
+                            fontSize: isMobile ? '0.9rem' : '1rem'
+                          }}
+                        >
+                          <AiFillCaretRight className="me-2 flex-shrink-0" /> 
+                          <span>{label}</span>
+                        </button>
+                      ) : (
+                        <Link
+                          to={path}
+                          className="text-white text-decoration-none d-flex align-items-center justify-content-center justify-content-md-start hover-link"
+                          style={{ fontSize: isMobile ? '0.9rem' : '1rem' }}
+                        >
+                          <AiFillCaretRight className="me-2 flex-shrink-0" /> 
+                          <span>{label}</span>
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             {/* Contact Section */}
-            <div className="col-lg-3 col-md-6">
-              <h5 className="text-uppercase mb-3">Contact</h5>
-              <ul className="list-unstyled">
-                <li className="mb-2 d-flex align-items-start">
-                  <FaMapMarkerAlt className="me-2 mt-z1" />
-                  <span>
-                    Head Office: P.O. Box 556, Postal Code 103, Muscat,
-                    Sultanate of Oman
-                  </span>
-                </li>
-                <li className="mb-2 d-flex align-items-center">
-                  <FaPhone className="me-2" />08069640455
-                </li>
-                <li className="d-flex align-items-center">
-                  <FaEnvelope className="me-2" /> info@globalhealthandalliedservices.com
-                </li>
-              </ul>
+            <div className="col-12 col-md-6 col-lg-3">
+              <div className="text-center text-md-start">
+                <h5 className="text-uppercase mb-3 fs-5 fw-bold">Contact</h5>
+                <ul className="list-unstyled mb-0">
+                  <li className="mb-3 d-flex align-items-start justify-content-center justify-content-md-start">
+                    <FaMapMarkerAlt className="me-2 mt-1 flex-shrink-0" />
+                    <span style={{ fontSize: isMobile ? '0.85rem' : '0.95rem', lineHeight: '1.4' }}>
+                      Head Office: P.O. Box 556, Postal Code 103, Muscat,
+                      Sultanate of Oman
+                    </span>
+                  </li>
+                  <li className="mb-3 d-flex align-items-center justify-content-center justify-content-md-start">
+                    <FaPhone className="me-2 flex-shrink-0" />
+                    <a 
+                      href="tel:08069640455" 
+                      className="text-white text-decoration-none"
+                      style={{ fontSize: isMobile ? '0.9rem' : '1rem' }}
+                    >
+                      08069640455
+                    </a>
+                  </li>
+                  <li className="d-flex align-items-center justify-content-center justify-content-md-start">
+                    <FaEnvelope className="me-2 flex-shrink-0" />
+                    <a 
+                      href="mailto:info@globalhealthandalliedservices.com" 
+                      className="text-white text-decoration-none text-break"
+                      style={{ fontSize: isMobile ? '0.85rem' : '0.95rem' }}
+                    >
+                      info@globalhealthandalliedservices.com
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
+        
         {/* Copyright */}
-        <div className="text-center pt-3 border-top border-light mt-3">
-          © 2025 Global Health & Allied Insurance. All rights reserved.
+        <div className="border-top border-light">
+          <div className="container-fluid px-3 px-sm-4">
+            <div className="text-center py-3">
+              <span style={{ fontSize: isMobile ? '0.85rem' : '0.95rem' }}>
+                © 2025 Global Health & Allied Insurance. All rights reserved.
+              </span>
+            </div>
+          </div>
         </div>
       </footer>
 
       {/* Contact Drawer */}
       <Drawer
-        title="We're Here to Help! Let Us Know Your Query"
-        width={window.innerWidth > 768 ? 600 : "95%"}
+        title={
+          <span style={{ fontSize: isMobile ? '16px' : '18px' }}>
+            We're Here to Help! Let Us Know Your Query
+          </span>
+        }
+        width={isMobile ? "100%" : window.innerWidth > 1024 ? 600 : "90%"}
         onClose={onClose}
         open={open}
-        bodyStyle={{ padding: "24px" }}
+        bodyStyle={{ 
+          padding: isMobile ? "16px" : "24px",
+          fontSize: isMobile ? '14px' : '16px'
+        }}
         headerStyle={{
           borderBottom: "1px solid #f0f0f0",
-          padding: "16px 24px",
+          padding: isMobile ? "12px 16px" : "16px 24px",
           fontWeight: "bold",
-          fontSize: "18px",
         }}
+        placement={isMobile ? "bottom" : "right"}
+        height={isMobile ? "85%" : "100%"}
       >
-        <div className="space-y-6">
-          <p className="text-gray-600">
+        <div className="h-100 d-flex flex-column">
+          <p className="text-muted mb-4" style={{ fontSize: isMobile ? '14px' : '16px' }}>
             Fill out the form below, and our team will get back to you as soon
             as possible.
           </p>
@@ -177,9 +243,10 @@ const Footer = () => {
             layout="vertical"
             ref={formRef}
             onFinish={sendEmail}
-            className="space-y-4"
+            className="flex-grow-1"
+            size={isMobile ? "middle" : "large"}
           >
-            <Row gutter={16}>
+            <Row gutter={[16, 8]}>
               <Col xs={24} sm={12}>
                 <Form.Item
                   name="user_name"
@@ -187,8 +254,12 @@ const Footer = () => {
                   rules={[
                     { required: true, message: "Please enter your name" },
                   ]}
+                  className="mb-3"
                 >
-                  <Input className="rounded-md shadow-sm border-gray-300" />
+                  <Input 
+                    className="rounded" 
+                    placeholder="Enter your full name"
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
@@ -199,16 +270,18 @@ const Footer = () => {
                     { required: true, message: "Please enter your email" },
                     { type: "email", message: "Please enter a valid email" },
                   ]}
+                  className="mb-3"
                 >
                   <Input
                     type="email"
-                    className="rounded-md shadow-sm border-gray-300"
+                    className="rounded"
+                    placeholder="Enter your email address"
                   />
                 </Form.Item>
               </Col>
             </Row>
 
-            <Row gutter={16}>
+            <Row gutter={[16, 8]}>
               <Col xs={24} sm={12}>
                 <Form.Item
                   name="user_phone"
@@ -219,10 +292,12 @@ const Footer = () => {
                       message: "Please enter your phone number",
                     },
                   ]}
+                  className="mb-3"
                 >
                   <Input
                     type="tel"
-                    className="rounded-md shadow-sm border-gray-300"
+                    className="rounded"
+                    placeholder="Enter your phone number"
                   />
                 </Form.Item>
               </Col>
@@ -233,8 +308,12 @@ const Footer = () => {
                   rules={[
                     { required: true, message: "Please enter your address" },
                   ]}
+                  className="mb-3"
                 >
-                  <Input className="rounded-md shadow-sm border-gray-300" />
+                  <Input 
+                    className="rounded" 
+                    placeholder="Enter your address"
+                  />
                 </Form.Item>
               </Col>
             </Row>
@@ -247,18 +326,31 @@ const Footer = () => {
                   rules={[
                     { required: true, message: "Please enter your message" },
                   ]}
+                  className="mb-4"
                 >
                   <Input.TextArea
-                    rows={5}
-                    className="rounded-md shadow-sm border-gray-300"
+                    rows={isMobile ? 4 : 5}
+                    className="rounded"
                     placeholder="How can we help you today?"
+                    style={{ resize: 'none' }}
                   />
                 </Form.Item>
               </Col>
             </Row>
 
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button htmlType="submit" type="primary">
+            <div className="d-flex justify-content-end gap-2 pt-3 border-top">
+              <Button 
+                onClick={onClose}
+                size={isMobile ? "middle" : "large"}
+              >
+                Cancel
+              </Button>
+              <Button 
+                htmlType="submit" 
+                type="primary"
+                size={isMobile ? "middle" : "large"}
+                className="px-4"
+              >
                 Submit
               </Button>
             </div>
@@ -266,7 +358,44 @@ const Footer = () => {
         </div>
       </Drawer>
 
-      <ToastContainer />
+      <ToastContainer 
+        position={isMobile ? "top-center" : "top-right"}
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        toastStyle={{
+          fontSize: isMobile ? '14px' : '16px'
+        }}
+      />
+
+      <style jsx>{`
+        .hover-link {
+          transition: all 0.2s ease;
+        }
+        .hover-link:hover {
+          opacity: 0.8;
+          transform: translateX(2px);
+        }
+        
+        @media (max-width: 767px) {
+          .text-break {
+            word-break: break-word;
+            overflow-wrap: break-word;
+          }
+        }
+        
+        @media (max-width: 575px) {
+          .container-fluid {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

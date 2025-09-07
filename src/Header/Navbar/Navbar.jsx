@@ -4,7 +4,17 @@ import emailjs from "@emailjs/browser";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
 import logo from "../../assets/Home/global-main-logo.png";
-import { Drawer, Form, Input, Row, Col, Button, Modal, Select,message } from "antd";
+import {
+  Drawer,
+  Form,
+  Input,
+  Row,
+  Col,
+  Button,
+  Modal,
+  Select,
+  message,
+} from "antd";
 import { ToastContainer } from "react-toastify";
 import { handleSuccess } from "../../errortoast";
 import Top from "./TopBar/Top";
@@ -23,22 +33,15 @@ import bike1 from "../../../src/assets/Home/bike-icon.png";
 import health from "../../../src/assets/Home/health-icon.png";
 import home from "../../../src/assets/Home/home-icon.png";
 import auto from "../../../src/assets/Home/auto.png";
-// import auto from "../../../src/assets/Home/"
 import commercial from "../../../src/assets/Home/commercial-insurance.png";
-import liability from "../../../src/assets/Home/liability-insurance.png"
-import property from "../../../src/assets/Home/property-insurance.png"
-
-// importfrom "../../../../src/assets/Home/car-icons.png";
-// import bikeicon from "../../../../src/assets/Home/bike-icon.png";
-// import healthicon from "../../../../src/assets/Home/health-icon.png";
-// import homeicon from "../../../../src/assets/Home/home-icon.png";
+import liability from "../../../src/assets/Home/liability-insurance.png";
+import property from "../../../src/assets/Home/property-insurance.png";
 
 const { Option } = Select;
 
 const Navbar = ({ icon1, icon2 }) => {
-    const [formRef] = Form.useForm();
-      const [loading, setLoading] = useState(false);
-
+  const [formRef] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
   // State for callback modal
   const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
@@ -201,13 +204,10 @@ const Navbar = ({ icon1, icon2 }) => {
     },
   };
 
-
-  // 
-
-// contact form
- const handleSubmit = async (values) => {
+  // contact form
+  const handleSubmit = async (values) => {
     setLoading(true);
-    
+
     try {
       // Prepare data for backend API
       const formData = {
@@ -215,42 +215,44 @@ const Navbar = ({ icon1, icon2 }) => {
         email: values.user_email,
         phone_number: values.user_phone,
         address: values.user_address,
-        message: values.user_message
+        message: values.user_message,
       };
 
       // Send data to backend
-       const response = await fetch('http://localhost:8080/api/contactform', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8080/api/contactform", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         // Show success message
-        message.success('Thank you for contacting us! Our team will get back to you soon.');
-        
+        message.success(
+          "Thank you for contacting us! Our team will get back to you soon."
+        );
+
         // Reset form
         formRef.resetFields();
-        
+
         // Close drawer after a short delay
         setTimeout(() => {
           onClose();
         }, 1500);
       }
-      
     } catch (error) {
-      console.error('Error submitting form:', error);
-      message.error('Sorry, there was an error submitting your form. Please try again.');
+      console.error("Error submitting form:", error);
+      message.error(
+        "Sorry, there was an error submitting your form. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  // 
   return (
     <>
       <div className="topbar d-none d-md-block">
@@ -303,8 +305,7 @@ const Navbar = ({ icon1, icon2 }) => {
                         <ul className="list-unstyled">
                           <li className="d-flex" style={{ padding: "10px" }}>
                             <img
-                                                            style={{ width: "30px", height: "33px" }}
-
+                              style={{ width: "30px", height: "33px" }}
                               src={caricon1}
                               alt="Car Insurance"
                               className="img-fluid"
@@ -359,7 +360,6 @@ const Navbar = ({ icon1, icon2 }) => {
                               }
                             >
                               <img
-                                // className="img-fluid"
                                 style={{
                                   height: "32px",
                                   width: "32px",
@@ -377,12 +377,14 @@ const Navbar = ({ icon1, icon2 }) => {
                               }
                             >
                               <img
-                              className="img-fluid"
-                              style={{
-                                height:"32px",
-                                width:"32px"}} 
-                              src={liability} 
-                              alt="liability-insurance" />
+                                className="img-fluid"
+                                style={{
+                                  height: "32px",
+                                  width: "32px",
+                                }}
+                                src={liability}
+                                alt="liability-insurance"
+                              />
                               Liability Insurance
                             </Link>
                           </li>
@@ -392,14 +394,15 @@ const Navbar = ({ icon1, icon2 }) => {
                                 handleError("This page is under Development")
                               }
                             >
-                              <img 
-                              className="img-fluid"
-                              style={{
-                                height:"32px",
-                                width:"32px",
-                              }}
-                              src={property} 
-                              alt="property-insurance"/>
+                              <img
+                                className="img-fluid"
+                                style={{
+                                  height: "32px",
+                                  width: "32px",
+                                }}
+                                src={property}
+                                alt="property-insurance"
+                              />
                               Property Insurance
                             </Link>
                           </li>
@@ -407,9 +410,8 @@ const Navbar = ({ icon1, icon2 }) => {
                       </li>
                     </ul>
                   </li>
-                  {/*  */}
 
-  <li className="nav-item dropdown">
+                  <li className="nav-item dropdown">
                     <Link to="#">Claims</Link>
                     <ul
                       className="dropdown"
@@ -422,7 +424,7 @@ const Navbar = ({ icon1, icon2 }) => {
                         margin: 0,
                       }}
                     >
-                         <li>
+                      <li>
                         <Link
                           to="/Claimprocess"
                           style={{
@@ -478,44 +480,12 @@ const Navbar = ({ icon1, icon2 }) => {
                             alt="Intimate Claims"
                           />
                           <span style={{ fontSize: "14px", fontWeight: "500" }}>
-                           Vehicle Intimate Claims
+                            Vehicle Intimate Claims
                           </span>
                         </Link>
                       </li>
-                      {/* <li>
-                        <Link
-                          to="/documentupload"
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            cursor: "pointer",
-                            padding: "8px 12px",
-                            borderRadius: "4px",
-                            transition: "background-color 0.2s",
-                          }}
-                        >
-                          <img
-                            style={{
-                              height: "24px",
-                              width: "24px",
-                              flexShrink: 0,
-                            }}
-                            className="img-fluid"
-                            src={img5}
-                            alt="Document Upload"
-                          />
-                          <span style={{ fontSize: "14px", fontWeight: "500" }}>
-                            Document Upload
-                          </span>
-                        </Link>
-                      </li> */}
-                 
                     </ul>
                   </li>
-                  {/*  */}
 
                   <li className="nav-item dropdown">
                     <Link to="#">Support</Link>
@@ -554,7 +524,6 @@ const Navbar = ({ icon1, icon2 }) => {
                             </span>
                           </Link>
 
-                          {/* WhatsApp Button */}
                           <a
                             onClick={handleClick}
                             style={{
@@ -577,7 +546,6 @@ const Navbar = ({ icon1, icon2 }) => {
                             </span>
                           </a>
 
-                          {/* Callback Button */}
                           <a
                             onClick={showCallbackModal}
                             style={{
@@ -604,8 +572,6 @@ const Navbar = ({ icon1, icon2 }) => {
                     </ul>
                   </li>
 
-                
-
                   <li>
                     <Link to="#" onClick={showDrawer}>
                       Contact Us
@@ -615,8 +581,29 @@ const Navbar = ({ icon1, icon2 }) => {
               </nav>
             </div>
 
-            {/* Right Section - User Actions & Mobile Menu */}
-            
+            {/* Right Section - User Actions & Mobile Menu Button */}
+            <div className="col-6 col-sm-9 col-lg-3">
+              <div className="d-flex align-items-center justify-content-end">
+                {/* Desktop Login/Logout */}
+               
+
+                {/* Mobile Menu Button */}
+                <button
+                  className="mobile-menu-toggle d-lg-none btn"
+                  onClick={toggleMobileMenu}
+                  aria-label="Toggle mobile menu"
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    fontSize: "1.5rem",
+                    padding: "8px",
+                    color: isScrolled ? "white" : "#333",
+                  }}
+                >
+                  <MenuOutlined />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -744,7 +731,7 @@ const Navbar = ({ icon1, icon2 }) => {
         </Form>
       </Modal>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <div
         className={`mobile-menu-overlay ${mobileMenuOpen ? "open" : ""}`}
         onClick={toggleMobileMenu}
@@ -762,6 +749,7 @@ const Navbar = ({ icon1, icon2 }) => {
         }}
       ></div>
 
+      {/* Mobile Navigation Container */}
       <div
         className={`mobile-nav-container ${mobileMenuOpen ? "open" : ""}`}
         style={{
@@ -1015,20 +1003,20 @@ const Navbar = ({ icon1, icon2 }) => {
               <ul className="list-unstyled m-0">
                 <li>
                   <Link
-                    to="/intimateclaims"
+                    to="/Claimprocess"
                     onClick={toggleMobileMenu}
                     className="d-block p-2 px-4 text-decoration-none"
                   >
-                    Intimate Claims
+                    Claim Process
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to="/documentupload"
+                    to="/intimateclaims"
                     onClick={toggleMobileMenu}
                     className="d-block p-2 px-4 text-decoration-none"
                   >
-                    Document Upload
+                    Vehicle Intimate Claims
                   </Link>
                 </li>
               </ul>
@@ -1050,33 +1038,7 @@ const Navbar = ({ icon1, icon2 }) => {
         </ul>
 
         {/* Mobile User Section */}
-        <div className="mobile-user-section p-3 border-top mt-auto">
-          {username && (
-            <div className="mb-2">
-              <span className="text-muted small">Hello, </span>
-              <span className="fw-bold">{username}</span>
-            </div>
-          )}
-          {username ? (
-            <button
-              onClick={() => {
-                toggleMobileMenu();
-                handleLogout();
-              }}
-              className="btn btn-outline-danger btn-sm w-100"
-            >
-              Log Out
-            </button>
-          ) : (
-            <Link
-              to="/login"
-              className="btn btn-primary btn-sm w-100 text-decoration-none text-center d-block"
-              onClick={toggleMobileMenu}
-            >
-              Log In
-            </Link>
-          )}
-        </div>
+        
       </div>
 
       {/* Contact Drawer */}
@@ -1100,10 +1062,8 @@ const Navbar = ({ icon1, icon2 }) => {
           </p>
 
           <Form
-                    form={formRef}
-
+            form={formRef}
             layout="vertical"
-            ref={formRef}
             onFinish={handleSubmit}
             className="space-y-4"
           >
@@ -1186,7 +1146,9 @@ const Navbar = ({ icon1, icon2 }) => {
             </Row>
 
             <div className="flex justify-end space-x-3 pt-4">
-              <Button htmlType="submit">Submit</Button>
+              <Button htmlType="submit" loading={loading}>
+                Submit
+              </Button>
             </div>
           </Form>
         </div>
