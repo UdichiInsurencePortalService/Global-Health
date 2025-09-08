@@ -171,22 +171,7 @@ const authRoutes = require("./Routes/authRouter"); // Google OAuth routes
 const PORT = process.env.PORT || 8080;
 
 // 🔹 CORS config
-const allowedOrigins = ["http://localhost:5173", "http://13.201.13.219:5173"];
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+ 
 
 
 // 🔹 API Routes

@@ -276,7 +276,7 @@ const Carinsurance = () => {
       // STEP 1: Try to get data from PostgreSQL database first
       try {
         console.log("🔍 Checking database for vehicle: " + regNum);
-        const dbUrl = `${import.meta.env.VITE_LOCALHOST_GET_CAR_API}?registration_number=${regNum}`;
+        const dbUrl = `${import.meta.env.VITE_GET_CAR_API}?registration_number=${regNum}`;
         console.log("Database URL:", dbUrl);
         
         const dbRes = await fetch(dbUrl);
@@ -528,7 +528,7 @@ const Carinsurance = () => {
       
       console.log("Payload being sent to database:>>>>>>>>>>", payload);
       
-      const saveRes = await fetch(import.meta.env.VITE_LOCALHOST_CAR_API, {
+      const saveRes = await fetch(import.meta.env.VITE_CAR_API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
