@@ -179,7 +179,11 @@ app.use(
     credentials: true,
   })
 );
-
+app.get("/welcome", (req, res) => {
+  res.json({
+    message: "Welcome to the Global Health Backend! 🚀"
+  });
+});
 // 🔹 API Routes
 app.use("/api", vehiclePostgresRoutes);
 app.use("/api", BikePostgressRoutes);
