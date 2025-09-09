@@ -172,13 +172,35 @@ const PORT = process.env.PORT || 8080;
 
 // 🔹 CORS config
  
+// app.use(
+//   cors({
+//     origin: process.env.FRONTEND_URL || "http://13.201.13.219:5173", // your frontend
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true,
+//   })
+// );
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://13.201.13.219:5173"
+];
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://13.201.13.219:5173", // your frontend
+    origin: function(origin, callback) {
+      // allow requests with no origin (like curl or Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
 app.get("/welcome", (req, res) => {
   res.json({
     message: "Welcome to the Global Health Backend! 🚀"
