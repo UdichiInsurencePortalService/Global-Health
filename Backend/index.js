@@ -182,24 +182,25 @@ const PORT = process.env.PORT || 8080;
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://13.201.13.219:5173"
+  "http://13.201.13.219:5173",
+  "https://13.201.13.219:5173"   // just in case browser forces https
 ];
 
 app.use(
   cors({
-    origin: function(origin, callback) {
-      // allow requests with no origin (like curl or Postman)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
-        return callback(new Error(msg), false);
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow Postman/curl
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("CORS not allowed"), false);
       }
-      return callback(null, true);
     },
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
+
 
 app.get("/welcome", (req, res) => {
   res.json({
