@@ -143,7 +143,7 @@ router.get('/vehicle/getcardata', (req, res) => {
   
   const { registration_number } = req.query;
 
-  let fetch_query = 'SELECT * FROM "cardata"';
+  let fetch_query = 'SELECT * FROM cardata';
   const values = [];
 
   if (registration_number) {
