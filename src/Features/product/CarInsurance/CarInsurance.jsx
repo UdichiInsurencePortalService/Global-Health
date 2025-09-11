@@ -275,13 +275,13 @@ const Carinsurance = () => {
   
       // STEP 1: Try to get data from PostgreSQL database first
       try {
-        console.log("🔍 Checking database for vehicle: " + regNum);
+        // console.log("🔍 Checking database for vehicle: " + regNum);
         const dbUrl = `${import.meta.env.VITE_LOCALHOST_GET_CAR_API}?registration_number=${regNum}`;
-        console.log("Database URL:", dbUrl);
+        // console.log("Database URL:", dbUrl);
         
         const dbRes = await fetch(dbUrl);
         const dbResult = await dbRes.json();
-        console.log("Database response:>>>>>>", dbResult);
+        // console.log("Database response:>>>>>>", dbResult);
         
         if (dbResult?.cubic_capacity > 700) {
           handleError("This is car number or something else In Our ....")
@@ -293,7 +293,7 @@ const Carinsurance = () => {
         
         // Check if we got data back as an array or single object
         if (dbRes.ok && dbResult) {
-          console.log("✅ Vehicle found in database!");
+          // console.log("✅ Vehicle found in database!");
           
           // Handle if response is an array (choose first matching record)
           if (Array.isArray(dbResult)) {
@@ -317,19 +317,19 @@ const Carinsurance = () => {
                            vehicleData?.sale_amount?.toString() || 
                            vehicleData?.idv_value?.toString() || 
                            "1000000";
-          console.log("💰 Ex-showroom price from database:>>>>>>><<<<<< " + exShowroomPrice);
+          // console.log("💰 Ex-showroom price from database:>>>>>>><<<<<< " + exShowroomPrice);
         } else {
-          console.log("❓ Vehicle not found in database.");
+          // console.log("❓ Vehicle not found in database.");
           throw new Error("NOT_IN_DB");
         }
        
       } 
       catch (dbError) {
-        console.log("Database error or not found:", dbError.message);
+        // console.log("Database error or not found:", dbError.message);
         
         // STEP 2: If not in database, fetch from Surepass API
         if (dbError.message === "NOT_IN_DB") {
-          console.log("🔄 Fetching from Surepass API...");
+          // console.log("🔄 Fetching from Surepass API...");
           
           // Get main vehicle data from Surepass
           vehicleData = await fetchVehicleFromSurepass(regNum);
@@ -341,7 +341,7 @@ const Carinsurance = () => {
               exShowroomPrice = priceFromAPI;
               vehicleData.exshowroom = priceFromAPI;
               vehicleData.idv_value = priceFromAPI; // Also set idv_value for consistency
-              console.log("💰 Ex-showroom price from Surepass: " + exShowroomPrice);
+              // console.log("💰 Ex-showroom price from Surepass: " + exShowroomPrice);
             }
             
             // Save to PostgreSQL database with mobile number
@@ -349,7 +349,7 @@ const Carinsurance = () => {
           } else {
             // If Surepass also fails, create minimal data
             vehicleData = { registration_number: regNum };
-            console.log("⚠️ Could not retrieve detailed vehicle information");
+            // console.log("⚠️ Could not retrieve detailed vehicle information");
             msgApi.warning("Limited vehicle data available. Some fields may be missing.");
             
             // Still save the minimal data with mobile number
@@ -362,7 +362,7 @@ const Carinsurance = () => {
       }
   
       // STEP 3: Prepare data for display
-      console.log("📋 Preparing vehicle summary for display>>>>>>>>>>>>", vehicleData);
+      // console.log("📋 Preparing vehicle summary for display>>>>>>>>>>>>", vehicleData);
       
       // Create a consistent summary object for the UI
       const summary = {
@@ -387,7 +387,7 @@ const Carinsurance = () => {
         mobile_number: mobile, // Add mobile number to summary
       };
   
-      console.log("✨ Vehicle summary ready:>>>>>>>", summary);
+      // console.log("✨ Vehicle summary ready:>>>>>>>", summary);
       
       // Clear any existing data before setting new data
       localStorage.removeItem("vehicleDetails");
@@ -395,7 +395,7 @@ const Carinsurance = () => {
       // Store data in localStorage for UI display
       localStorage.setItem("vehicleDetails", JSON.stringify(summary));
       
-      console.log("Data stored in localStorage, now navigating to /user");
+      // console.log("Data stored in localStorage, now navigating to /user");
       msgApi.success("Vehicle details fetched successfully!");
       
       // Navigate to user page after a short delay
@@ -419,7 +419,7 @@ const Carinsurance = () => {
    */
   const fetchVehicleFromSurepass = async (regNum) => {
     try {
-      console.log("📞 Calling Surepass API for vehicle data");
+      // console.log("📞 Calling Surepass API for vehicle data");
       const surepassRes = await fetch(import.meta.env.VITE_SUREPASS_URL, {
         method: "POST",
         headers: {
@@ -443,7 +443,7 @@ const Carinsurance = () => {
         return null;
       }
       
-      console.log("✅ Successfully got vehicle data from Surepass>>>>>>>>>>>", surepassData);
+      // console.log("✅ Successfully got vehicle data from Surepass>>>>>>>>>>>", surepassData);
       return surepassData.data;
     } catch (error) {
       console.error("❌ Error calling Surepass API:", error);
@@ -458,7 +458,7 @@ const Carinsurance = () => {
    */
   const fetchExShowroomPrice = async (regNum) => {
     try {
-      console.log("📞 Calling Surepass API for ex-showroom price");
+      // console.log("📞 Calling Surepass API for ex-showroom price");
       const showroomRes = await fetch(import.meta.env.VITE_SUREPASS_EX_SHOWROOM_API, {
         method: "POST",
         headers: {
@@ -469,15 +469,15 @@ const Carinsurance = () => {
       });
     
       const showroomData = await showroomRes.json();
-      console.log("Ex-showroom API response:", showroomData);
+      // console.log("Ex-showroom API response:", showroomData);
       
       // Fixed condition: Check if API was successful and has idv_value
       if (!showroomData.success || !showroomData?.data?.idv_value) {
-        console.log("⚠️ No ex-showroom price found in Surepass");
+        // console.log("⚠️ No ex-showroom price found in Surepass");
         return null;
       }
       
-      console.log("✅ Successfully got ex-showroom price from Surepass:", showroomData.data.idv_value);
+      // console.log("✅ Successfully got ex-showroom price from Surepass:", showroomData.data.idv_value);
       return showroomData.data.idv_value.toString();
     } catch (error) {
       console.error("❌ Error fetching ex-showroom price:", error);
@@ -494,7 +494,7 @@ const Carinsurance = () => {
    */
   const saveVehicleToDatabase = async (regNum, mobile, vehicleData) => {
     try {
-      console.log("💾 Saving vehicle data to database");
+      // console.log("💾 Saving vehicle data to database");
       
       // Extract and map the fields needed for the backend API
       const payload = {
@@ -526,7 +526,7 @@ const Carinsurance = () => {
         mobile_number: mobile // Use the input mobile number directly
       };
       
-      console.log("Payload being sent to database:>>>>>>>>>>", payload);
+      // console.log("Payload being sent to database:>>>>>>>>>>", payload);
       
       const saveRes = await fetch(import.meta.env.VITE_LOCALHOST_CAR_API, {
         method: "POST",
@@ -555,13 +555,13 @@ const Carinsurance = () => {
       // Try to parse the successful response
       try {
         const saveResult = await saveRes.json();
-        console.log("✅ Database save response:", saveResult);
+        // console.log("✅ Database save response:", saveResult);
         msgApi.success("Vehicle data successfully saved to database");
         return true;
       } catch (parseError) {
         // Handle case where response isn't JSON
         const textResponse = await saveRes.text();
-        console.log("✅ Database save response (text):", textResponse);
+        // console.log("✅ Database save response (text):", textResponse);
         msgApi.success("Vehicle data saved to database");
         return true;
       }

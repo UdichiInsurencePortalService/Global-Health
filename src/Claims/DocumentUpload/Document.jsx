@@ -95,7 +95,7 @@ const Document = () => {
     setLoading(true);
     
     try {
-      console.log('Submitting accident details...', values);
+      // console.log('Submitting accident details...', values);
       
       // Submit accident details first
       const response = await axios.post("http://localhost:8080/api/accidentform", {
@@ -186,7 +186,7 @@ const onDocumentFormFinish = async (values) => {
       }
     });
 
-    console.log('Submitting complete claim with form data');
+    // console.log('Submitting complete claim with form data');
     
     // API call to submit complete claim (Step 2)
     const response = await axios.post("http://localhost:8080/api/documentupload", formData, {

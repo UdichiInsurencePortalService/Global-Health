@@ -50,8 +50,8 @@ const createTransporter = () => {
   return nodemailer.createTransport({
     service: 'gmail', // or your preferred email service
     auth: {
-      user: process.env.EMAIL_USER || 'globalhealth235@gmail.com',
-      pass: process.env.EMAIL_PASS || 'ubxw sbty yxkt pcgo' // Use app password for Gmail
+      user:'globalhealth235@gmail.com',
+      pass:'snul decp usnu cszn' // Use app password for Gmail
     },
     tls: {
       rejectUnauthorized: false // Helps with some email server issues

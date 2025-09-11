@@ -41,7 +41,7 @@ const Choose = () => {
   ];
 
   return (
-    <div className="choose-section py-5">
+    <div className="choose-section ">
       <div className="container">
         <div className="row justify-content-center text-center mb-5">
           <div className="col-lg-8 col-md-10 col-12">

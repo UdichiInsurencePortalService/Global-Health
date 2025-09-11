@@ -577,7 +577,7 @@ const UserData = () => {
       const storageData = JSON.stringify(premiumData);
           localStorage.setItem("premiumDetails", storageData); // ✅ Save to localStorage
 
-      console.log('Premium details saved:>>>>><<<<<<', premiumData);
+      // console.log('Premium details saved:>>>>><<<<<<', premiumData);
     } catch (error) {
       console.error('Error saving premium details:', error);
     }
@@ -648,11 +648,11 @@ const calculateNCB = (vehicleDetails) => {
 
   const ncbPercent = getStandardNCBPercentage(claimFreeYears);
 
-  console.log("=== NCB CALCULATION ===");
-  console.log("Vehicle Age:", vehicleAge);
-  console.log("Claim-Free Years:", claimFreeYears);
-  console.log("NCB %:", ncbPercent);
-  console.log("=======================");
+  // console.log("=== NCB CALCULATION ===");
+  // console.log("Vehicle Age:", vehicleAge);
+  // console.log("Claim-Free Years:", claimFreeYears);
+  // console.log("NCB %:", ncbPercent);
+  // console.log("=======================");
 
   return { claimFreeYears, ncbPercent, vehicleAge };
 };
@@ -686,8 +686,8 @@ const calculateNCB = (vehicleDetails) => {
       setBaseIdv(exShowroomPrice);
       setIdv(exShowroomPrice);
       
-      console.log("IDV Calculation (Simplified):");
-      console.log("Ex-Showroom Price used as IDV:", exShowroomPrice);
+      // console.log("IDV Calculation (Simplified):");
+      // console.log("Ex-Showroom Price used as IDV:", exShowroomPrice);
       
       // Calculate NCB using improved logic
       const { ncbPercent } = calculateNCB(storedVehicleDetails);
@@ -722,39 +722,39 @@ const calculateNCB = (vehicleDetails) => {
     const { vehicleAge } = calculateNCB(vehicle);
     const engineCC = vehicle?.cubic_capacity || 1200;
 
-    console.log("=== REDUCED PREMIUM CALCULATION ===");
+    // console.log("=== REDUCED PREMIUM CALCULATION ===");
     
     // Step 1: Calculate reduced own damage premium using ex-showroom IDV
     const reducedRate = getReducedOwnDamageRate(vehicleAge, engineCC, 'tier2');
     let ownDamagePremium = Math.round(idv * (reducedRate / 100));
     
-    console.log("1. IDV (Ex-Showroom Price):", idv);
-    console.log("2. Vehicle Age Used:", vehicleAge, "years");
-    console.log("3. Reduced Rate:", reducedRate + "% of IDV");
-    console.log("4. Own Damage Premium:", ownDamagePremium);
+    // console.log("1. IDV (Ex-Showroom Price):", idv);
+    // console.log("2. Vehicle Age Used:", vehicleAge, "years");
+    // console.log("3. Reduced Rate:", reducedRate + "% of IDV");
+    // console.log("4. Own Damage Premium:", ownDamagePremium);
     
     // Step 2: Calculate NCB discount
     const ncbDiscountAmount = Math.round(ownDamagePremium * (ncbPercentage / 100));
-    console.log("5. NCB Discount:", ncbDiscountAmount, "(" + ncbPercentage + "%)");
+    // console.log("5. NCB Discount:", ncbDiscountAmount, "(" + ncbPercentage + "%)");
     setNcbDiscount(ncbDiscountAmount);
     
     const finalOwnDamagePremium = ownDamagePremium - ncbDiscountAmount;
-    console.log("6. Final Own Damage Premium (after NCB):", finalOwnDamagePremium);
+    // console.log("6. Final Own Damage Premium (after NCB):", finalOwnDamagePremium);
     
     // Step 3: Add reduced third-party premium
     const thirdPartyPremium = getReducedThirdPartyPremium(vehicle);
-    console.log("7. Reduced Third-Party Premium:", thirdPartyPremium);
+    // console.log("7. Reduced Third-Party Premium:", thirdPartyPremium);
     
     // Step 4: Calculate zero depreciation charge - 12% of Own Damage Premium (reduced from 15%)
     const zeroDepCharge = addOns.find(addon => addon.id === 1)?.selected ? 
-      Math.round(ownDamagePremium * 0.12) : 0; // 12% of own damage premium
+      Math.round(ownDamagePremium * 0.25) : 0; // 25% of own damage premium
     
     // Only update if the value has changed to prevent infinite loops
     if (zeroDepCharge !== zeroDepreciationCharge) {
       setZeroDepreciationCharge(zeroDepCharge);
     }
     
-    console.log("8. Zero Depreciation Charge:", zeroDepCharge, "(12% of Own Damage Premium)");
+    // console.log("8. Zero Depreciation Charge:", zeroDepCharge, "(12% of Own Damage Premium)");
     
     // Step 5: Add add-ons
     const addOnsPremium = addOns
@@ -763,19 +763,19 @@ const calculateNCB = (vehicleDetails) => {
         if (addon.id === 1) return total + zeroDepCharge;
         return total + addon.price;
       }, 0);
-    console.log("9. Add-Ons Premium:", addOnsPremium);
+    // console.log("9. Add-Ons Premium:", addOnsPremium);
 
     // Step 6: Calculate subtotal
     const subtotal = finalOwnDamagePremium + thirdPartyPremium + addOnsPremium;
-    console.log("10. Subtotal (before GST):", subtotal);
+    // console.log("10. Subtotal (before GST):", subtotal);
     
     // Step 7: Add reduced GST (15% instead of 18%)
-    const gst = Math.round(subtotal * 0.15);
-    console.log("11. Reduced GST (15%):", gst);
+    const gst = Math.round(subtotal * 0.18);
+    // console.log("11. Reduced GST (15%):", gst);
     
     // Step 8: Calculate final premium
     const finalPremium = subtotal + gst;
-    console.log("12. FINAL REDUCED PREMIUM:", finalPremium);
+    // console.log("12. FINAL REDUCED PREMIUM:", finalPremium);
     
     setPremium(finalPremium);
 
@@ -838,7 +838,7 @@ const calculateNCB = (vehicleDetails) => {
       }, 0);
     
     const subtotal = ownDamagePremium - ncbDiscount + thirdPartyPremium + addOnsPremium;
-    const gst = Math.round(subtotal * 0.15);
+    const gst = Math.round(subtotal * 0.18);
 
     return [
       { 
@@ -874,7 +874,7 @@ const calculateNCB = (vehicleDetails) => {
         component: 'GST', 
         amount: gst, 
         icon: <DollarOutlined style={{ color: '#eb2f96' }} />,
-        details: '15% of Subtotal (Reduced Rate)'
+        details: '18% of Subtotal (Reduced Rate)'
       },
     ];
   };
@@ -1124,6 +1124,7 @@ const calculateNCB = (vehicleDetails) => {
                 <Link to='/formpage'>
                   <Button 
                     type="primary" 
+                    className='user-button'
                     size="large" 
                     block
                     style={{ 
@@ -1164,7 +1165,10 @@ const calculateNCB = (vehicleDetails) => {
                       borderRadius: '8px',
                       fontSize: '14px',
                       fontWeight: 'bold',
-                      boxShadow: '0 3px 10px rgba(82, 196, 26, 0.3)'
+                      boxShadow: '0 3px 10px rgba(82, 196, 26, 0.3)',
+                      position: 'absolute',
+                      left: '105px',
+                        top: '45px',
                     }}
                   >
                     Download Quotation
@@ -1208,7 +1212,7 @@ const calculateNCB = (vehicleDetails) => {
               <div style={{ marginTop: '15px', padding: '15px', background: '#f6ffed', borderRadius: '8px' }}>
                 <p style={{ margin: '5px 0', fontSize: '14px', color: '#52c41a' }}>
                   <InfoCircleOutlined style={{ marginRight: '5px' }} />
-                  <strong>Zero Depreciation Charge:</strong> 15% of Own Damage Premium (₹{zeroDepreciationCharge.toLocaleString()})
+                  <strong>Zero Depreciation Charge:</strong> 20% of Own Damage Premium (₹{zeroDepreciationCharge.toLocaleString()})
                 </p>
                 <p style={{ margin: '5px 0', fontSize: '12px', color: '#666' }}>
                   This ensures you get the full claim amount without any depreciation deduction.
@@ -1286,7 +1290,7 @@ const calculateNCB = (vehicleDetails) => {
                           ₹ {addon.price.toLocaleString()}
                           {addon.id === 1 && addon.price > 0 && (
                             <span style={{ fontSize: '12px', opacity: 0.8, display: 'block' }}>
-                              (15% of Own Damage Premium)
+                              (20% of Own Damage Premium)
                             </span>
                           )}
                         </div>
@@ -1452,6 +1456,7 @@ const calculateNCB = (vehicleDetails) => {
             <Link to="/formpage">
               <Button 
                 type="primary" 
+                className='user-button'
                 size="large"
                 style={{
                   background: 'linear-gradient(135deg, #52c41a 0%, #389e0d 100%)',

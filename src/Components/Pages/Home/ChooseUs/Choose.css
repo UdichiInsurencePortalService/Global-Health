@@ -3,6 +3,7 @@
    .choose-section {
     background: rgb(245, 250, 255);;
     color: white;
+    padding: 19px 18px !important;
   }
   
   .feature-card {

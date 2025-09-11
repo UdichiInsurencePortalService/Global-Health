@@ -8,13 +8,29 @@ router.use(cors());
 router.use(express.json());
 
 // Configure nodemailer with better error handling
+
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-        user: process.env.EMAIL_USER || 'globalhealth235@gmail.com', // Make sure this is set in your .env file
-        pass: process.env.EMAIL_PASS || 'ubxw sbty yxkt pcgo' // Use App Password, not regular password
-    }
+        user: "globalhealth235@gmail.com", // your Gmail address
+        pass: "snul decp usnu cszn  ",         // your 16-character App Password
+    },
 });
+
+const mailOptions = {
+    from: "globalhealth235@gmail.com",
+    to: "recipient@example.com",
+    subject: "Test Email",
+    text: "Hello! This is a test email sent using Nodemailer and Gmail.",
+};
+
+transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log("Error:", error);
+    }
+    console.log("Email sent:", info.response);
+});
+
 
 // Test email configuration on startup
 transporter.verify((error, success) => {
@@ -125,10 +141,46 @@ router.post('/medical-registration', async (req, res) => {
                             <h3 style="color: #dc3545;">Next Steps Required:</h3>
                             <p>To complete your registration, please submit the following documents:</p>
                             <ul>
-                                <li><strong>Medical License</strong> - Scanned copy of your current medical license</li>
-                                <li><strong>Official Photograph</strong> - Recent professional photograph</li>
+                                <li>Complete reprint of paper Submitted for consideration for the award</li>
+                                <li>Biodata , mentioning academic , professional and research contribution</li>
+                             <li>Provide statement giving detils achievement during last 5 year</li>
+            <li>Certificate of No objection form all other co-Authors for research work submitted for the award</li>
+
+
                             </ul>
                         </div>
+
+                         <div style="max-width:600px;margin:40px auto;padding:20px;border-radius:12px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.15);background:#f9fafb;
+            font-family:Arial,Helvetica,sans-serif;line-height:1.6;color:#111;">
+  
+  <h1 style="font-size:22px;margin-bottom:10px;color:#0f172a;">
+    Registration Fee
+  </h1>
+
+  <p style="font-size:18px;margin:8px 0;">
+    The registration fee is 
+
+    <span style="font-weight:bold;color:#16a34a;">₹5000</span>.
+  </p>
+
+  <p style="margin:8px 0;">
+    Please send the fee to this account:  
+        <h2 style="font-weight:bold;color:#2563eb;">Canara Bank</h2>
+        <h4 style="font-weight:bold;color:#2563eb;">Account-Name => Pratichi Foundation</h4>
+
+        <h5 style="font-weight:bold;color:#2563eb;">IFSC code =>CNRB0018686</5>
+
+    <span style="font-weight:bold;color:#2563eb;">Account Number is => 110116320705</span>
+        <p style="font-weight:bold;color:#2563eb;"> UPI-id => 327181291670085@cnrb</p>
+
+  </p>
+
+  <h2 style="font-size:18px;margin-top:20px;color:#dc2626;">
+    ⚠️ Without registration fee and document verification your application will not considered.
+  </h2>
+</div>
+
                         
                         <p>Please reply to this email with the required documents attached, or upload them through our secure portal.</p>
                         

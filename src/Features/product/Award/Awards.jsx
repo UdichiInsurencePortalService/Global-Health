@@ -114,7 +114,7 @@ export default function Awards() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/api/medical-registration', {
+      const response = await fetch(`${import.meta.env.VITE_MEDICAL_API}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -684,7 +684,7 @@ export default function Awards() {
             padding: '20px', 
             textAlign: 'center' 
           }}>
-            <h3 style={{ margin: 0 }}>Medical Professional Registration</h3>
+            <h3 style={{ margin: 0 }}>Global Medical Icon Award</h3>
           </div>
 
           {/* Body */}
@@ -1182,9 +1182,9 @@ export default function Awards() {
               </h5>
               
               <p style={{ marginBottom: '20px', color: '#666', lineHeight: '1.5' }}>
-                Your medical registration has been submitted successfully. 
-                A confirmation email with further instructions has been sent to your email address.
-              </p>
+                Your medical Award registration has been submitted successfully. 
+                A confirmation email with further instructions has been sent to your email address.</p>
+
               
               {registrationId && (
                 <div style={{ marginBottom: '20px' }}>
@@ -1217,7 +1217,7 @@ export default function Awards() {
                   paddingLeft: '20px'
                 }}>
                   <li>Check your email for confirmation details</li>
-                  <li>Submit your medical license (scanned copy)</li>
+                  <li>Submit your medical Document (scanned copy)</li>
                   <li>Provide a recent professional photograph</li>
                 </ul>
               </div>

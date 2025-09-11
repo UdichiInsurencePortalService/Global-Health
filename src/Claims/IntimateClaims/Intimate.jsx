@@ -34,7 +34,7 @@ const Intimate = () => {
   // Step 1: Check if policy exists - UPDATED TO HANDLE API RESPONSE PROPERLY
   const checkPolicyExists = async (policyNumber) => {
     try {
-      console.log('Checking if policy exists:', policyNumber);
+      // console.log('Checking if policy exists:', policyNumber);
       
       const response = await fetch(`${API_BASE_URL}/policy?policyNumber=${encodeURIComponent(policyNumber)}`, {
         method: 'GET',
@@ -43,9 +43,9 @@ const Intimate = () => {
         }
       });
 
-      console.log('Policy check response status:', response.status);
+      // console.log('Policy check response status:', response.status);
       const data = await response.json();
-      console.log('Policy check response data:', data);
+      // console.log('Policy check response data:', data);
       
       if (!response.ok) {
         throw new Error(data.message || 'Policy verification failed');
@@ -79,7 +79,7 @@ const Intimate = () => {
   // Step 2: Check period of insurance from policy data
   const checkPolicyPeriod = (policyData) => {
     try {
-      console.log('Checking policy period from policy data:', policyData);
+      // console.log('Checking policy period from policy data:', policyData);
       
       if (!policyData) {
         return {
@@ -91,7 +91,7 @@ const Intimate = () => {
       // Get the period of insurance from policy data
       const periodOfInsurance = policyData.period_of_insurance || policyData.periodOfInsurance;
       
-      console.log('Period of insurance found:', periodOfInsurance);
+      // console.log('Period of insurance found:', periodOfInsurance);
       
       // Check if period is null or undefined
       if (periodOfInsurance === null || periodOfInsurance === undefined || periodOfInsurance === '') {
@@ -127,10 +127,10 @@ const Intimate = () => {
     try {
       const currentDate = new Date();
       const currentDateStr = currentDate.toISOString().split('T')[0];
-      console.log('=== POLICY EXPIRATION CHECK ===');
-      console.log('Current Date:', currentDateStr);
-      console.log('Current Year:', currentDate.getFullYear());
-      console.log('Period String received:', periodStr);
+      // console.log('=== POLICY EXPIRATION CHECK ===');
+      // console.log('Current Date:', currentDateStr);
+      // console.log('Current Year:', currentDate.getFullYear());
+      // console.log('Period String received:', periodStr);
       
       // Handle bracket notation format like "[2023-05-20,2024-04-20)"
       if (typeof periodStr === 'string' && periodStr.includes('[') && periodStr.includes(',')) {
@@ -141,17 +141,17 @@ const Intimate = () => {
           const startDate = new Date(startDateStr.trim());
           const endDate = new Date(endDateStr.trim());
           
-          console.log('Parsed Start Date:', startDate.toISOString().split('T')[0]);
-          console.log('Parsed End Date:', endDate.toISOString().split('T')[0]);
-          console.log('Policy Period:', startDate.getFullYear(), 'to', endDate.getFullYear());
+          // console.log('Parsed Start Date:', startDate.toISOString().split('T')[0]);
+          // console.log('Parsed End Date:', endDate.toISOString().split('T')[0]);
+          // console.log('Policy Period:', startDate.getFullYear(), 'to', endDate.getFullYear());
           
           // Policy is expired if current date is after end date
           const isExpired = currentDate > endDate;
-          console.log('Date Comparison: Current >  End Date?', isExpired);
-          console.log('Days since expiry:', Math.floor((currentDate - endDate) / (1000 * 60 * 60 * 24)));
+          // console.log('Date Comparison: Current >  End Date?', isExpired);
+          // console.log('Days since expiry:', Math.floor((currentDate - endDate) / (1000 * 60 * 60 * 24)));
           
           if (isExpired) {
-            console.log('🚨 POLICY EXPIRED - Current date is after end date');
+            // console.log('🚨 POLICY EXPIRED - Current date is after end date');
             return true;
           }
           
@@ -168,15 +168,15 @@ const Intimate = () => {
           const startDate = new Date(startDateStr);
           const endDate = new Date(endDateStr);
           
-          console.log('Parsed Start Date:', startDate.toISOString().split('T')[0]);
-          console.log('Parsed End Date:', endDate.toISOString().split('T')[0]);
+          // console.log('Parsed Start Date:', startDate.toISOString().split('T')[0]);
+          // console.log('Parsed End Date:', endDate.toISOString().split('T')[0]);
           
           // Policy is expired if current date is after end date
           const isExpired = currentDate > endDate;
-          console.log('Date Comparison: Current > End Date?', isExpired);
+          // console.log('Date Comparison: Current > End Date?', isExpired);
           
           if (isExpired) {
-            console.log('🚨 POLICY EXPIRED - Current date is after end date');
+            // console.log('🚨 POLICY EXPIRED - Current date is after end date');
             return true;
           }
           
@@ -191,14 +191,14 @@ const Intimate = () => {
           const startDate = new Date(dateParts[0].trim());
           const endDate = new Date(dateParts[1].trim());
           
-          console.log('Parsed Start Date:', startDate.toISOString().split('T')[0]);
-          console.log('Parsed End Date:', endDate.toISOString().split('T')[0]);
+          // console.log('Parsed Start Date:', startDate.toISOString().split('T')[0]);
+          // console.log('Parsed End Date:', endDate.toISOString().split('T')[0]);
           
           const isExpired = currentDate > endDate;
-          console.log('Date Comparison: Current > End Date?', isExpired);
+          // console.log('Date Comparison: Current > End Date?', isExpired);
           
           if (isExpired) {
-            console.log('🚨 POLICY EXPIRED - Current date is after end date');
+            // console.log('🚨 POLICY EXPIRED - Current date is after end date');
             return true;
           }
           
@@ -207,7 +207,7 @@ const Intimate = () => {
       }
 
       // Enhanced fallback: Check policy year from policy number
-      console.log('Checking policy number for year validation...');
+      // console.log('Checking policy number for year validation...');
       if (formData.policyNumber) {
         const yearMatch = formData.policyNumber.match(/\/([0-9]{4}-[0-9]{2})\//);
         if (yearMatch && yearMatch[1]) {
@@ -217,21 +217,21 @@ const Intimate = () => {
           const policyEndYear = parseInt('20' + endYearStr); // Convert "26" to "2026"
           const currentYear = currentDate.getFullYear();
           
-          console.log('Policy Year from Number:', policyYearStr);
-          console.log('Policy Start Year:', policyStartYear);
-          console.log('Policy End Year:', policyEndYear);
-          console.log('Current Year:', currentYear);
+          // console.log('Policy Year from Number:', policyYearStr);
+          // console.log('Policy Start Year:', policyStartYear);
+          // console.log('Policy End Year:', policyEndYear);
+          // console.log('Current Year:', currentYear);
           
           // Policy is expired if current year is greater than policy end year
           if (currentYear > policyEndYear) {
-            console.log('🚨 POLICY EXPIRED - Current year is after policy end year');
+            // console.log('🚨 POLICY EXPIRED - Current year is after policy end year');
             return true;
           }
           
           // For your example: Policy is 2025-26, but period is 2023-2024
           // This indicates a mismatch or the policy number format doesn't match actual period
           // In such cases, rely on the actual period_of_insurance data if available
-          console.log('Policy number year check: Policy appears valid based on number year');
+          // console.log('Policy number year check: Policy appears valid based on number year');
         }
       }
       
@@ -242,24 +242,24 @@ const Intimate = () => {
           const latestYearInPeriod = Math.max(...yearMatches.map(year => parseInt(year)));
           const currentYear = currentDate.getFullYear();
           
-          console.log('Latest year found in period:', latestYearInPeriod);
-          console.log('Current year:', currentYear);
+          // console.log('Latest year found in period:', latestYearInPeriod);
+          // console.log('Current year:', currentYear);
           
           // If the latest year in the period is more than 1 year ago, policy is expired
           if (currentYear - latestYearInPeriod > 1) {
-            console.log('🚨 POLICY EXPIRED - Period contains years too far in the past');
+            // console.log('🚨 POLICY EXPIRED - Period contains years too far in the past');
             return true;
           }
         }
       }
       
-      console.log('✅ Policy appears to be valid');
+      // console.log('✅ Policy appears to be valid');
       return false;
       
     } catch (error) {
       console.error('Error checking policy expiration:', error);
       // In case of error, assume expired for safety
-      console.log('🚨 ERROR - Assuming policy is expired for safety');
+      // console.log('🚨 ERROR - Assuming policy is expired for safety');
       return true;
     }
   };
@@ -288,7 +288,7 @@ const Intimate = () => {
         };
       }
       
-      console.log('Policy exists and is valid from API, now checking period from policy data...');
+      // console.log('Policy exists and is valid from API, now checking period from policy data...');
       
       // Step 2: Check policy period from the policy data we already have (optional additional check)
       const periodCheck = checkPolicyPeriod(existsCheck.data);
@@ -356,7 +356,7 @@ const Intimate = () => {
         chassis_number: claimData.chassisNumber
       };
       
-      console.log('Sending claim data to server:', payload);
+      // console.log('Sending claim data to server:', payload);
       
       const response = await fetch(`${API_BASE_URL}/claims`, {
         method: 'POST',
@@ -366,9 +366,9 @@ const Intimate = () => {
         body: JSON.stringify(payload)
       });
       
-      console.log('API Response Status:', response.status);
+      // console.log('API Response Status:', response.status);
       const responseText = await response.text();
-      console.log('API Raw Response:', responseText);
+      // console.log('API Raw Response:', responseText);
       
       let data;
       try {
@@ -382,7 +382,7 @@ const Intimate = () => {
         throw new Error(data.message || 'Failed to create claim. Please try again.');
       }
       
-      console.log('Claim saved to database successfully:', data);
+      // console.log('Claim saved to database successfully:', data);
       return { success: true, data };
       
     } catch (error) {
@@ -450,7 +450,7 @@ const Intimate = () => {
       // FIXED: Handle different verification results properly
       if (!verification.success) {
         if (verification.expired) {
-          console.log('Policy expired, showing error and modal...');
+          // console.log('Policy expired, showing error and modal...');
           handleError('Your policy has expired. Please renew it to continue.');
           setShowwrongPeriodModal(true);
           return; // IMPORTANT: Stop execution here
@@ -467,7 +467,7 @@ const Intimate = () => {
       }
 
       // ONLY PROCEED IF POLICY IS VALID
-      console.log('Policy is valid, proceeding with claim submission...');
+      // console.log('Policy is valid, proceeding with claim submission...');
 
       // Submit claim data to database if policy is valid
       const dbResult = await submitClaimToDatabase(formData);
