@@ -605,6 +605,15 @@ const Navbar = ({ icon1, icon2 }) => {
                     </ul>
                   </li>
 
+
+
+
+                <li>
+                    <Link to="/Currentpening">
+                      Career
+                    </Link>
+                  </li>
+
                   <li>
                     <Link to="#" onClick={showDrawer}>
                       Contact Us

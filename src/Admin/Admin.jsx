@@ -63,9 +63,9 @@ const Admin = () => {
                   </Button>
                 </Form>
 
-                <div className="mt-4 text-center text-muted">
+                {/* <div className="mt-4 text-center text-muted">
                   Demo login: <strong>admin / admin</strong>
-                </div>
+                </div> */}
               </Card.Body>
             </Card>
           </Col>

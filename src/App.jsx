@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./Header/Navbar/Navbar.jsx";
@@ -47,21 +46,24 @@ import ProtectedRoute from "./ProtectedRoutes/ProtectedRoute.jsx";
 import ScroolTop from "./ScroolToTop/ScroolTop.jsx";
 import Awards from "./Features/product/Award/Awards.jsx";
 import Currentpening from "./Header/Footer/Currentpening.jsx";
+
+import CurrentForm from "./Header/Footer/CurrentForm.jsx";
 // import { Award } from "lucide-react";
 
 // import ScrollToTopButton from "./Reuse/ScrollToTopButton/ScrollToTopButton.jsx";
 
 function App() {
   const location = useLocation();
-  
+
   // Check if current route is admin, dashboard, or any admin sub-routes
-  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dashboard');
+  const isAdminRoute =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/dashboard");
 
   return (
     <>
-
       <Googletranslation />
-      
+
       {/* Only show Navbar if not on admin/dashboard routes */}
       {/* {!isAdminRoute && <Navbar />} */}
       {/* {!isAdminRoute && <Googletranslation/>} */}
@@ -71,11 +73,16 @@ function App() {
       <Routes>
         {/* Admin Routes - no navbar/footer */}
         <Route path="/admin/*" element={<Admin />} />
-        <Route path="/dashboard" element= {<ProtectedRoute><Dashboard/></ProtectedRoute>}/>
-         <Route path="/insurance/car" element={<AdminCarinsurance/>} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/insurance/car" element={<AdminCarinsurance />} />
 
-
-        
         {/* Regular Routes - with navbar/footer */}
 
         <Route path="/" element={<Home />} />
@@ -102,18 +109,19 @@ function App() {
         <Route path="/intimateclaims" element={<Intimate />} />
         <Route path="/documentupload" element={<Document />} />
         <Route path="/claimprocess" element={<Claimprocess />} />
-        <Route path="/Currentpening" element={<Currentpening/>} />
-
+        <Route path="/Currentpening" element={<Currentpening />} />
 
         {/* Award routes */}
 
-   <Route path="/Award" element={<Awards/>}/>
-      
+        <Route path="/Award" element={<Awards />} />
+
         {/* Other Routes */}
         <Route path="/policy" element={<Policy />} />
         <Route path="/formpage" element={<FormPage />} />
+
+        <Route path="/currentform" element ={<CurrentForm/>}/>
       </Routes>
-          <ScroolTop/>
+      <ScroolTop />
 
       {/* Only show Footer and Chat if not on admin/dashboard routes */}
       {/* {!isAdminRoute && (

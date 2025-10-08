@@ -153,6 +153,8 @@ const accidentform = require("./Routes/Accidentform.js");
 const finaldocument = require("./Routes/Finaldocumentclaim.js");
 const contact = require("./Routes/ContactUs.js");
 const award = require("./Routes/doctorAward.js");
+const job = require('./Routes/JobVacancy.js');
+
 
 // DB connections
 require("./Models/postgressdb"); // ✅ Postgres connection
@@ -183,8 +185,11 @@ const PORT = process.env.PORT || 8080;
 const allowedOrigins = [
   "http://localhost:5173",
   "http://13.201.13.219:5173",
-  "https://13.201.13.219:5173"   // just in case browser forces https
+  "https://13.201.13.219:5173",
+  "http://www.sscac.co.in",
+  "https://www.sscac.co.in" // include both http and https just in case
 ];
+
 
 app.use(
   cors({
@@ -219,7 +224,7 @@ app.use("/api", accidentform);
 app.use("/api", finaldocument);
 app.use("/api", contact);
 app.use("/api", award);
-
+app.use("/api",job)
 app.get("/", (req, res) => {
   res.send("Backend running with Postgres + Redis ✅");
 });

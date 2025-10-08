@@ -76,42 +76,20 @@ router.post("/accidentform", async (req, res) => {
 // GET: Retrieve all accident data with pagination
 router.get('/getaccidentdata', async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
-    const offset = (page - 1) * limit;
-
-    const query = `
-      SELECT * FROM accident_details 
-      ORDER BY created_at DESC 
-      LIMIT $1 OFFSET $2
-    `;
-
-    const countQuery = 'SELECT COUNT(*) FROM accident_details';
-
-    const [accidents, countResult] = await Promise.all([
-      db.query(query, [limit, offset]),
-      db.query(countQuery)
-    ]);
-
-    const totalAccidents = parseInt(countResult.rows[0].count);
-    const totalPages = Math.ceil(totalAccidents / limit);
+    const query = 'SELECT * FROM accident_details';
+    const result = await db.query(query);
 
     res.status(200).json({
       success: true,
       message: 'All accident data retrieved successfully',
-      data: accidents.rows,
-      pagination: {
-        currentPage: parseInt(page),
-        totalPages,
-        totalAccidents,
-        limit: parseInt(limit)
-      }
+      data: result.rows
     });
-  } catch (err) {
-    console.error('Database error while fetching accident data:', err);
+  } catch (error) {
+    console.error('Database error while fetching accident data:', error);
     res.status(500).json({
       success: false,
       message: 'Database error',
-      error: err.message
+      error: error.message
     });
   }
 });

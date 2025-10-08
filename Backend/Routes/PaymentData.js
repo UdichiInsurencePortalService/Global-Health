@@ -289,7 +289,7 @@ const result = await db.query(
 
 router.get('/getpaymentuserdata', async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM user_payment_data ORDER BY id DESC');
+    const result = await db.query('SELECT * FROM user_payment_data');
     
     res.status(200).json({
       message: 'All user payment data retrieved successfully',

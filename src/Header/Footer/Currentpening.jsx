@@ -1,8 +1,259 @@
 import React, { useState } from 'react';
-
-const Currentpening = () => {
+import { Container, Row, Col, Card, Table, Badge, Button, Modal, Form, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+const CurrentOpenings = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showJobModal, setShowJobModal] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedJobForDescription, setSelectedJobForDescription] = useState(null);
+
+  const vacancyData = [
+    {
+      slNo: 1,
+      postName: "Product Manager – Recruitment Portal",
+      department: "Technology",
+      vacancies: 237,
+      salary: "Rs 65000.00",
+      type: "Senior Level"
+    },
+    {
+      slNo: 2,
+      postName: "Business Development Manager – Insurance",
+      department: "Insurance",
+      vacancies: 79,
+      salary: "Rs 47500.00",
+      type: "Senior Level"
+    },
+    {
+      slNo: 3,
+      postName: "Program Manager – Healthcare Awards",
+      department: "Healthcare",
+      vacancies: 325,
+      salary: "Rs 55000.00",
+      type: "Senior Level"
+    },
+    {
+      slNo: 4,
+      postName: "Software Developers (Full-Stack)",
+      department: "Technology",
+      vacancies: 3,
+      salary: "Rs 55000.00",
+      type: "Technical"
+    },
+    {
+      slNo: 5,
+      postName: "Event & Sponsorship Manager",
+      department: "Healthcare",
+      vacancies: 73,
+      salary: "Rs 42500.00",
+      type: "Mid Level"
+    },
+    {
+      slNo: 6,
+      postName: "Operations & Claims Executive",
+      department: "Insurance",
+      vacancies: 760,
+      salary: "Rs 25000.00",
+      type: "Mid Level"
+    },
+    {
+      slNo: 7,
+      postName: "Customer Relationship Officer",
+      department: "Insurance",
+      vacancies: 15,
+      salary: "Rs 21500.00",
+      type: "Entry Level"
+    },
+    {
+      slNo: 8,
+      postName: "Insurance Agents / Freelance Advisors",
+      department: "Insurance",
+      vacancies: 1550,
+      salary: "15% commission",
+      type: "Commission"
+    },
+    {
+      slNo: 9,
+      postName: "Medical Experts / Jury Members",
+      department: "Medical Award",
+      vacancies: 127,
+      salary: "Rs 10000 per cycle",
+      type: "Expert"
+    }
+  ];
+
+  const jobDescriptions = {
+    "Product Manager – Insurance": {
+      location: "PAN INDIA",
+      department: "Insurance Division",
+      reportsTo: "Head of Insurance Operations",
+      overview: "The Product Manager – Insurance will be responsible for conceptualising, developing, and managing innovative insurance products tailored to customer needs. This role involves market research, competitor analysis, regulatory compliance, and collaboration with cross-functional teams to ensure successful product lifecycle management.",
+      responsibilities: [
+        "Conduct market analysis to identify product gaps and opportunities",
+        "Design and launch insurance products (life, health, general, or customised plans)",
+        "Ensure products comply with IRDAI and other regulatory requirements",
+        "Collaborate with underwriting, claims, actuarial, and tech teams for product implementation",
+        "Develop product positioning, pricing strategies, and customer value propositions",
+        "Monitor performance metrics and refine products for profitability and customer satisfaction",
+        "Support digital transformation in insurance product delivery"
+      ],
+      qualifications: [
+        "Graduate/MBA/PGDM in Insurance, Finance, or related field",
+        "Experience in insurance product development desirable",
+        "Strong understanding of IRDAI guidelines",
+        "Analytical and problem-solving ability",
+        "Excellent communication and stakeholder management skills"
+      ]
+    },
+    "Business Development Manager – Insurance": {
+      location: "PAN INDIA",
+      department: "Sales & Business Development – Insurance",
+      reportsTo: "Director – Insurance Vertical",
+      overview: "The Business Development Manager (BDM) will drive business growth through strategic partnerships, client acquisition, and channel development in the insurance sector.",
+      responsibilities: [
+        "Develop and implement business growth strategies for insurance products",
+        "Acquire new clients through B2B, B2C, and digital channels",
+        "Build partnerships with brokers, agents, corporates, and digital platforms",
+        "Achieve revenue targets and expand market share",
+        "Conduct presentations, proposals, and negotiations with potential clients",
+        "Work closely with marketing for lead generation campaigns",
+        "Track competitor activities and provide market intelligence"
+      ],
+      qualifications: [
+        "Graduate/Postgraduate in Business, Insurance, or related discipline",
+        "Strong networking and client relationship skills",
+        "Proven track record of achieving sales targets",
+        "Knowledge of digital sales channels will be an advantage"
+      ]
+    },
+    "Event & Sponsorship Manager": {
+      location: "PAN INDIA",
+      department: "Events & Partnerships",
+      reportsTo: "CEO/Head – Marketing & Outreach",
+      overview: "The Event & Sponsorship Manager will lead the planning, execution, and monetisation of organisational events including conferences, award shows, and promotional activities. The role will focus on sponsorship acquisition, stakeholder engagement, and ensuring high-quality event delivery.",
+      responsibilities: [
+        "Plan, coordinate, and manage events (insurance expos, healthcare awards, recruitment fairs)",
+        "Design sponsorship packages and secure corporate sponsors/partners",
+        "Manage budgets, vendor contracts, and event logistics",
+        "Build and maintain relationships with sponsors, partners, and media",
+        "Collaborate with marketing for promotions, PR, and digital campaigns",
+        "Ensure smooth on-ground execution and post-event evaluation"
+      ],
+      qualifications: [
+        "Graduate/Postgraduate in Event Management, Marketing, or related field",
+        "Desirable experience in event planning & sponsorship sales",
+        "Strong negotiation and client relationship skills",
+        "Ability to manage multiple large-scale events",
+        "Creativity with strong project management skills"
+      ]
+    },
+    "Program Manager – Healthcare Awards": {
+      location: "PAN INDIA",
+      department: "Medical/Healthcare Awards Vertical",
+      reportsTo: "Director – Awards & Recognition",
+      overview: "The Program Manager will oversee the complete lifecycle of the organisation's Medical & Health Awards, from program design and nomination management to jury coordination, event execution, and stakeholder engagement.",
+      responsibilities: [
+        "Develop the framework, categories, and criteria for healthcare awards",
+        "Manage nomination, shortlisting, and jury evaluation processes",
+        "Coordinate with medical associations, hospitals, and healthcare professionals",
+        "Ensure transparency and credibility in the award process",
+        "Manage timelines, budgets, and program resources",
+        "Collaborate with Event & Sponsorship Manager for award ceremony execution",
+        "Build long-term partnerships with healthcare institutions and stakeholders"
+      ],
+      qualifications: [
+        "Postgraduate in Healthcare Management, Public Health, or related field",
+        "Experience in healthcare program management or awards/events preferred",
+        "Strong knowledge of India's healthcare ecosystem",
+        "Excellent organisational, communication, and leadership skills",
+        "Experience in stakeholder engagement and program execution"
+      ]
+    },
+    "Operations & Claims Executive": {
+      location: "PAN INDIA",
+      department: "Insurance Operations",
+      reportsTo: "Operations Manager",
+      overview: "The Operations & Claims Executive will manage policy servicing, claims processing, and backend support to ensure smooth and efficient insurance operations while maintaining compliance with regulatory standards.",
+      responsibilities: [
+        "Handle end-to-end claims processing (verification, documentation, coordination with insurers)",
+        "Ensure accuracy in policy issuance, endorsements, renewals, and cancellations",
+        "Maintain claim records and generate periodic reports",
+        "Liaise with clients, hospitals, surveyors, and third-party administrators (TPAs)",
+        "Monitor compliance with IRDAI regulations and internal SOPs",
+        "Provide operational support for insurance product delivery and customer queries"
+      ],
+      qualifications: [
+        "Graduate in Commerce, Finance, or Insurance-related field",
+        "0–4 years' experience in insurance operations or claims",
+        "Strong knowledge of claims settlement processes",
+        "Attention to detail, problem-solving, and documentation skills",
+        "Familiarity with insurance software/TPA portals will be an advantage"
+      ]
+    },
+    "Customer Relationship Officer": {
+      location: "PAN INDIA",
+      department: "Customer Service / CRM",
+      reportsTo: "Head – Customer Relations",
+      overview: "The CRO will act as the primary contact point for customers, ensuring high levels of satisfaction, timely resolution of queries, and long-term relationship building across the organisation's insurance, recruitment, and healthcare award verticals.",
+      responsibilities: [
+        "Handle customer inquiries, complaints, and service requests effectively",
+        "Maintain regular communication with clients and policyholders",
+        "Support policy renewals, claim follow-ups, and product/service information",
+        "Conduct periodic feedback surveys to improve service delivery",
+        "Coordinate with operations, sales, and technical teams to resolve issues",
+        "Build loyalty and trust through personalised customer care"
+      ],
+      qualifications: [
+        "Graduate in any discipline; MBA preferred",
+        "0–3 years' experience in customer service, preferably in insurance/healthcare",
+        "Strong communication, empathy, and interpersonal skills",
+        "Ability to multitask and manage client expectations",
+        "Proficiency in CRM tools and MS Office"
+      ]
+    },
+    "Insurance Agents / Freelance Advisors": {
+      location: "Multiple Locations / Field-based",
+      department: "Sales – Insurance",
+      reportsTo: "Business Development Manager",
+      overview: "The Insurance Agent will promote and sell insurance products, generate leads, and provide guidance to clients on suitable plans. This role is target-driven and critical to expanding the organisation's reach in the insurance sector.",
+      responsibilities: [
+        "Identify prospective clients and generate leads",
+        "Explain policy features, benefits, and exclusions clearly to customers",
+        "Assist clients in selecting suitable insurance products",
+        "Support in policy application, documentation, and renewals",
+        "Achieve assigned sales targets and contribute to business growth",
+        "Maintain compliance with IRDAI regulations and ethical selling practices"
+      ],
+      qualifications: [
+        "Minimum 12th pass (IRDAI license mandatory or willingness to obtain)",
+        "Prior experience in insurance sales/agency preferred",
+        "Strong sales aptitude and customer service orientation",
+        "Excellent communication and persuasion skills",
+        "Ability to work independently and meet deadlines"
+      ]
+    },
+    "Medical Experts / Jury Members": {
+      location: "PAN INDIA",
+      department: "Healthcare Awards Division",
+      reportsTo: "Program Director – Healthcare Awards",
+      overview: "Medical Experts and Jury Members will evaluate nominations, validate clinical excellence, and provide unbiased assessments to recognise outstanding contributions in the healthcare sector.",
+      responsibilities: [
+        "Review and assess award nominations across various categories",
+        "Contribute to the design of evaluation parameters and scoring rubrics",
+        "Provide medical/clinical insights to maintain credibility and transparency",
+        "Participate in jury meetings, deliberations, and final decision-making",
+        "Uphold fairness, confidentiality, and integrity in the award process",
+        "Represent the awards in conferences, panel discussions, and ceremonies"
+      ],
+      qualifications: [
+        "MBBS/MD/PhD in Medicine, Public Health, or related field",
+        "10+ years' professional experience in healthcare practice, research, or administration",
+        "Recognised expertise and credibility in the medical community",
+        "Strong ethical standards and impartial judgment",
+        "Prior experience in jury panels, medical boards, or associations (preferred)"
+      ]
+    }
+  };
 
   const jobData = {
     insurance: {
@@ -58,25 +309,11 @@ const Currentpening = () => {
           badge: "Mid Level"
         },
         {
-          title: "Communications & PR Officer",
-          type: "Core Role (Salaried)",
-          salary: "₹25,000–₹40,000/month",
-          description: "Manage media outreach, press releases, award branding, social media campaigns.",
-          badge: "Mid Level"
-        },
-        {
           title: "Medical Experts / Jury Members",
           type: "Freelance Role",
           salary: "₹5,000–₹15,000 per award cycle",
           description: "Evaluate nominations, score applicants, join award jury panel.",
           badge: "Expert Level"
-        },
-        {
-          title: "Freelance Designers & Event Anchors",
-          type: "Freelance Role",
-          salary: "₹10,000–₹30,000/project",
-          description: "Design materials and anchor events based on project scope.",
-          badge: "Creative"
         }
       ]
     },
@@ -97,637 +334,369 @@ const Currentpening = () => {
           salary: "₹40,000–₹70,000/month",
           description: "Build web portal, integrate payment gateways, ensure data security.",
           badge: "Technical"
-        },
-        {
-          title: "Content & Assessment Manager",
-          type: "Core Role (Salaried)",
-          salary: "₹30,000–₹45,000/month",
-          description: "Develop question banks, practice tests, coordinate with subject experts.",
-          badge: "Content"
-        },
-        {
-          title: "Recruitment Operations Executive",
-          type: "Core Role (Salaried)",
-          salary: "₹25,000–₹35,000/month",
-          description: "Manage employer accounts, candidate database, coordinate interviews.",
-          badge: "Operations"
-        },
-        {
-          title: "Subject Matter Experts (SMEs)",
-          type: "Freelance Role",
-          salary: "₹500–₹1,500 per test OR ₹1–₹5 per MCQ",
-          description: "Create questions, case studies, video content for exams.",
-          badge: "Expert"
-        },
-        {
-          title: "Freelance Recruiters",
-          type: "Freelance Role",
-          salary: "5–10% of candidate's CTC",
-          description: "Source candidates for client roles.",
-          badge: "Commission"
         }
       ]
     }
   };
 
-  const handleApplyClick = (job, division) => {
-    setSelectedJob({ ...job, division: division.title });
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedJob(null);
-  };
-
-  const getBadgeClass = (badge) => {
-    switch (badge) {
-      case 'Senior Level': return 'badge-senior';
-      case 'Mid Level': return 'badge-mid';
-      case 'Entry Level': return 'badge-entry';
-      case 'Commission Based': return 'badge-commission';
-      case 'Expert Level': return 'badge-expert';
-      case 'Technical': return 'badge-technical';
-      case 'Creative': return 'badge-creative';
-      case 'Content': return 'badge-content';
-      case 'Operations': return 'badge-operations';
-      default: return 'badge-default';
+  const getBadgeVariant = (type) => {
+    switch (type) {
+      case 'Senior Level': return 'danger';
+      case 'Technical': return 'info';
+      case 'Mid Level': return 'warning';
+      case 'Entry Level': return 'success';
+      case 'Expert': return 'primary';
+      case 'Commission': return 'secondary';
+      default: return 'light';
     }
+  };
+
+  const getBadgeColor = (badge) => {
+    switch (badge) {
+      case 'Senior Level': return 'danger';
+      case 'Mid Level': return 'warning';
+      case 'Entry Level': return 'success';
+      case 'Commission Based': return 'info';
+      case 'Expert Level': return 'primary';
+      case 'Technical': return 'secondary';
+      default: return 'light';
+    }
+  };
+
+  const handleShowJobDescription = (jobTitle) => {
+    const description = jobDescriptions[jobTitle];
+    if (description) {
+      setSelectedJobForDescription({ title: jobTitle, ...description });
+      setShowJobModal(true);
+    }
+  };
+
+  const handleApplyClick = () => {
+    setShowModal(true);
   };
 
   return (
     <>
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-        
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          line-height: 1.6;
-          color: #333;
-        }
-        
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 20px;
-        }
-        
-        .main-wrapper {
-          background: linear-gradient(135deg, #f8faff 0%, #f1f5ff 100%);
-          padding: 2rem 0;
-        }
-        
-        /* Header Styles */
-        .header {
-          text-align: center;
-          margin-bottom: 3rem;
-        }
-        
-        .main-title {
-          font-size: clamp(2rem, 5vw, 3.5rem);
-          font-weight: 700;
-          color: #1e40af;
-          margin-bottom: 1rem;
-          letter-spacing: -0.02em;
-        }
-        
-        .main-subtitle {
-          font-size: clamp(1rem, 3vw, 1.25rem);
-          color: #64748b;
-          margin-bottom: 1.5rem;
-          font-weight: 400;
-        }
-        
-        .divider {
-          width: 80px;
-          height: 4px;
-          background: linear-gradient(90deg, #1e40af, #3b82f6);
-          border: none;
-          border-radius: 2px;
-          margin: 0 auto;
-        }
-        
-        /* Section Styles */
-        .section {
-          margin-bottom: 4rem;
-        }
-        
-        .section-header {
-          text-align: center;
-          margin-bottom: 2.5rem;
-        }
-        
-        .section-title {
-          font-size: clamp(1.5rem, 4vw, 2.25rem);
-          font-weight: 600;
-          color: #1e40af;
-          margin-bottom: 0.5rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.75rem;
-        }
-        
-        .section-icon {
-          font-size: clamp(1.5rem, 4vw, 2rem);
-        }
-        
-        /* Grid Layout */
-        .jobs-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 1.5rem;
-        }
-        
-        @media (max-width: 768px) {
-          .jobs-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-          }
-        }
-        
-        /* Job Card Styles */
-        .job-card {
-          background: white;
-          border-radius: 16px;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-          overflow: hidden;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-        }
-        
-        .job-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .job-card-header {
-          background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-          color: white;
-          padding: 1.5rem;
-        }
-        
-        .job-card-title {
-          font-size: 1.125rem;
-          font-weight: 600;
-          margin-bottom: 0.5rem;
-          line-height: 1.4;
-        }
-        
-        .job-badge {
-          display: inline-flex;
-          align-items: center;
-          padding: 0.25rem 0.75rem;
-          border-radius: 9999px;
-          font-size: 0.75rem;
-          font-weight: 500;
-          letter-spacing: 0.025em;
-        }
-        
-        .badge-senior { background: rgba(239, 68, 68, 0.1); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.2); }
-        .badge-mid { background: rgba(245, 158, 11, 0.1); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.2); }
-        .badge-entry { background: rgba(34, 197, 94, 0.1); color: #16a34a; border: 1px solid rgba(34, 197, 94, 0.2); }
-        .badge-commission { background: rgba(59, 130, 246, 0.1); color: #2563eb; border: 1px solid rgba(59, 130, 246, 0.2); }
-        .badge-expert { background: rgba(107, 114, 128, 0.1); color: #374151; border: 1px solid rgba(107, 114, 128, 0.2); }
-        .badge-technical { background: rgba(139, 92, 246, 0.1); color: #7c3aed; border: 1px solid rgba(139, 92, 246, 0.2); }
-        .badge-creative { background: rgba(236, 72, 153, 0.1); color: #db2777; border: 1px solid rgba(236, 72, 153, 0.2); }
-        .badge-content { background: rgba(6, 182, 212, 0.1); color: #0891b2; border: 1px solid rgba(6, 182, 212, 0.2); }
-        .badge-operations { background: rgba(168, 85, 247, 0.1); color: #9333ea; border: 1px solid rgba(168, 85, 247, 0.2); }
-        .badge-default { background: rgba(107, 114, 128, 0.1); color: #374151; border: 1px solid rgba(107, 114, 128, 0.2); }
-        
-        .job-card-body {
-          padding: 1.5rem;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-        }
-        
-        .job-type {
-          display: inline-flex;
-          align-items: center;
-          padding: 0.5rem 1rem;
-          background: #f1f5f9;
-          color: #64748b;
-          border-radius: 8px;
-          font-size: 0.875rem;
-          font-weight: 500;
-          margin-bottom: 1rem;
-          align-self: flex-start;
-        }
-        
-        .job-description {
-          color: #64748b;
-          font-size: 0.9375rem;
-          margin-bottom: 1.5rem;
-          line-height: 1.6;
-          flex: 1;
-        }
-        
-        .job-salary {
-          font-size: 1rem;
-          font-weight: 600;
-          color: #1e40af;
-          margin-bottom: 1.5rem;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-        
-        .apply-btn {
-          background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-          color: white;
-          border: none;
-          padding: 0.875rem 1.5rem;
-          border-radius: 12px;
-          font-size: 1rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-        }
-        
-        .apply-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
-        }
-        
-        /* Footer Styles */
-        .footer {
-          text-align: center;
-          margin-top: 4rem;
-          padding-top: 2rem;
-          border-top: 1px solid #e2e8f0;
-        }
-        
-        .footer-title {
-          font-weight: 600;
-          color: #1e40af;
-          margin-bottom: 0.5rem;
-        }
-        
-        .footer-text {
-          color: #64748b;
-          font-size: 10px;
-        }
-        
-        .footer-email {
-          color: #1e40af;
-          font-weight: 600;
-        }
-        
-        /* Modal Styles */
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.6);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-          padding: 1rem;
-        }
-        
-        .modal-content {
-          background: white;
-          border-radius: 20px;
-          width: 100%;
-          max-width: 600px;
-          max-height: 90vh;
-          overflow-y: auto;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-        
-        .modal-header {
-          background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-          color: white;
-          padding: 1.5rem;
-          display: flex;
-          align-items: center;
-          justify-content: between;
-          border-radius: 20px 20px 0 0;
-        }
-        
-        .modal-title {
-          font-size: 1.25rem;
-          font-weight: 600;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          flex: 1;
-        }
-        
-        .close-btn {
-          background: rgba(255, 255, 255, 0.2);
-          border: none;
-          color: white;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        
-        .close-btn:hover {
-          background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .modal-body {
-          padding: 2rem 1.5rem;
-        }
-        
-        @media (max-width: 768px) {
-          .modal-body {
-            padding: 1.5rem 1rem;
-          }
-        }
-        
-        .selected-job-title {
-          font-size: 1.5rem;
-          font-weight: 600;
-          color: #1e40af;
-          margin-bottom: 0.5rem;
-          text-align: center;
-        }
-        
-        .selected-job-division {
-          color: #64748b;
-          text-align: center;
-          margin-bottom: 2rem;
-        }
-        
-        .how-to-apply {
-          background: linear-gradient(135deg, #f8faff 0%, #f1f5ff 100%);
-          margin-bottom: 1.5rem;
-          border: 1px solid #e2e8f0;
-        }
-        
-        .how-to-apply-title {
-          font-size: 1.125rem;
-          font-weight: 600;
-          color: #16a34a;
-          margin-bottom: 1rem;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-        
-        .email-box {
-          background: white;
-          border: 2px dashed #3b82f6;
-          border-radius: 12px;
-          padding: 1.5rem;
-          text-align: center;
-          transition: all 0.3s ease;
-          margin-top: 1rem;
-        }
-        
-        .email-box:hover {
-          border-color: #1e40af;
-          transform: scale(1.02);
-        }
-        
-        .email-icon {
-          font-size: 2rem;
-          margin-bottom: 0.5rem;
-          display: block;
-        }
-        
-        .email-address {
-          font-size: 1.125rem;
-          font-weight: 600;
-          color: #1e40af;
-          word-break: break-all;
-        }
-        
-        @media (max-width: 768px) {
-          .email-address {
-            font-size: 10px;
-          }
-        }
-        
-        .tip-box {
-          background: rgba(59, 130, 246, 0.1);
-          border: 1px solid rgba(59, 130, 246, 0.2);
-          border-radius: 12px;
-          padding: 1rem;
-          text-align: center;
-        }
-        
-        .tip-text {
-          color: #1e40af;
-          font-weight: 500;
-          margin: 0;
-        }
-        
-        .modal-footer {
-          padding: 1.5rem;
-          border-top: 1px solid #e2e8f0;
-          display: flex;
-          gap: 1rem;
-          justify-content: flex-end;
-        }
-        
-        @media (max-width: 768px) {
-          .modal-footer {
-            flex-direction: column;
-          }
-        }
-        
-        .btn-secondary {
-          background: #f1f5f9;
-          color: #64748b;
-          border: 1px solid #e2e8f0;
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        
-        .btn-secondary:hover {
-          background: #e2e8f0;
-        }
-        
-        .btn-primary {
-          background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-          color: white;
-          border: none;
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-        }
-        
-        .btn-primary:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-      `}</style>
-      
-      <div className="main-wrapper">
-        <div className="container">
-          {/* Header */}
-          <div className="header">
-            <h1 className="main-title">
-              🌟 Current Job Openings
-            </h1>
-            <p className="main-subtitle">
-              Join our dynamic team at Global Health & Allied Services
-            </p>
-            <hr className="divider" />
-          </div>
-
-          {/* Job Divisions */}
-          {Object.entries(jobData).map(([key, division]) => (
-            <div key={key} className="section">
-              <div className="section-header">
-                <h2 className="section-title">
-                  <span className="section-icon">{division.icon}</span>
-                  {division.title}
-                </h2>
-              </div>
-              
-              <div className="jobs-grid">
-                {division.jobs.map((job, index) => (
-                  <div key={index} className="job-card">
-                    <div className="job-card-header">
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
-                        <h3 className="job-card-title">{job.title}</h3>
-                        <span className={`job-badge ${getBadgeClass(job.badge)}`}>
-                          {job.badge}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="job-card-body">
-                      <span className="job-type">
-                        {job.type}
-                      </span>
-                      
-                      <p className="job-description">
-                        {job.description}
+      <Container fluid className="py-4">
+        {/* Vacancy Table */}
+        <Row className="mb-4">
+          <Col xs={12}>
+            <Card className="shadow-sm">
+              <Card.Header className="bg-primary text-white">
+                <h5 className="mb-0 fw-bold">
+                  <i className="bi bi-briefcase me-2"></i>
+                  Vacancy Details - Multi-Domain Recruitment
+                </h5>
+              </Card.Header>
+              <Card.Body className="p-0">
+                <div className="table-responsive">
+                  <Table bordered hover className="mb-0">
+                    <thead className="table-light">
+                      <tr>
+                        <th className="text-center" style={{ width: '8%' }}>SL. No.</th>
+                        <th style={{ width: '35%' }}>Name of the post</th>
+                        <th className="text-center" style={{ width: '15%' }}>Department</th>
+                        <th className="text-center" style={{ width: '12%' }}>Vacancies</th>
+                        <th className="text-center" style={{ width: '15%' }}>Salary</th>
+                        <th className="text-center" style={{ width: '15%' }}>Type</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {vacancyData.map((vacancy) => (
+                        <tr key={vacancy.slNo}>
+                          <td className="text-center fw-bold">{vacancy.slNo}</td>
+                          <td>
+                            <div className="fw-semibold">{vacancy.postName}</div>
+                            {jobDescriptions[vacancy.postName] && (
+                              <Button
+                                variant="link"
+                                size="sm"
+                                className="p-0 text-decoration-none"
+                                onClick={() => handleShowJobDescription(vacancy.postName)}
+                              >
+                                <small>View Job Description →</small>
+                              </Button>
+                            )}
+                          </td>
+                          <td className="text-center">
+                            <Badge bg="light" text="dark" className="px-2 py-1">
+                              {vacancy.department}
+                            </Badge>
+                          </td>
+                          <td className="text-center fw-bold text-primary fs-5">
+                            {vacancy.vacancies}
+                          </td>
+                          <td className="text-center fw-semibold">{vacancy.salary}</td>
+                          <td className="text-center">
+                            <Badge bg={getBadgeVariant(vacancy.type)} className="px-2 py-1">
+                              {vacancy.type}
+                            </Badge>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
+                
+                {/* Summary Section */}
+                <div className="p-3 bg-light border-top">
+                  <Row>
+                    <Col md={6} className="mb-2 mb-md-0">
+                      <h6 className="mb-2 text-muted">
+                        <i className="bi bi-graph-up me-1"></i>
+                        Summary
+                      </h6>
+                      <p className="mb-1 small">
+                        <strong>Total Positions:</strong> {vacancyData.length}
                       </p>
-                      
-                      <div className="job-salary">
-                        <span>💰</span>
-                        {job.salary}
+                      <p className="mb-0 small">
+                        <strong>Total Vacancies:</strong> {vacancyData.reduce((sum, item) => sum + item.vacancies, 0)}
+                      </p>
+                    </Col>
+                    <Col md={6}>
+                      <h6 className="mb-2 text-muted">
+                        <i className="bi bi-building me-1"></i>
+                        Departments
+                      </h6>
+                      <div className="d-flex flex-wrap gap-1">
+                        {[...new Set(vacancyData.map(item => item.department))].map(dept => (
+                          <Badge key={dept} bg="outline-secondary" text="dark" className="border">
+                            {dept}
+                          </Badge>
+                        ))}
                       </div>
-                      
-                      <button
-                        className="apply-btn"
-                        onClick={() => handleApplyClick(job, division)}
-                      >
-                        <span>📧</span>
-                        Apply Now
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+                    </Col>
+                  </Row>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
 
-          {/* Footer */}
-          <div className="footer">
-            <p className="footer-title">
-              Global Health & Allied Services
-            </p>
-            <p className="footer-text">
-              Building careers, transforming healthcare
-            </p>
-            <p className="footer-text">
-              For any queries, contact us at: <span className="footer-email">info@globalhealthandalliedservices.com</span>
-            </p>
-          </div>
-        </div>
+        {/* Job Cards Section */}
+        <Row className="mb-4">
+          <Col xs={12}>
+            <div className="text-center mb-4">
+              <h1 className="display-4 fw-bold text-primary mb-3">
+                <i className="bi bi-star-fill me-2"></i>
+                Current Job Openings
+              </h1>
+              <p className="lead text-muted">
+                Join our dynamic team at Global Health & Allied Services
+              </p>
+              <hr className="w-25 mx-auto border-primary border-3" />
+            </div>
+
+            {Object.entries(jobData).map(([key, division]) => (
+              <Card key={key} className="mb-4 shadow-sm">
+                <Card.Header className="bg-gradient" style={{ background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)' }}>
+                  <h3 className="text-white mb-0 d-flex align-items-center">
+                    <span className="me-2" style={{ fontSize: '1.5rem' }}>{division.icon}</span>
+                    {division.title}
+                  </h3>
+                </Card.Header>
+                <Card.Body>
+                  <Row>
+                    {division.jobs.map((job, index) => (
+                      <Col key={index} lg={6} xl={4} className="mb-4">
+                        <Card className="h-100 border-0 shadow-sm">
+                          <Card.Header className="bg-light border-bottom">
+                            <div className="d-flex justify-content-between align-items-start">
+                              <h6 className="fw-bold mb-0 flex-grow-1">{job.title}</h6>
+                              <Badge bg={getBadgeColor(job.badge)} className="ms-2">
+                                {job.badge}
+                              </Badge>
+                            </div>
+                          </Card.Header>
+                          <Card.Body className="d-flex flex-column">
+                            <Badge bg="secondary" className="align-self-start mb-2 px-2 py-1">
+                              {job.type}
+                            </Badge>
+                            <p className="text-muted small flex-grow-1 mb-3">
+                              {job.description}
+                            </p>
+                            <div className="mt-auto">
+                              <div className="d-flex align-items-center mb-2">
+                                <i className="bi bi-currency-rupee text-primary me-1"></i>
+                                <span className="fw-semibold text-primary">{job.salary}</span>
+                              </div>
+                              {jobDescriptions[job.title] && (
+                                <Button
+                                  variant="outline-primary"
+                                  size="sm"
+                                  className="w-100"
+                                  onClick={() => handleShowJobDescription(job.title)}
+                                >
+                                  <i className="bi bi-eye me-1"></i>
+                                  View Details
+                                </Button>
+                              )}
+                            </div>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
+                </Card.Body>
+              </Card>
+            ))}
+
+            {/* Single Apply Now Section */}
+           <Card className="bg-primary text-white text-center shadow-lg border-0 rounded-4 my-5">
+      <Card.Body className="py-5 px-4">
+        <h2 className="mb-3 fw-bold">
+          <i className="bi bi-rocket-takeoff me-2"></i>
+          Ready to Join Our Team?
+        </h2>
+        <p className="lead mb-4">
+          Take the next step in your career with <br />
+          <strong>Global Health & Allied Services</strong>
+        </p>
+        <Link
+          to="/currentform"
+          onClick={handleApplyClick}
+          className="text-decoration-none"
+        >
+          <Button
+            variant="light"
+            size="lg"
+            className="px-5 py-3 fw-bold text-primary rounded-pill shadow-sm"
+          >
+            <i className="bi bi-envelope-fill me-2"></i>
+            Apply Now
+          </Button>
+        </Link>
+      </Card.Body>
+    </Card>
+
+            {/* Footer */}
+            <div className="text-center mt-5 pt-4 border-top">
+              <h5 className="text-primary fw-bold mb-2">
+                Global Health & Allied Services
+              </h5>
+              <p className="text-muted mb-1">Building careers, transforming healthcare</p>
+              <p className="small text-muted">
+                For any queries, contact us at:{' '}
+                <a href="mailto:info@globalhealthandalliedservices.com" className="text-primary fw-semibold">
+                  info@globalhealthandalliedservices.com
+                </a>
+              </p>
+            </div>
+          </Col>
+        </Row>
+
+        {/* Job Description Modal */}
+       {/* Job Description Modal */}
+        <Modal show={showJobModal} onHide={() => setShowJobModal(false)} size="lg" scrollable centered>
+          <Modal.Header closeButton className="bg-gradient text-white border-0" style={{ background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)' }}>
+            <Modal.Title className="d-flex align-items-center">
+              <i className="bi bi-file-earmark-text me-2"></i>
+              Job Details
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="p-4">
+            {selectedJobForDescription && (
+              <div>
+                {/* Job Title Card */}
+                <Card className="border-0 shadow-sm mb-4">
+                  <Card.Body className="bg-light">
+                    <h3 className="text-primary fw-bold mb-0">{selectedJobForDescription.title}</h3>
+                  </Card.Body>
+                </Card>
+
+                {/* Role Overview Card */}
+                <Card className="border-0 shadow-sm mb-4">
+                  <Card.Body>
+                    <div className="d-flex align-items-center mb-3">
+                      <div className="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+                        <i className="bi bi-file-text fs-4 text-primary"></i>
+                      </div>
+                      <h5 className="text-primary fw-bold mb-0">Role Overview</h5>
+                    </div>
+                    <p className="text-muted mb-0 lh-lg">{selectedJobForDescription.overview}</p>
+                  </Card.Body>
+                </Card>
+
+                {/* Key Responsibilities Card */}
+                <Card className="border-0 shadow-sm mb-4">
+                  <Card.Body>
+                    <div className="d-flex align-items-center mb-3">
+                      <div className="bg-success bg-opacity-10 rounded-circle p-2 me-3">
+                        <i className="bi bi-list-check fs-4 text-success"></i>
+                      </div>
+                      <h5 className="text-success fw-bold mb-0">Key Responsibilities</h5>
+                    </div>
+                    <div className="ps-2">
+                      {selectedJobForDescription.responsibilities.map((resp, index) => (
+                        <div key={index} className="mb-3 d-flex align-items-start">
+                          <div className="me-3 mt-1">
+                            <i className="bi bi-check-circle-fill text-success"></i>
+                          </div>
+                          <p className="mb-0 text-muted">{resp}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </Card.Body>
+                </Card>
+              </div>
+            )}
+          </Modal.Body>
+          <Modal.Footer className="border-0 bg-light">
+            <Button variant="secondary" onClick={() => setShowJobModal(false)} className="px-4">
+              <i className="bi bi-x-circle me-2"></i>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         {/* Application Modal */}
-        {showModal && (
-          <div className="modal-overlay" onClick={handleCloseModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h5 className="modal-title">
-                  <span>📧</span>
-                  Apply for Position
-                </h5>
-                <button className="close-btn" onClick={handleCloseModal}>
-                  ✕
-                </button>
-              </div>
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+          <Modal.Header closeButton className="bg-primary text-white">
+            <Modal.Title>
+              <i className="bi bi-envelope-fill me-2"></i>
+              Apply for Position
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center py-4">
+            <div className="mb-4">
+              <i className="bi bi-envelope-check display-1 text-primary mb-3"></i>
+              <h4 className="text-primary mb-3">How to Apply</h4>
+              <p className="lead mb-4">Share your resume and experience with us:</p>
               
-              <div className="modal-body">
-                {selectedJob && (
-                  <>
-                    <h4 className="selected-job-title">{selectedJob.title}</h4>
-                    <p className="selected-job-division">{selectedJob.division}</p>
-                    
-                    <div className="how-to-apply">
-                      <h5 className="how-to-apply-title">
-                        <span>✉️</span>
-                        How to Apply
-                      </h5>
-                      <p style={{ marginBottom: '1rem', fontWeight: '500' }}>
-                        Share your resume and experience on:
-                      </p>
-                      <div className="email-box">
-                        <span className="email-icon">📧</span>
-                        <div className="email-address">info@globalhealthandalliedservices.com</div>
-                      </div>
-                    </div>
-                    
-                    <div className="tip-box">
-                      <p className="tip-text">
-                        <span style={{ marginRight: '0.5rem' }}>💡</span>
-                        <strong>Tip:</strong> Please mention the job title "{selectedJob.title}" in your email subject line.
-                      </p>
-                    </div>
-                  </>
-                )}
-              </div>
-              
-              <div className="modal-footer">
-                <button className="btn-secondary" onClick={handleCloseModal}>
-                  Close
-                </button>
-                <button 
-                  className="btn-primary"
-                  onClick={() => {
-                    window.open(`mailto:info@globalhealthandalliedservices.com?subject=Application for ${selectedJob?.title}`, '_blank');
-                    handleCloseModal();
-                  }}
-                >
-                  <span>📧</span>
-                  Send Email
-                </button>
-              </div>
+              <Card className="border-2 border-primary border-dashed">
+                <Card.Body className="py-4">
+                  <i className="bi bi-envelope-at display-6 text-primary mb-2"></i>
+                  <h5 className="text-primary fw-bold">
+                    info@globalhealthandalliedservices.com
+                  </h5>
+                </Card.Body>
+              </Card>
             </div>
-          </div>
-        )}
-      </div>
+            
+            <Alert className="alert-info">
+              <i className="bi bi-lightbulb me-2"></i>
+              <strong>Tip:</strong> Please mention the specific job title you're interested in within your email subject line.
+            </Alert>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Close
+            </Button>
+            <Button 
+              variant="primary"
+              onClick={() => {
+                window.open('mailto:info@globalhealthandalliedservices.com?subject=Job Application - Global Health & Allied Services', '_blank');
+                setShowModal(false);
+              }}
+            >
+              <i className="bi bi-envelope-fill me-1"></i>
+              Send Email
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Container>
     </>
   );
 };
 
-export default Currentpening;
+export default CurrentOpenings;

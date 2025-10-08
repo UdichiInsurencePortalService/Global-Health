@@ -41,7 +41,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail', // or your email service
   auth: {
     user: process.env.EMAIL_USER || 'globalhealth235@gmail.com',
-    pass: process.env.EMAIL_PASS || 'ubxw sbty yxkt pcgo'
+    pass: process.env.EMAIL_PASS || 'snul decp usnu cszn'
   }
 });
 
@@ -312,4 +312,141 @@ router.use((error, req, res, next) => {
   next(error);
 });
 
+
+// 
+
+router.get("/getdocument/complete/", async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        id,
+        full_name,
+        email, 
+        registration_number,
+        phone_number,
+        aadhar_images,
+        accident_images,
+        total_expenditure,
+        claim_id,
+        created_at,
+        updated_at
+      FROM document_uploads 
+      ORDER BY created_at DESC
+    `;
+
+    const result = await db.query(query);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No documents found"
+      });
+    }
+
+    // Helper function to process images for viewing
+    const processImagesForViewing = (imageData) => {
+      if (!imageData) return [];
+      
+      try {
+        const images = JSON.parse(imageData);
+        return images.map((image, index) => ({
+          id: index + 1,
+          filename: image.filename,
+          mimetype: image.mimetype,
+          size: image.size,
+          // Create a data URL that can be used directly in HTML img tags
+          dataUrl: `data:${image.mimetype};base64,${image.data}`,
+          // Also provide raw base64 data
+          base64: image.data,
+          // Add download link format
+          downloadUrl: `data:${image.mimetype};base64,${image.data}`,
+          // Add file info
+          sizeFormatted: formatFileSize(image.size)
+        }));
+      } catch (e) {
+        console.error("Error parsing image data:", e);
+        return [];
+      }
+    };
+
+    // Helper function to format file size
+    const formatFileSize = (bytes) => {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    // Process all documents
+    const allDocuments = result.rows.map(documentData => {
+      // Process all image arrays for each document
+      const aadharImages = processImagesForViewing(documentData.aadhar_images);
+      const accidentImages = processImagesForViewing(documentData.accident_images);
+      const expenditureImages = processImagesForViewing(documentData.total_expenditure);
+
+      return {
+        // Basic information
+        basicInfo: {
+          id: documentData.id,
+          full_name: documentData.full_name,
+          email: documentData.email,
+          registration_number: documentData.registration_number,
+          phone_number: documentData.phone_number,
+          claim_id: documentData.claim_id,
+          created_at: documentData.created_at,
+          updated_at: documentData.updated_at
+        },
+        
+        // Document images with viewing capabilities
+        documents: {
+          aadhar_images: {
+            count: aadharImages.length,
+            images: aadharImages
+          },
+          accident_images: {
+            count: accidentImages.length,
+            images: accidentImages
+          },
+          expenditure_images: {
+            count: expenditureImages.length,
+            images: expenditureImages
+          }
+        },
+
+        // Summary for each document
+        summary: {
+          total_images: aadharImages.length + accidentImages.length + expenditureImages.length,
+          aadhar_count: aadharImages.length,
+          accident_count: accidentImages.length,
+          expenditure_count: expenditureImages.length
+        }
+      };
+    });
+
+    // Calculate overall summary
+    const overallSummary = {
+      total_documents: result.rows.length,
+      total_images_across_all: allDocuments.reduce((sum, doc) => sum + doc.summary.total_images, 0),
+      total_aadhar_images: allDocuments.reduce((sum, doc) => sum + doc.summary.aadhar_count, 0),
+      total_accident_images: allDocuments.reduce((sum, doc) => sum + doc.summary.accident_count, 0),
+      total_expenditure_images: allDocuments.reduce((sum, doc) => sum + doc.summary.expenditure_count, 0)
+    };
+
+    res.status(200).json({
+      success: true,
+      message: "All document data retrieved successfully",
+      data: allDocuments,
+      summary: overallSummary
+    });
+
+  } catch (error) {
+    console.error("Error retrieving all document data:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Error retrieving all document data",
+      error: error.message
+    });
+  }
+});
 module.exports = router;

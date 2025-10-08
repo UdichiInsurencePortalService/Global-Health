@@ -7,13 +7,13 @@ const db = require("../Models/postgressdb");
 router.use(cors());
 router.use(express.json());
 
-// Configure nodemailer with better error handling
+// Configure nodemailer with better error handling 
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: "globalhealth235@gmail.com", // your Gmail address
-        pass: "snul decp usnu cszn  ",         // your 16-character App Password
+        pass: "snul decp usnu cszn",         // your 16-character App Password
     },
 });
 
@@ -77,16 +77,7 @@ router.post('/medical-registration', async (req, res) => {
             }
         }
 
-        // Check if email already exists
-        const emailCheckQuery = 'SELECT id FROM medical_registration WHERE email = $1';
-        const existingEmail = await db.query(emailCheckQuery, [email]);
-        
-        if (existingEmail.rows.length > 0) {
-            return res.status(409).json({
-                success: false,
-                message: "This email address is already registered. Please use a different email or contact support if you need to update your registration."
-            });
-        }
+      
 
         // Check if medical registration number already exists
         const regNumCheckQuery = 'SELECT id FROM medical_registration WHERE medical_registration_number = $1';
@@ -154,31 +145,11 @@ router.post('/medical-registration', async (req, res) => {
             box-shadow:0 4px 15px rgba(0,0,0,0.15);background:#f9fafb;
             font-family:Arial,Helvetica,sans-serif;line-height:1.6;color:#111;">
   
-  <h1 style="font-size:22px;margin-bottom:10px;color:#0f172a;">
-    Registration Fee
-  </h1>
+ 
 
-  <p style="font-size:18px;margin:8px 0;">
-    The registration fee is 
+  
 
-    <span style="font-weight:bold;color:#16a34a;">₹5000</span>.
-  </p>
-
-  <p style="margin:8px 0;">
-    Please send the fee to this account:  
-        <h2 style="font-weight:bold;color:#2563eb;">Canara Bank</h2>
-        <h4 style="font-weight:bold;color:#2563eb;">Account-Name => Pratichi Foundation</h4>
-
-        <h5 style="font-weight:bold;color:#2563eb;">IFSC code =>CNRB0018686</5>
-
-    <span style="font-weight:bold;color:#2563eb;">Account Number is => 110116320705</span>
-        <p style="font-weight:bold;color:#2563eb;"> UPI-id => 327181291670085@cnrb</p>
-
-  </p>
-
-  <h2 style="font-size:18px;margin-top:20px;color:#dc2626;">
-    ⚠️ Without registration fee and document verification your application will not considered.
-  </h2>
+ 
 </div>
 
                         
