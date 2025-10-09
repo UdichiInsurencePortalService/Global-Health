@@ -180,7 +180,7 @@ const Footer = () => {
                       className="text-white text-decoration-none"
                       style={{ fontSize: isMobile ? '0.9rem' : '1rem' }}
                     >
-                      08069640455
+                      0806940922
                     </a>
                   </li>
                   <li className="d-flex align-items-center justify-content-center justify-content-md-start">

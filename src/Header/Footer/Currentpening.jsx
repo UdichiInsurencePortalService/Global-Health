@@ -14,7 +14,6 @@ const CurrentOpenings = () => {
       department: "Technology",
       vacancies: 237,
       salary: "Rs 65000.00",
-      type: "Senior Level"
     },
     {
       slNo: 2,
@@ -22,7 +21,6 @@ const CurrentOpenings = () => {
       department: "Insurance",
       vacancies: 79,
       salary: "Rs 47500.00",
-      type: "Senior Level"
     },
     {
       slNo: 3,
@@ -30,7 +28,6 @@ const CurrentOpenings = () => {
       department: "Healthcare",
       vacancies: 325,
       salary: "Rs 55000.00",
-      type: "Senior Level"
     },
     {
       slNo: 4,
@@ -38,7 +35,6 @@ const CurrentOpenings = () => {
       department: "Technology",
       vacancies: 3,
       salary: "Rs 55000.00",
-      type: "Technical"
     },
     {
       slNo: 5,
@@ -46,7 +42,6 @@ const CurrentOpenings = () => {
       department: "Healthcare",
       vacancies: 73,
       salary: "Rs 42500.00",
-      type: "Mid Level"
     },
     {
       slNo: 6,
@@ -54,7 +49,6 @@ const CurrentOpenings = () => {
       department: "Insurance",
       vacancies: 760,
       salary: "Rs 25000.00",
-      type: "Mid Level"
     },
     {
       slNo: 7,
@@ -62,7 +56,6 @@ const CurrentOpenings = () => {
       department: "Insurance",
       vacancies: 15,
       salary: "Rs 21500.00",
-      type: "Entry Level"
     },
     {
       slNo: 8,
@@ -70,7 +63,6 @@ const CurrentOpenings = () => {
       department: "Insurance",
       vacancies: 1550,
       salary: "15% commission",
-      type: "Commission"
     },
     {
       slNo: 9,
@@ -78,7 +70,6 @@ const CurrentOpenings = () => {
       department: "Medical Award",
       vacancies: 127,
       salary: "Rs 10000 per cycle",
-      type: "Expert"
     }
   ];
 
@@ -398,7 +389,6 @@ const CurrentOpenings = () => {
                         <th className="text-center" style={{ width: '15%' }}>Department</th>
                         <th className="text-center" style={{ width: '12%' }}>Vacancies</th>
                         <th className="text-center" style={{ width: '15%' }}>Salary</th>
-                        <th className="text-center" style={{ width: '15%' }}>Type</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -427,11 +417,7 @@ const CurrentOpenings = () => {
                             {vacancy.vacancies}
                           </td>
                           <td className="text-center fw-semibold">{vacancy.salary}</td>
-                          <td className="text-center">
-                            <Badge bg={getBadgeVariant(vacancy.type)} className="px-2 py-1">
-                              {vacancy.type}
-                            </Badge>
-                          </td>
+                         
                         </tr>
                       ))}
                     </tbody>

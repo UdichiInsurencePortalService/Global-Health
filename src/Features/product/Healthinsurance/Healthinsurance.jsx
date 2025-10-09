@@ -422,8 +422,7 @@ const Healthinsurance = () => {
     }
 
     const totalBeforeGST = basePremium + alcoholLoad + illnessLoad;
-    const gst = totalBeforeGST * 0.18;
-    const total = totalBeforeGST + gst;
+    const total = totalBeforeGST;
 
     setResult({
       selfPremium,
@@ -436,7 +435,6 @@ const Healthinsurance = () => {
       illnessLoad,
       basePremium: totalBeforeGST - alcoholLoad - illnessLoad,
       totalBeforeGST,
-      gst,
       total,
     });
 
@@ -566,40 +564,59 @@ const Healthinsurance = () => {
 
   const renderIndividualFormDetails = () => (
     <>
-      <Card
-        title={
-          <>
-            <ManOutlined /> Self Information
-          </>
-        }
-        style={{ marginTop: 16 }}
-        bordered={true}
-      >
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12}>
-            <Input
-              prefix={<CalculatorOutlined />}
-              type="number"
-              placeholder="Your Age"
-              value={formData.selfAge || ""}
-              onChange={(e) =>
-                handleChange("selfAge", parseInt(e.target.value))
-              }
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <Select
-              placeholder="Are you alcoholic?"
-              style={{ width: "100%" }}
-              value={formData.alcoholic ? "yes" : "no"}
-              onChange={(value) => handleChange("alcoholic", value === "yes")}
-            >
-              <Option value="no">No</Option>
-              <Option value="yes">Yes</Option>
-            </Select>
-          </Col>
-        </Row>
-      </Card>
+     <Card
+  title={
+    <>
+      <ManOutlined /> Self Information
+    </>
+  }
+  style={{ marginTop: 16 }}
+  bordered
+>
+  <Row gutter={[16, 16]}>
+    {/* Age Field */}
+    <Col xs={24} sm={12}>
+      <div className="form-group">
+        <label
+          htmlFor="selfAge"
+          className="form-label fw-semibold d-block mb-2"
+        >
+          Age
+        </label>
+        <Input
+          id="selfAge"
+          prefix={<CalculatorOutlined />}
+          type="number"
+          placeholder="Enter your age"
+          value={formData.selfAge || ""}
+          onChange={(e) => handleChange("selfAge", parseInt(e.target.value))}
+        />
+      </div>
+    </Col>
+
+    {/* Alcoholic Field */}
+    <Col xs={24} sm={12}>
+      <div className="form-group">
+        <label
+          htmlFor="alcoholic"
+          className="form-label fw-semibold d-block mb-2"
+        >
+          Alcoholic
+        </label>
+        <Select
+          id="alcoholic"
+          placeholder="Are you alcoholic?"
+          style={{ width: "100%" }}
+          value={formData.alcoholic ? "yes" : "no"}
+          onChange={(value) => handleChange("alcoholic", value === "yes")}
+        >
+          <Option value="no">No</Option>
+          <Option value="yes">Yes</Option>
+        </Select>
+      </div>
+    </Col>
+  </Row>
+</Card>
 
       <Card
         title={
@@ -978,10 +995,10 @@ const Healthinsurance = () => {
                   </Text>
                 </div>
               )}
-              <div className="premium-item">
+              {/* <div className="premium-item">
                 <Text>GST (18%)</Text>
                 <Text strong>₹{result.gst.toFixed(2)}</Text>
-              </div>
+              </div> */}
 
               <Divider />
 
@@ -1246,13 +1263,13 @@ const Healthinsurance = () => {
               head={["WhatsApp", "Email", "Contact"]}
               contact={[  
                 {
-                  cont: "Connect with our self-serve chat bot support - 9818152403",
+                  cont: "Connect with our self-serve chat bot support - 0806940922",
                 },
                 {
                   conta: "Connect Write to us at globalhealth@235@gmail.com",
                 },
                 {
-                  conatac: "Call us on 9818152403",
+                  conatac: "Call us on 0806940922",
                 },
               ]}
             />
