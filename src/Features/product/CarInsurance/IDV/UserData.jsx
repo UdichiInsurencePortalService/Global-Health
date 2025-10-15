@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Table, Button, Divider, Tag, Tooltip, Slider, Progress, Space } from 'antd';
+import { Card, Row, Col, Table, Button, Tag, Tooltip, Slider, Progress, Space, Select } from 'antd';
+
 import { InfoCircleOutlined, CheckCircleOutlined, StarOutlined, SafetyOutlined, CarOutlined, DollarOutlined, DownloadOutlined } from '@ant-design/icons';
 
 import { Link } from 'react-router-dom';
 import './User.css';
+const { Option } = Select;
 
 const UserData = () => {
   const [vehicle, setVehicle] = useState(null);
@@ -14,6 +16,8 @@ const UserData = () => {
   const [ncbDiscount, setNcbDiscount] = useState(0);
   const [ncbPercentage, setNcbPercentage] = useState(0);
   const [zeroDepreciationCharge, setZeroDepreciationCharge] = useState(0);
+    const [selectedCurrency, setSelectedCurrency] = useState('INR');
+
   const [addOns, setAddOns] = useState([
     { id: 1, name: 'Zero Depreciation', selected: false, price: 0, icon: '🛡️', description: 'Get full claim amount without depreciation deduction' },
     { id: 2, name: 'Engine Protection', selected: false, price: 300, icon: '⚙️', description: 'Covers engine damage due to water ingress' },
@@ -21,6 +25,54 @@ const UserData = () => {
     { id: 4, name: 'Return to Invoice', selected: false, price: 400, icon: '💰', description: 'Get full invoice value in case of total loss' },
     { id: 5, name: 'PA Cover for Owner Driver', selected: false, price: 150, icon: '👤', description: 'Personal accident cover for driver' },
   ]);
+
+   const currencyRates = {
+    INR: { rate: 1, symbol: '₹', name: 'Indian Rupee' },
+    USD: { rate: 0.012, symbol: '$', name: 'US Dollar' },
+    EUR: { rate: 0.011, symbol: '€', name: 'Euro' },
+    GBP: { rate: 0.0095, symbol: '£', name: 'British Pound' },
+    AED: { rate: 0.044, symbol: 'د.إ', name: 'UAE Dirham' },
+    CNY: { rate: 0.087, symbol: '¥', name: 'Chinese Yuan' },
+    JPY: { rate: 1.85, symbol: '¥', name: 'Japanese Yen' },
+    AUD: { rate: 0.019, symbol: 'A$', name: 'Australian Dollar' },
+    CAD: { rate: 0.017, symbol: 'C$', name: 'Canadian Dollar' },
+    SGD: { rate: 0.016, symbol: 'S$', name: 'Singapore Dollar' },
+  };
+  // Function to convert amount to selected currency
+  const convertCurrency = (amount) => {
+    const convertedAmount = amount * currencyRates[selectedCurrency].rate;
+    return Math.round(convertedAmount);
+  };
+
+  // Function to format currency
+  const formatCurrency = (amount) => {
+    const convertedAmount = convertCurrency(amount);
+    const symbol = currencyRates[selectedCurrency].symbol;
+    return `${symbol} ${convertedAmount.toLocaleString()}`;
+  };
+
+  const saveCurrencyToStorage = (currency) => {
+    const currencyData = {
+      selectedCurrency: currency,
+      currencySymbol: currencyRates[currency].symbol,
+      currencyRate: currencyRates[currency].rate,
+      currencyName: currencyRates[currency].name
+    };
+    
+    try {
+      localStorage.setItem("currencyData", JSON.stringify(currencyData));
+      console.log('Currency data saved to localStorage:', currencyData);
+    } catch (error) {
+      console.error('Error saving currency to localStorage:', error);
+    }
+  };
+
+ const handleCurrencyChange = (currency) => {
+    setSelectedCurrency(currency);
+    saveCurrencyToStorage(currency);
+  };
+ 
+
 
   // Function to create and download PDF using HTML/CSS
   const downloadQuotationPDF = () => {
@@ -452,7 +504,7 @@ const UserData = () => {
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Current IDV:</span>
-                        <span class="detail-value">₹ ${idv.toLocaleString()}</span>
+                        <span class="detail-value">₹ ${formatCurrency(idv)}</span>
                     </div>
                 </div>
 
@@ -846,7 +898,7 @@ const calculateNCB = (vehicleDetails) => {
         component: 'Own Damage Premium', 
         amount: ownDamagePremium, 
         icon: <SafetyOutlined style={{ color: '#1890ff' }} />,
-        details: `${reducedRate}% of Ex-Showroom IDV (₹${idv.toLocaleString()})`
+        details: `${reducedRate}% of Ex-Showroom IDV (${formatCurrency(idv)})`
       },
       { 
         key: '2', 
@@ -867,7 +919,7 @@ const calculateNCB = (vehicleDetails) => {
         component: 'Add-Ons', 
         amount: addOnsPremium, 
         icon: <CheckCircleOutlined style={{ color: '#722ed1' }} />,
-        details: addOnsPremium > 0 ? `Including Zero Dep: ₹${zeroDepreciationCharge}` : 'None selected'
+        details: addOnsPremium > 0 ? `Including Zero Dep: ${formatCurrency(zeroDepreciationCharge)}` : 'None selected'
       },
       { 
         key: '5', 
@@ -911,7 +963,7 @@ const calculateNCB = (vehicleDetails) => {
       ),
     },
     {
-      title: 'Amount (₹)',
+      title: `Amount (${currencyRates[selectedCurrency].symbol})`,
       dataIndex: 'amount',
       key: 'amount',
       render: (amount) => (
@@ -919,7 +971,8 @@ const calculateNCB = (vehicleDetails) => {
           color: amount < 0 ? '#52c41a' : '#1890ff', 
           fontWeight: 'bold' 
         }}>
-          {amount < 0 ? '-' : ''}₹ {Math.abs(amount).toLocaleString()}
+          {amount < 0 ? '-' : ''}{formatCurrency(Math.abs(amount))}
+
         </span>
       ),
     },
@@ -1007,7 +1060,7 @@ const calculateNCB = (vehicleDetails) => {
                 <p><strong>Year:</strong> {purchaseYear} ({vehicleAge} years old)</p>
                 <p><strong>Owner:</strong> {vehicle.owner}</p>
                 <p><strong>Engine:</strong> {vehicle.cubic_capacity} cc</p>
-                <p><strong>Current IDV:</strong> ₹ {idv.toLocaleString()}</p>
+                <p><strong>Current IDV:</strong> ₹ {formatCurrency(idv)}</p>
               </div>
             </Card>
           </Col>
@@ -1040,7 +1093,7 @@ const calculateNCB = (vehicleDetails) => {
                   margin: '0',
                   fontWeight: 'bold'
                 }}>
-                  ₹ {idv.toLocaleString()}
+                   {formatCurrency(idv)}
                 </h2>
                 <p style={{ color: '#666', marginTop: '10px' }}>
                   Based on {vehicleAge} years vehicle age and standard depreciation
@@ -1073,14 +1126,15 @@ const calculateNCB = (vehicleDetails) => {
           </Col>
           
           {/* Premium Card */}
-          <Col xs={24} lg={8}>
+        <Col xs={24} lg={8}>
             <Card 
               style={{ 
                 borderRadius: '15px',
                 background: 'linear-gradient(135deg, #52c41a 0%, #389e0d 100%)',
                 color: 'white',
                 border: 'none',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+                boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                height: '100%'
               }}
               bodyStyle={{ padding: '25px' }}
             >
@@ -1088,13 +1142,33 @@ const calculateNCB = (vehicleDetails) => {
                 <SafetyOutlined style={{ fontSize: '48px', marginBottom: '15px' }} />
                 <h3 style={{ color: 'white', margin: '0 0 20px 0' }}>Annual Premium</h3>
                 
+                {/* Currency Selector */}
+                <div style={{ marginBottom: '20px' }}>
+                  <Select
+                    value={selectedCurrency}
+                   onChange={handleCurrencyChange}
+
+                    style={{ width: '100%' }}
+                    size="large"
+                    dropdownStyle={{ maxHeight: 300, overflow: 'auto' }}
+                  >
+                    {Object.entries(currencyRates).map(([code, data]) => (
+                      <Option key={code} value={code}>
+                        <span style={{ fontSize: '14px' }}>
+                          {data.symbol} {data.name} ({code})
+                        </span>
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+                
                 <h2 style={{ 
                   fontSize: '2.5rem', 
                   color: 'white', 
                   margin: '0',
                   fontWeight: 'bold'
                 }}>
-                  ₹ {premium.toLocaleString()}
+                  {formatCurrency(premium)}
                 </h2>
                 <p style={{ opacity: 0.9, marginTop: '10px' }}>Including GST</p>
                 
@@ -1104,7 +1178,7 @@ const calculateNCB = (vehicleDetails) => {
                   </Tag>
                   {ncbDiscount > 0 && (
                     <Tag color="green" style={{ fontSize: '14px', padding: '5px 15px' }}>
-                      Saved: ₹ {ncbDiscount.toLocaleString()}
+                      Saved: {formatCurrency(ncbDiscount)}
                     </Tag>
                   )}
                 </div>
@@ -1121,58 +1195,36 @@ const calculateNCB = (vehicleDetails) => {
                   </div>
                 )}
                 
-                <Link to='/formpage'>
-                  <Button 
-                    type="primary" 
-                    className='user-button'
-                    size="large" 
-                    block
-                    style={{ 
-                      background: 'white', 
-                      color: '#52c41a', 
-                      border: 'none',
-                      borderRadius: '25px',
-                      height: '50px',
-                      fontSize: '16px',
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    Proceed to Payment
-                  </Button>
-                </Link>
+                <Button 
+                  type="primary" 
+                  size="large" 
+                  block
+                  style={{ 
+                    background: 'white', 
+                    color: '#52c41a', 
+                    border: 'none',
+                    borderRadius: '25px',
+                    height: '50px',
+                    fontSize: '16px',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Proceed to Payment
+                </Button>
               </div>
             </Card>
           </Col>
         </Row>
         
-        <Row gutter={[24, 24]} className="mt-4">
+        
+        <Row gutter={[24, 24]} style={{ marginTop: '24px' }}>
           {/* Premium Breakdown */}
-          <Col xs={24} lg={12}>
+       <Col xs={24} lg={12}>
             <Card 
               title={
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'space-between', width: '100%' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <DollarOutlined style={{ color: '#1890ff' }} />
-                    <span>Premium Breakdown</span>
-                  </div>
-                  <Button 
-                    type="primary"
-                    icon={<DownloadOutlined />}
-                    onClick={downloadQuotationPDF}
-                    style={{
-                      background: 'linear-gradient(135deg, #52c41a 0%, #389e0d 100%)',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontSize: '14px',
-                      fontWeight: 'bold',
-                      boxShadow: '0 3px 10px rgba(82, 196, 26, 0.3)',
-                      position: 'absolute',
-                      left: '105px',
-                        top: '45px',
-                    }}
-                  >
-                    Download Quotation
-                  </Button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <DollarOutlined style={{ color: '#1890ff' }} />
+                  <span>Premium Breakdown</span>
                 </div>
               }
               style={{ 
@@ -1183,7 +1235,7 @@ const calculateNCB = (vehicleDetails) => {
             >
               <Table 
                 dataSource={premiumBreakdown} 
-                columns={columns} 
+                columns={columns}
                 pagination={false}
                 size="middle"
                 summary={pageData => {
@@ -1202,7 +1254,7 @@ const calculateNCB = (vehicleDetails) => {
                       </Table.Summary.Cell>
                       <Table.Summary.Cell>
                         <strong style={{ fontSize: '16px', color: '#1890ff' }}>
-                          ₹ {total.toLocaleString()}
+                          {formatCurrency(total)}
                         </strong>
                       </Table.Summary.Cell>
                     </Table.Summary.Row>
@@ -1212,17 +1264,17 @@ const calculateNCB = (vehicleDetails) => {
               <div style={{ marginTop: '15px', padding: '15px', background: '#f6ffed', borderRadius: '8px' }}>
                 <p style={{ margin: '5px 0', fontSize: '14px', color: '#52c41a' }}>
                   <InfoCircleOutlined style={{ marginRight: '5px' }} />
-                  <strong>Zero Depreciation Charge:</strong> 20% of Own Damage Premium (₹{zeroDepreciationCharge.toLocaleString()})
+                  <strong>Zero Depreciation:</strong> {formatCurrency(zeroDepreciationCharge)}
                 </p>
                 <p style={{ margin: '5px 0', fontSize: '12px', color: '#666' }}>
-                  This ensures you get the full claim amount without any depreciation deduction.
+                  Get full claim amount without depreciation deduction.
                 </p>
               </div>
             </Card>
           </Col>
           
           {/* Enhanced Add-ons */}
-          <Col xs={24} lg={12}>
+            <Col xs={24} lg={12}>
             <Card 
               title={
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1239,7 +1291,7 @@ const calculateNCB = (vehicleDetails) => {
               <p style={{ marginBottom: '20px', color: '#666' }}>
                 Enhance your coverage with these premium add-ons:
               </p>
-              <div className="add-ons-container">
+              <div>
                 {addOns.map(addon => (
                   <div 
                     key={addon.id} 
@@ -1259,18 +1311,6 @@ const calculateNCB = (vehicleDetails) => {
                         : '0 2px 8px rgba(0,0,0,0.1)',
                     }}
                     onClick={() => toggleAddOn(addon.id)}
-                    onMouseEnter={(e) => {
-                      if (!addon.selected) {
-                        e.target.style.transform = 'translateY(-2px)';
-                        e.target.style.boxShadow = '0 5px 20px rgba(0,0,0,0.15)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!addon.selected) {
-                        e.target.style.transform = 'translateY(0)';
-                        e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
-                      }
-                    }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <div style={{ flex: 1 }}>
@@ -1287,12 +1327,7 @@ const calculateNCB = (vehicleDetails) => {
                           {addon.description}
                         </p>
                         <div style={{ marginTop: '10px', fontSize: '18px', fontWeight: 'bold' }}>
-                          ₹ {addon.price.toLocaleString()}
-                          {addon.id === 1 && addon.price > 0 && (
-                            <span style={{ fontSize: '12px', opacity: 0.8, display: 'block' }}>
-                              (20% of Own Damage Premium)
-                            </span>
-                          )}
+                          {formatCurrency(addon.price)}
                         </div>
                       </div>
                       <div style={{ marginLeft: '15px' }}>
@@ -1457,6 +1492,8 @@ const calculateNCB = (vehicleDetails) => {
               <Button 
                 type="primary" 
                 className='user-button'
+                                onClick={() => saveCurrencyToStorage(selectedCurrency)}
+
                 size="large"
                 style={{
                   background: 'linear-gradient(135deg, #52c41a 0%, #389e0d 100%)',
@@ -1478,7 +1515,7 @@ const calculateNCB = (vehicleDetails) => {
           <div style={{ marginTop: '20px', fontSize: '14px', color: '#666' }}>
             <p>Secure payment • 24/7 support • Instant policy issuance</p>
             <p style={{ fontWeight: 'bold', color: '#1890ff' }}>
-              Final Premium: ₹{premium.toLocaleString()} (includes Zero Depreciation: ₹{zeroDepreciationCharge.toLocaleString()})
+              Final Premium: {formatCurrency(premium)} (includes Zero Depreciation: {formatCurrency(zeroDepreciationCharge)})
             </p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -16,18 +16,18 @@ import {
   message,
 } from "antd";
 import { ToastContainer } from "react-toastify";
-import { handleSuccess } from "../../errortoast";
+import { handleSuccess, handleError } from "../../errortoast";
 import Top from "./TopBar/Top";
-import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
-import { handleError } from "../../errortoast";
+import { CloseOutlined } from "@ant-design/icons";
+
+// Import images
 import img1 from "../../assets/reuseimage/whatsapp.png";
 import img2 from "../../assets/reuseimage/circle.png";
 import img3 from "../../assets/reuseimage/file.png";
 import img4 from "../../assets/reuseimage/paper.png";
-import img5 from "../../assets/reuseimage/file.png";
 import img6 from "../../assets/reuseimage/motor.png";
 
-// product icone for navbar
+// Product icons
 import caricon1 from "../../../src/assets/Home/car-icons.png";
 import bike1 from "../../../src/assets/Home/bike-icon.png";
 import health from "../../../src/assets/Home/health-icon.png";
@@ -39,31 +39,20 @@ import property from "../../../src/assets/Home/property-insurance.png";
 
 const { Option } = Select;
 
-const Navbar = ({ icon1, icon2 }) => {
+const Navbar = () => {
   const [formRef] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-
-  // State for callback modal
-  const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
   const [callbackForm] = Form.useForm();
-
-  // WhatsApp redirect state
-  const [redirect, setRedirect] = useState(false);
-
-  // Other existing states
-  const [username, setUsername] = useState(
-    localStorage.getItem("loggedInUser") || ""
-  );
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const timeout = 2000;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState("");
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState("");
 
-  // Insurance type options
+  const navigate = useNavigate();
+
   const insuranceTypes = [
     "Car Insurance",
     "Bike Insurance",
@@ -71,37 +60,31 @@ const Navbar = ({ icon1, icon2 }) => {
     "Auto Insurance",
   ];
 
-  // WhatsApp redirect effect
-  useEffect(() => {
-    if (redirect) {
-      window.location.href =
-        "https://wa.me/08069640455?text=Welcome%20to%20Global%20Health%20and%20Allied%20Insurance.%20How%20can%20I%20assist%20you%3Ftarget_blank";
-    }
-  }, [redirect]);
-
-  // WhatsApp click handler
-  const handleClick = () => {
-    setRedirect(true);
+  // WhatsApp handler
+  const handleWhatsAppClick = () => {
+    window.open(
+      "https://wa.me/08069640455?text=Welcome%20to%20Global%20Health%20and%20Allied%20Insurance.%20How%20can%20I%20assist%20you%3F",
+      "_blank"
+    );
   };
 
   // Callback modal handlers
-  const showCallbackModal = () => {
-    setIsCallbackModalOpen(true);
-  };
-
+  const showCallbackModal = () => setIsCallbackModalOpen(true);
+  
   const handleCallbackOk = () => {
     callbackForm
       .validateFields()
-      .then((values) => {
-        console.log("Callback Form Data:", values);
-        // Here you can handle the form submission
-        // For example, send data to an API
-
-        // Reset form and close modal
-        callbackForm.resetFields();
-        setIsCallbackModalOpen(false);
-
-        handleSuccess("Callback request submitted successfully!");
+      .then(async (values) => {
+        try {
+          // Add your callback API call here
+          console.log("Callback Form Data:", values);
+          
+          callbackForm.resetFields();
+          setIsCallbackModalOpen(false);
+          handleSuccess("Callback request submitted successfully!");
+        } catch (error) {
+          handleError("Failed to submit callback request");
+        }
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
@@ -119,55 +102,49 @@ const Navbar = ({ icon1, icon2 }) => {
 
   // Mobile menu functions
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+  
   const toggleDropdown = (name) => {
     setActiveDropdown(activeDropdown === name ? "" : name);
   };
 
-  // Email sending function
-  const sendEmail = (values) => {
-    emailjs
-      .send("service_la8diqr", "template_qhn3bt3", values, "_CVqq1nmrbE6BhO0x")
-      .then(() => {
-        handleSuccess("Message sent successfully!");
-        onClose();
-      })
-      .catch((error) => console.error("Failed to send email:", error));
-  };
+  // Contact form submission
+  const handleSubmit = async (values) => {
+    setLoading(true);
 
-  // Logout function
-  const handleLogout = () => {
-    localStorage.removeItem("loggedInUser");
-    localStorage.removeItem("token");
-    handleSuccess("User logged out");
-    setTimeout(() => navigate("/login"), timeout);
-  };
+    try {
+      const formData = {
+        name: values.user_name,
+        email: values.user_email,
+        phone_number: values.user_phone,
+        address: values.user_address,
+        message: values.user_message,
+      };
 
-  // Effect hooks
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setUsername(localStorage.getItem("loggedInUser") || "");
-    };
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
+      const response = await fetch("http://localhost:8080/api/contactform", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const mobileNav = document.querySelector(".mobile-nav-container");
-      if (
-        mobileMenuOpen &&
-        mobileNav &&
-        !mobileNav.contains(event.target) &&
-        !event.target.classList.contains("mobile-menu-toggle") &&
-        !event.target.closest('.mobile-menu-toggle')
-      ) {
-        setMobileMenuOpen(false);
+      const result = await response.json();
+
+      if (result.success) {
+        message.success("Thank you! Our team will contact you soon.");
+        formRef.resetFields();
+        setTimeout(() => onClose(), 1500);
       }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [mobileMenuOpen]);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      message.error("Error submitting form. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // Scroll handling
   useEffect(() => {
     const controlNavbar = () => {
       const currentScrollY = window.scrollY;
@@ -175,16 +152,39 @@ const Navbar = ({ icon1, icon2 }) => {
       setVisible(currentScrollY < lastScrollY || currentScrollY < 50);
       setLastScrollY(currentScrollY);
     };
+
     window.addEventListener("scroll", controlNavbar);
     return () => window.removeEventListener("scroll", controlNavbar);
   }, [lastScrollY]);
 
+  // Close mobile menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const mobileNav = document.querySelector(".mobile-nav-container");
+      const menuToggle = document.querySelector(".mobile-menu-toggle");
+      
+      if (
+        mobileMenuOpen &&
+        mobileNav &&
+        !mobileNav.contains(event.target) &&
+        !menuToggle?.contains(event.target)
+      ) {
+        closeMobileMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [mobileMenuOpen]);
+
+  // Close mobile menu on window resize
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 992 && mobileMenuOpen) {
-        setMobileMenuOpen(false);
+        closeMobileMenu();
       }
     };
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [mobileMenuOpen]);
@@ -205,7 +205,6 @@ const Navbar = ({ icon1, icon2 }) => {
     },
   };
 
-  // Hamburger menu styles
   const hamburgerStyles = {
     container: {
       width: "30px",
@@ -225,65 +224,6 @@ const Navbar = ({ icon1, icon2 }) => {
       transition: "all 0.3s ease-in-out",
       transformOrigin: "center",
     },
-    lineTop: {
-      transform: mobileMenuOpen ? "translateY(9px) rotate(45deg)" : "translateY(0) rotate(0deg)",
-    },
-    lineMiddle: {
-      opacity: mobileMenuOpen ? 0 : 1,
-      transform: mobileMenuOpen ? "scale(0)" : "scale(1)",
-    },
-    lineBottom: {
-      transform: mobileMenuOpen ? "translateY(-9px) rotate(-45deg)" : "translateY(0) rotate(0deg)",
-    },
-  };
-
-  // contact form
-  const handleSubmit = async (values) => {
-    setLoading(true);
-
-    try {
-      // Prepare data for backend API
-      const formData = {
-        name: values.user_name,
-        email: values.user_email,
-        phone_number: values.user_phone,
-        address: values.user_address,
-        message: values.user_message,
-      };
-
-      // Send data to backend
-      const response = await fetch("http://localhost:8080/api/contactform", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        // Show success message
-        message.success(
-          "Thank you for contacting us! Our team will get back to you soon."
-        );
-
-        // Reset form
-        formRef.resetFields();
-
-        // Close drawer after a short delay
-        setTimeout(() => {
-          onClose();
-        }, 1500);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      message.error(
-        "Sorry, there was an error submitting your form. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -295,7 +235,7 @@ const Navbar = ({ icon1, icon2 }) => {
       <header className="header" style={navbarStyles.header}>
         <div className="container-fluid px-3 px-lg-4">
           <div className="row align-items-center">
-            {/* Logo Section */}
+            {/* Logo */}
             <div className="col-6 col-sm-3 col-lg-3">
               <div className="logo">
                 <Link to="/" style={{ display: "flex", alignItems: "center" }}>
@@ -307,7 +247,6 @@ const Navbar = ({ icon1, icon2 }) => {
                       maxWidth: "118px",
                       width: "100%",
                       height: "auto",
-                      objectFit: "contain",
                     }}
                   />
                 </Link>
@@ -321,123 +260,53 @@ const Navbar = ({ icon1, icon2 }) => {
                   <li>
                     <Link to="/">Home</Link>
                   </li>
+                  
                   <li className="nav-item dropdown">
                     <Link to="#">Product</Link>
-                    <ul
-                      className="dropdown large-dropdown"
-                      style={{
-                        width: "550px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                      }}
-                    >
+                    <ul className="dropdown large-dropdown" style={{
+                      width: "550px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                    }}>
                       <li style={{ margin: "20px" }}>
-                        <h2 className="dropdown-header">
-                          Individual Insurance
-                        </h2>
+                        <h2 className="dropdown-header">Individual Insurance</h2>
                         <ul className="list-unstyled">
-                          <li className="d-flex" style={{ padding: "10px" }}>
-                            <img
-                              style={{ width: "30px", height: "33px" }}
-                              src={caricon1}
-                              alt="Car Insurance"
-                              className="img-fluid"
-                            />
+                          <li className="d-flex align-items-center" style={{ padding: "10px" }}>
+                            <img style={{ width: "30px", height: "33px", marginRight: "10px" }} src={caricon1} alt="Car" />
                             <Link to="/carinsurance">Car Insurance</Link>
                           </li>
-                          <li className="d-flex">
-                            <img
-                              style={{ width: "29px", height: "27px" }}
-                              src={bike1}
-                              alt="Bikeinsurance"
-                              className="img-fluid"
-                            />
-                            <Link to="/Bikeinsurance">Bike Insurance</Link>
+                          <li className="d-flex align-items-center">
+                            <img style={{ width: "29px", height: "27px", marginRight: "10px" }} src={bike1} alt="Bike" />
+                            <Link to="/bikeinsurance">Bike Insurance</Link>
                           </li>
-                          <li className="d-flex">
-                            <img
-                              src={health}
-                              style={{ width: "25px", height: "25px" }}
-                              alt="Healthinsurance"
-                              className="img-fluid"
-                            />
-                            <Link to="/Healthinsurance">Health Insurance</Link>
+                          <li className="d-flex align-items-center">
+                            <img src={health} style={{ width: "25px", height: "25px", marginRight: "10px" }} alt="Health" />
+                            <Link to="/healthinsurance">Health Insurance</Link>
                           </li>
-                          <li className="d-flex">
-                            <img
-                              src={auto}
-                              style={{ width: "26px", height: "25px" }}
-                              className="img-fluid"
-                              alt="Autoinsurance"
-                            />
-                            <Link to="/Autoinsurance">Auto Insurance</Link>
+                          <li className="d-flex align-items-center">
+                            <img src={auto} style={{ width: "26px", height: "25px", marginRight: "10px" }} alt="Auto" />
+                            <Link to="/autoinsurance">Auto Insurance</Link>
                           </li>
-                          <li className="d-flex" style={{ padding: "10px" }}>
-                            <img
-                              src={home}
-                              alt="Homeinsurance"
-                              style={{ width: "25px", height: "25px" }}
-                              className="img-fluid"
-                            />
-                            <Link to="/Homeinsurance">Home Insurance</Link>
+                          <li className="d-flex align-items-center" style={{ padding: "10px" }}>
+                            <img src={home} alt="Home" style={{ width: "25px", height: "25px", marginRight: "10px" }} />
+                            <Link to="/homeinsurance">Home Insurance</Link>
                           </li>
                         </ul>
                       </li>
                       <li style={{ margin: "20px" }}>
                         <h2 className="dropdown-header">Business Insurance</h2>
                         <ul className="list-unstyled">
-                          <li>
-                            <Link
-                              onClick={() =>
-                                handleError("This page is Under-development")
-                              }
-                            >
-                              <img
-                                style={{
-                                  height: "32px",
-                                  width: "32px",
-                                }}
-                                src={commercial}
-                                alt=""
-                              />
-                              Commercial Insurance
-                            </Link>
+                          <li className="d-flex align-items-center">
+                            <img style={{ height: "32px", width: "32px", marginRight: "10px" }} src={commercial} alt="Commercial" />
+                            <Link onClick={() => handleError("This page is under development")}>Commercial Insurance</Link>
                           </li>
-                          <li>
-                            <Link
-                              onClick={() =>
-                                handleError("This page is under Development")
-                              }
-                            >
-                              <img
-                                className="img-fluid"
-                                style={{
-                                  height: "32px",
-                                  width: "32px",
-                                }}
-                                src={liability}
-                                alt="liability-insurance"
-                              />
-                              Liability Insurance
-                            </Link>
+                          <li className="d-flex align-items-center">
+                            <img style={{ height: "32px", width: "32px", marginRight: "10px" }} src={liability} alt="Liability" />
+                            <Link onClick={() => handleError("This page is under development")}>Liability Insurance</Link>
                           </li>
-                          <li>
-                            <Link
-                              onClick={() =>
-                                handleError("This page is under Development")
-                              }
-                            >
-                              <img
-                                className="img-fluid"
-                                style={{
-                                  height: "32px",
-                                  width: "32px",
-                                }}
-                                src={property}
-                                alt="property-insurance"
-                              />
-                              Property Insurance
-                            </Link>
+                          <li className="d-flex align-items-center">
+                            <img style={{ height: "32px", width: "32px", marginRight: "10px" }} src={property} alt="Property" />
+                            <Link onClick={() => handleError("This page is under development")}>Property Insurance</Link>
                           </li>
                         </ul>
                       </li>
@@ -446,75 +315,22 @@ const Navbar = ({ icon1, icon2 }) => {
 
                   <li className="nav-item dropdown">
                     <Link to="#">Claims</Link>
-                    <ul
-                      className="dropdown"
-                      style={{
-                        width: "400px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        padding: "15px",
-                        listStyle: "none",
-                        margin: 0,
-                      }}
-                    >
-                      <li>
-                        <Link
-                          to="/Claimprocess"
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            cursor: "pointer",
-                            padding: "8px 12px",
-                            borderRadius: "4px",
-                            transition: "background-color 0.2s",
-                          }}
-                        >
-                          <img
-                            style={{
-                              height: "24px",
-                              width: "24px",
-                              flexShrink: 0,
-                            }}
-                            className="img-fluid"
-                            src={img6}
-                            alt="Document Upload"
-                          />
-                          <span style={{ fontSize: "14px", fontWeight: "500" }}>
-                            Claim Process
-                          </span>
+                    <ul className="dropdown" style={{
+                      width: "400px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      padding: "15px",
+                    }}>
+                      <li style={{ marginBottom: "10px" }}>
+                        <Link to="/claimprocess" className="d-flex align-items-center gap-2">
+                          <img style={{ height: "24px", width: "24px" }} src={img6} alt="Process" />
+                          <span>Claim Process</span>
                         </Link>
                       </li>
-                      <li style={{ marginBottom: "10px" }}>
-                        <Link
-                          to="/intimateclaims"
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            cursor: "pointer",
-                            padding: "8px 12px",
-                            borderRadius: "4px",
-                            transition: "background-color 0.2s",
-                          }}
-                        >
-                          <img
-                            style={{
-                              height: "24px",
-                              width: "24px",
-                              flexShrink: 0,
-                            }}
-                            className="img-fluid"
-                            src={img4}
-                            alt="Intimate Claims"
-                          />
-                          <span style={{ fontSize: "14px", fontWeight: "500" }}>
-                            Vehicle Intimate Claims
-                          </span>
+                      <li>
+                        <Link to="/intimateclaims" className="d-flex align-items-center gap-2">
+                          <img style={{ height: "24px", width: "24px" }} src={img4} alt="Intimate" />
+                          <span>Vehicle Intimate Claims</span>
                         </Link>
                       </li>
                     </ul>
@@ -522,111 +338,55 @@ const Navbar = ({ icon1, icon2 }) => {
 
                   <li className="nav-item dropdown">
                     <Link to="#">Support</Link>
-                    <ul
-                      className="dropdown"
-                      style={{
-                        width: "600px",
-                        padding: "15px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        display: "flex",
-                        textDecoration: "none",
-                      }}
-                    >
-                      <li style={{ textDecoration: "none" }}>
-                        <div style={{ display: "flex" }}>
-                          <Link
-                            to="/policy"
-                            style={{
-                              textDecoration: "none",
-                              color: "inherit",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "10px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <img
-                              src={img3}
-                              alt="Download"
-                              style={{ width: "24px", height: "24px" }}
-                              className="img-fluid"
-                            />
-                            <span style={{ fontFamily: "initial" }}>
-                              Download policy pdf
-                            </span>
-                          </Link>
-
-                          <a
-                            onClick={handleClick}
-                            style={{
-                              textDecoration: "none",
-                              color: "inherit",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "10px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <img
-                              style={{ width: "24px", height: "24px" }}
-                              className="img-fluid"
-                              src={img1}
-                              alt="WhatsApp"
-                            />
-                            <span style={{ fontFamily: "initial" }}>
-                              Connect on WhatsApp
-                            </span>
-                          </a>
-
-                          <a
-                            onClick={showCallbackModal}
-                            style={{
-                              textDecoration: "none",
-                              color: "inherit",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "10px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <img
-                              style={{ width: "24px", height: "24px" }}
-                              className="img-fluid"
-                              src={img2}
-                              alt="Callback"
-                            />
-                            <span style={{ fontFamily: "initial" }}>
-                              Request a Callback
-                            </span>
-                          </a>
-                        </div>
+                    <ul className="dropdown" style={{
+                      width: "600px",
+                      padding: "15px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                    }}>
+                      <li className="d-flex gap-3">
+                        <Link to="/policy" className="d-flex align-items-center gap-2">
+                          <img src={img3} alt="Download" style={{ width: "24px", height: "24px" }} />
+                          <span>Download Policy PDF</span>
+                        </Link>
+                        <a onClick={handleWhatsAppClick} className="d-flex align-items-center gap-2" style={{ cursor: "pointer" }}>
+                          <img style={{ width: "24px", height: "24px" }} src={img1} alt="WhatsApp" />
+                          <span>Connect on WhatsApp</span>
+                        </a>
+                        <a onClick={showCallbackModal} className="d-flex align-items-center gap-2" style={{ cursor: "pointer" }}>
+                          <img style={{ width: "24px", height: "24px" }} src={img2} alt="Callback" />
+                          <span>Request a Callback</span>
+                        </a>
                       </li>
                     </ul>
                   </li>
 
-
-
-
-                <li>
-                    <Link to="/Currentpening">
-                      Career
-                    </Link>
+                  <li className="nav-item dropdown">
+                    <Link to="/award">Award</Link>
+                    <ul className="dropdown" style={{
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                    }}>
+                      <li>
+                        <Link to="/sponsorship">Sponsorship</Link>
+                      </li>
+                    </ul>
                   </li>
 
                   <li>
-                    <Link to="#" onClick={showDrawer}>
-                      Contact Us
-                    </Link>
+                    <Link to="/currentpening">Career</Link>
+                  </li>
+
+                  <li>
+                    <Link to="#" onClick={showDrawer}>Contact Us</Link>
                   </li>
                 </ul>
               </nav>
             </div>
 
-            {/* Right Section - User Actions & Mobile Menu Button */}
+            {/* Mobile Menu Button */}
             <div className="col-6 col-sm-9 col-lg-3">
               <div className="d-flex align-items-center justify-content-end">
-                {/* Mobile Menu Button with Animated Hamburger */}
                 <button
                   className="mobile-menu-toggle d-lg-none btn p-0"
                   onClick={toggleMobileMenu}
@@ -635,30 +395,21 @@ const Navbar = ({ icon1, icon2 }) => {
                     border: "none",
                     background: "transparent",
                     padding: "12px",
-                    borderRadius: "8px",
-                    transition: "all 0.3s ease",
-                    transform: mobileMenuOpen ? "scale(1.1)" : "scale(1)",
                   }}
                 >
                   <div style={hamburgerStyles.container}>
-                    <div 
-                      style={{
-                        ...hamburgerStyles.line,
-                        ...hamburgerStyles.lineTop,
-                      }}
-                    ></div>
-                    <div 
-                      style={{
-                        ...hamburgerStyles.line,
-                        ...hamburgerStyles.lineMiddle,
-                      }}
-                    ></div>
-                    <div 
-                      style={{
-                        ...hamburgerStyles.line,
-                        ...hamburgerStyles.lineBottom,
-                      }}
-                    ></div>
+                    <div style={{
+                      ...hamburgerStyles.line,
+                      transform: mobileMenuOpen ? "translateY(9px) rotate(45deg)" : "none",
+                    }}></div>
+                    <div style={{
+                      ...hamburgerStyles.line,
+                      opacity: mobileMenuOpen ? 0 : 1,
+                    }}></div>
+                    <div style={{
+                      ...hamburgerStyles.line,
+                      transform: mobileMenuOpen ? "translateY(-9px) rotate(-45deg)" : "none",
+                    }}></div>
                   </div>
                 </button>
               </div>
@@ -667,37 +418,24 @@ const Navbar = ({ icon1, icon2 }) => {
         </div>
       </header>
 
-      {/* Callback Request Modal */}
+      {/* Callback Modal */}
       <Modal
         title="Request a Callback"
         open={isCallbackModalOpen}
         onOk={handleCallbackOk}
         onCancel={handleCallbackCancel}
         okText="Submit Request"
-        cancelText="Cancel"
         width={window.innerWidth > 768 ? 500 : "95%"}
-        destroyOnClose={true}
       >
-        <Form
-          form={callbackForm}
-          layout="vertical"
-          name="callback_request_form"
-        >
+        <Form form={callbackForm} layout="vertical">
           <Form.Item
             label="Insurance Type"
             name="insuranceType"
-            rules={[
-              {
-                required: true,
-                message: "Please select an insurance type!",
-              },
-            ]}
+            rules={[{ required: true, message: "Please select insurance type!" }]}
           >
             <Select placeholder="Select insurance type">
               {insuranceTypes.map((type) => (
-                <Option key={type} value={type}>
-                  {type}
-                </Option>
+                <Option key={type} value={type}>{type}</Option>
               ))}
             </Select>
           </Form.Item>
@@ -706,14 +444,8 @@ const Navbar = ({ icon1, icon2 }) => {
             label="Username"
             name="username"
             rules={[
-              {
-                required: true,
-                message: "Please input your username!",
-              },
-              {
-                min: 2,
-                message: "Username must be at least 2 characters!",
-              },
+              { required: true, message: "Please input your username!" },
+              { min: 2, message: "Username must be at least 2 characters!" },
             ]}
           >
             <Input placeholder="Enter your full name" />
@@ -723,64 +455,36 @@ const Navbar = ({ icon1, icon2 }) => {
             label="Mobile Number"
             name="mobile"
             rules={[
-              {
-                required: true,
-                message: "Please input your mobile number!",
-              },
-              {
-                pattern: /^[0-9]{10}$/,
-                message: "Please enter a valid 10-digit mobile number!",
-              },
+              { required: true, message: "Please input your mobile number!" },
+              { pattern: /^[0-9]{10}$/, message: "Enter valid 10-digit number!" },
             ]}
           >
-            <Input
-              placeholder="Enter your mobile number"
-              maxLength={10}
-              addonBefore="+91"
-            />
+            <Input placeholder="Enter mobile number" maxLength={10} addonBefore="+91" />
           </Form.Item>
 
           <Form.Item
             label="Email"
             name="email"
             rules={[
-              {
-                required: true,
-                message: "Please input your email!",
-              },
-              {
-                type: "email",
-                message: "Please enter a valid email address!",
-              },
+              { required: true, message: "Please input your email!" },
+              { type: "email", message: "Enter valid email!" },
             ]}
           >
-            <Input placeholder="Enter your email address" />
+            <Input placeholder="Enter your email" />
           </Form.Item>
 
           <Form.Item
             label="Address"
             name="address"
             rules={[
-              {
-                required: true,
-                message: "Please input your address!",
-              },
-              {
-                min: 10,
-                message: "Address must be at least 10 characters!",
-              },
+              { required: true, message: "Please input your address!" },
+              { min: 10, message: "Address must be at least 10 characters!" },
             ]}
           >
-            <Input.TextArea
-              placeholder="Enter your complete address"
-              rows={3}
-            />
+            <Input.TextArea placeholder="Enter complete address" rows={3} />
           </Form.Item>
 
-          <Form.Item
-            label="Preferred Call Time (Optional)"
-            name="preferredTime"
-          >
+          <Form.Item label="Preferred Call Time (Optional)" name="preferredTime">
             <Select placeholder="Select preferred time">
               <Option value="morning">Morning (9 AM - 12 PM)</Option>
               <Option value="afternoon">Afternoon (12 PM - 4 PM)</Option>
@@ -793,7 +497,7 @@ const Navbar = ({ icon1, icon2 }) => {
       {/* Mobile Menu Overlay */}
       <div
         className={`mobile-menu-overlay ${mobileMenuOpen ? "open" : ""}`}
-        onClick={toggleMobileMenu}
+        onClick={closeMobileMenu}
         style={{
           position: "fixed",
           top: 0,
@@ -804,10 +508,10 @@ const Navbar = ({ icon1, icon2 }) => {
           zIndex: 1001,
           opacity: mobileMenuOpen ? 1 : 0,
           visibility: mobileMenuOpen ? "visible" : "hidden",
-          transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-          backdropFilter: mobileMenuOpen ? "blur(4px)" : "blur(0px)",
+          transition: "all 0.4s ease",
+          backdropFilter: mobileMenuOpen ? "blur(4px)" : "none",
         }}
-      ></div>
+      />
 
       {/* Mobile Navigation Container */}
       <div

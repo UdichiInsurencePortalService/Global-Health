@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import Preloader from '../src/Preloader.jsx'
 import Navbar from "./Header/Navbar/Navbar.jsx";
 import Footer from "./Header/Footer/Footer.jsx";
-// import Chat from "./ChatBot/Chat.jsx";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-// import './i18n';
 
 // Pages
 import Home from "./Components/Pages/Home/Home.jsx";
@@ -24,6 +23,7 @@ import Autoinsurance from "./Features/product/Autoinsurance/Autoinsurance.jsx";
 
 // Claims
 import Intimate from "./Claims/IntimateClaims/Intimate.jsx";
+
 // Footer links
 import Faq from "./Features/product/Faq/Faq.jsx";
 import Companyinfo from "./Features/product/Companyinfo/Companyinfo.jsx";
@@ -46,32 +46,52 @@ import ProtectedRoute from "./ProtectedRoutes/ProtectedRoute.jsx";
 import ScroolTop from "./ScroolToTop/ScroolTop.jsx";
 import Awards from "./Features/product/Award/Awards.jsx";
 import Currentpening from "./Header/Footer/Currentpening.jsx";
-
 import CurrentForm from "./Header/Footer/CurrentForm.jsx";
-// import { Award } from "lucide-react";
-
-// import ScrollToTopButton from "./Reuse/ScrollToTopButton/ScrollToTopButton.jsx";
+import Sponsorship from "./Features/product/Award/Sponsorship.jsx";
 
 function App() {
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
+  const [prevLocation, setPrevLocation] = useState("");
 
-  // Check if current route is admin, dashboard, or any admin sub-routes
+  // Initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Route change detection
+  useEffect(() => {
+    if (location.pathname !== prevLocation && prevLocation !== "") {
+      setLoading(true);
+      
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+    setPrevLocation(location.pathname);
+  }, [location.pathname]);
+
+  // Check if current route is admin
   const isAdminRoute =
     location.pathname.startsWith("/admin") ||
     location.pathname.startsWith("/dashboard");
 
   return (
     <>
+      {loading && <Preloader />}
+      
       <Googletranslation />
 
-      {/* Only show Navbar if not on admin/dashboard routes */}
-      {/* {!isAdminRoute && <Navbar />} */}
-      {/* {!isAdminRoute && <Googletranslation/>} */}
-
-      <Navbar />
+      {!isAdminRoute && <Navbar />}
 
       <Routes>
-        {/* Admin Routes - no navbar/footer */}
+        {/* Admin Routes */}
         <Route path="/admin/*" element={<Admin />} />
         <Route
           path="/dashboard"
@@ -83,8 +103,7 @@ function App() {
         />
         <Route path="/insurance/car" element={<AdminCarinsurance />} />
 
-        {/* Regular Routes - with navbar/footer */}
-
+        {/* Regular Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/aboutus" element={<Abouts />} />
         <Route path="/blog" element={<Blog />} />
@@ -109,32 +128,21 @@ function App() {
         <Route path="/intimateclaims" element={<Intimate />} />
         <Route path="/documentupload" element={<Document />} />
         <Route path="/claimprocess" element={<Claimprocess />} />
-        <Route path="/Currentpening" element={<Currentpening />} />
+        <Route path="/currentpening" element={<Currentpening />} />
 
         {/* Award routes */}
-
-        <Route path="/Award" element={<Awards />} />
+        <Route path="/award" element={<Awards />} />
+        <Route path="/sponsorship" element={<Sponsorship />} />
 
         {/* Other Routes */}
         <Route path="/policy" element={<Policy />} />
         <Route path="/formpage" element={<FormPage />} />
-
-        <Route path="/currentform" element ={<CurrentForm/>}/>
+        <Route path="/currentform" element={<CurrentForm />} />
       </Routes>
+
       <ScroolTop />
 
-      {/* Only show Footer and Chat if not on admin/dashboard routes */}
-      {/* {!isAdminRoute && (
-        <>
-          <Footer />
-          <Chat />
-        </>
-      )} */}
-      {/* <ScrollToTopButton /> */}
-
-      <Footer />
-
-      {/* <Chat /> */}
+      {!isAdminRoute && <Footer />}
     </>
   );
 }
