@@ -59,7 +59,7 @@ export default function Awards() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [registrationId, setRegistrationId] = useState(null);
-    const API_BASE_URL = 'http://localhost:8080/api'; // Replace with your backend URL
+    const API_BASE_URL = 'https://globalhealthandalliedservices.com/api'; // Replace with your backend URL
 
 
   // Load Razorpay script

@@ -27,7 +27,7 @@ const JobApplicationForm = () => {
   const [submitMessage, setSubmitMessage] = useState({ type: '', text: '' });
 
   const RAZORPAY_KEY_ID = 'rzp_test_your_key_here'; // Replace with your actual key
-  const API_BASE_URL = 'http://localhost:8080/api'; // Replace with your backend URL
+  const API_BASE_URL = 'https://globalhealthandalliedservices.com/api'; // Replace with your backend URL
 
   const educationOptions = [
     { value: '', label: 'Select Education Level' },

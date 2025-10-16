@@ -10,7 +10,7 @@ import 'jspdf-autotable';
 import logo from '../assets/Home/global-logo.png';
 import qr from '../assets/kunal.jpeg';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://globalhealthandalliedservices.com/api';
 
 const FormPage = () => {
   const { userForm, setUserForm } = useContext(UserContext);

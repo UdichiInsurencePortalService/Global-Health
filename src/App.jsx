@@ -58,7 +58,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -70,7 +70,7 @@ function App() {
       
       const timer = setTimeout(() => {
         setLoading(false);
-      }, 1000);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
@@ -128,7 +128,7 @@ function App() {
         <Route path="/intimateclaims" element={<Intimate />} />
         <Route path="/documentupload" element={<Document />} />
         <Route path="/claimprocess" element={<Claimprocess />} />
-        <Route path="/currentpening" element={<Currentpening />} />
+        <Route path="/currentopening" element={<Currentpening />} />
 
         {/* Award routes */}
         <Route path="/award" element={<Awards />} />
